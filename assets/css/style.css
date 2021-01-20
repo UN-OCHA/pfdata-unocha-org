@@ -1,0 +1,1659 @@
+body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0; margin: 0; background-color: #fff;}
+.logo-panel{background: #3289c9; display:block; padding: 8px 16px; text-align: center; min-height: 74px; max-height: 74px;}
+.logo-panel .navbar-brand{display:block; padding: 0 0 8px 0; margin: 0 0 5px 0; line-height:normal; border-bottom:1px solid #98c0df;}
+.logo-panel .navbar-brand img{width: 115px;}
+.logo-panel span{color:#eee; font-size: 0.75rem; display:block; }
+.fixed-top, .sb-nav-fixed #layoutSidenav #layoutSidenav_nav, .sb-nav-fixed .sb-topnav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+#layoutSidenav {display: flex;}
+#layoutSidenav #layoutSidenav_nav {
+  flex-basis: 225px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease-in-out;
+  z-index: 1038;
+  transform: translateX(-225px);
+}
+#layoutSidenav #layoutSidenav_content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  flex-grow: 1;
+  min-height: calc(100vh - 27px);
+  margin-left: -225px;
+}
+
+.sb-sidenav-toggled #layoutSidenav #layoutSidenav_nav {
+  transform: translateX(0);
+}
+.sb-sidenav-toggled #layoutSidenav #layoutSidenav_content:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /*background: #000;*/
+  z-index: 0;
+  /*opacity: 0.5;*/
+  transition: opacity 0.3s ease-in-out;
+}
+@media (min-width: 992px) {
+  #layoutSidenav #layoutSidenav_nav {
+    transform: translateX(0);
+  }
+  #layoutSidenav #layoutSidenav_content {
+    margin-left: 0;
+    transition: margin 0.15s ease-in-out;
+  }
+
+  .sb-sidenav-toggled #layoutSidenav #layoutSidenav_nav {
+    transform: translateX(-225px);
+  }
+  .sb-sidenav-toggled #layoutSidenav #layoutSidenav_content {
+    margin-left: -225px;
+  }
+  .sb-sidenav-toggled #layoutSidenav #layoutSidenav_content:before {
+    display: none;
+  }
+}
+.sb-nav-fixed .sb-topnav {
+  z-index: 1039; display:none;
+}
+.sb-nav-fixed #layoutSidenav #layoutSidenav_nav {
+  width: 225px;
+  height: 100vh;
+  z-index: 1038;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+.sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav {
+  padding-top: 0;
+}
+
+.sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav .sb-sidenav-menu {
+  scrollbar-width: thin;
+  scrollbar-color: lightgray white;
+}
+
+.sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav .sb-sidenav-menu::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+.sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav .sb-sidenav-menu::-webkit-scrollbar-track {
+  background: transparent;        /* color of the tracking area */
+}
+.sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav .sb-sidenav-menu::-webkit-scrollbar-thumb {
+  background-color: #eee;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid #fff;  /* creates padding around scroll thumb */
+}
+
+.sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav .sb-sidenav-menu {
+  overflow-y: auto; 
+}
+.sb-nav-fixed #layoutSidenav #layoutSidenav_content {
+  padding-left: 225px;  
+}
+.nav .nav-link .sb-nav-link-icon,
+.sb-sidenav-menu .nav-link .sb-nav-link-icon {
+  margin-right: 0.5rem;
+}
+
+.sb-topnav {
+  padding-left: 0;
+  height: 56px;
+  z-index: 1039;
+}
+.sb-topnav .navbar-brand {
+  min-width: 261px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: 0;
+}
+.sb-topnav.navbar-dark #sidebarToggle {
+  color: rgba(255, 255, 255, 0.5);
+}
+.sb-topnav.navbar-light #sidebarToggle {
+  color: #212529;
+}
+
+.sb-sidenav {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 75px);
+  flex-wrap: nowrap;
+}
+.sb-sidenav .sb-sidenav-menu {
+  flex-grow: 1;
+}
+.sb-sidenav .sb-sidenav-menu .nav {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.sb-sidenav .sb-sidenav-menu .nav .sb-sidenav-menu-heading {
+  padding: 1.75rem 1rem 0.75rem;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.sb-sidenav .sb-sidenav-menu .nav .nav-link {
+  display: flex;
+  align-items: center;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  position: relative;
+  font-size: 0.85rem;
+}
+.sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-nav-link-icon {
+  font-size: 0.9rem;
+}
+.sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-sidenav-collapse-arrow {
+  display: inline-block;
+  margin-left: auto;
+  transition: transform 0.15s ease;
+}
+.sb-sidenav .sb-sidenav-menu .nav .nav-link.collapsed .sb-sidenav-collapse-arrow {
+  transform: rotate(-90deg);
+}
+.sb-sidenav .sb-sidenav-menu .nav .sb-sidenav-menu-nested {
+  margin-left: 1.5rem;
+  flex-direction: column;
+}
+.sb-sidenav .sb-sidenav-footer {
+  padding: 0.75rem;
+  flex-shrink: 0;
+}
+
+.sb-sidenav-dark {
+  background-color: #212529;
+  color: rgba(255, 255, 255, 0.5);
+}
+.sb-sidenav-dark .sb-sidenav-menu .sb-sidenav-menu-heading {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sb-sidenav-dark .sb-sidenav-menu .nav-link {
+  color: rgba(255, 255, 255, 0.5);
+}
+.sb-sidenav-dark .sb-sidenav-menu .nav-link .sb-nav-link-icon {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sb-sidenav-dark .sb-sidenav-menu .nav-link .sb-sidenav-collapse-arrow {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sb-sidenav-dark .sb-sidenav-menu .nav-link:hover {
+  color: #fff;
+}
+.sb-sidenav-dark .sb-sidenav-menu .nav-link.active {
+  color: #fff;
+}
+.sb-sidenav-dark .sb-sidenav-menu .nav-link.active .sb-nav-link-icon {
+  color: #fff;
+}
+.sb-sidenav-dark .sb-sidenav-footer {
+  background-color: #343a40;
+}
+
+.sb-sidenav-light {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+.sb-sidenav-light .sb-sidenav-menu .sb-sidenav-menu-heading {
+  color: #333;
+}
+.sb-sidenav-light .sb-sidenav-menu .nav-link {
+  color: #777;
+}
+.sb-sidenav-light .sb-sidenav-menu .nav-link .sb-nav-link-icon {
+  color: #adb5bd; transition: all 0.2s linear;
+}
+.sb-sidenav-light .sb-sidenav-menu .nav-link .sb-sidenav-collapse-arrow {
+  color: #adb5bd;
+}
+.sb-sidenav-light .sb-sidenav-menu .nav-link:hover {
+  color: #3289C9;
+}
+.sb-sidenav-light .sb-sidenav-menu .nav-link:hover .sb-nav-link-icon{
+  color: #3289C9;
+}
+.sb-sidenav-light .sb-sidenav-menu .nav-link.menuactive {
+  color: #fff; font-weight: 500; background-color: #3289C9; transition: all 0.2s linear;
+}
+.sb-sidenav-light .sb-sidenav-menu .nav-link.menuactive .sb-nav-link-icon {
+  color: #fff; transition: all 0.2s linear;
+}
+.sb-sidenav-light .sb-sidenav-menu .nav-link.menuactive .sb-sidenav-collapse-arrow {
+  color: #fff; transition: all 0.2s linear;
+}
+.sb-sidenav-light .sb-sidenav-menu .nav-link.active .sb-sidenav-collapse-arrow {
+  transform: rotate(180deg); transition: all 0.2s linear;
+}
+.sb-sidenav-light .sb-sidenav-footer {
+  background-color: #e9ecef;
+}
+@font-face {
+      font-family: 'humanitarian-icons-v02';
+      src: url('font/humanitarian-icons-v02.eot?64690892');
+      src: url('font/humanitarian-icons-v02.eot?64690892#iefix') format('embedded-opentype'),
+           url('font/humanitarian-icons-v02.woff?64690892') format('woff'),
+           url('font/humanitarian-icons-v02.ttf?64690892') format('truetype'),
+           url('font/humanitarian-icons-v02.svg?64690892#humanitarian-icons-v02') format('svg');
+      font-weight: normal;
+      font-style: normal;
+}
+.select-panel{padding: 1rem;}
+.select-panel select{border:1px solid #65A8DC; transition: all 0.2s linear;}
+.select-panel .form-control:disabled{border: 1px solid #ccc;}
+
+.link-sidenav {
+  height: calc(100% - 140px);
+  width: 0;
+  position: fixed;
+  z-index: 1040;
+  top: 74px;
+  left: 0;
+  background-color: #fff;
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 0;
+  white-space: nowrap;
+	margin-top: 70px;
+	transition-timing-function: cubic-bezier(0.0,0.0,0.2,1);
+}
+
+.link-sidenav {
+  scrollbar-width: thin;
+  scrollbar-color: lightgray white;
+}
+
+.link-sidenav::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+.link-sidenav::-webkit-scrollbar-track {
+  background: transparent;        /* color of the tracking area */
+}
+.link-sidenav::-webkit-scrollbar-thumb {
+  background-color: #eee;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid #fff;  /* creates padding around scroll thumb */
+}
+
+.link-sidenav a {  
+  text-decoration: none;
+  font-size: 25px;
+  color: #777;
+  display: block;
+  transition: 0.3s;
+}
+
+.link-sidenav a:hover {
+  color: #555;
+}
+
+.link-sidenav .closebtn {
+  position: relative;
+  font-size: 30px;
+  text-align: right;
+  float:right;
+	line-height: normal;
+}
+
+.pfbiccyearButtonsDiv {
+  scrollbar-width: thin;
+  scrollbar-color: lightgray white;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.pfbiccyearButtonsDiv::-webkit-scrollbar {
+  height: 12px;               /* width of the entire scrollbar */
+}
+.pfbiccyearButtonsDiv::-webkit-scrollbar-track {
+  background: transparent;        /* color of the tracking area */
+}
+.pfbiccyearButtonsDiv::-webkit-scrollbar-thumb {
+  background-color: #eee;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid #fff;  /* creates padding around scroll thumb */
+}
+
+.side-panel{padding:5px 10px; border-bottom:1px solid #ccc; margin: 0 15px;}
+.side-panel h6{margin-bottom:0; font-size:0.9rem; font-family: 'Roboto', sans-serif; font-weight: 600; line-height: normal; float: left;
+    margin-right: 5px; background-color: #e5ecf4; border-radius: 15px; padding: 0 7px;}
+.side-panel h4{font-weight: 500; font-size: 0.9rem; line-height: normal; color: #333; padding: 5px !important; margin-top: 10px; text-align: center; border-bottom: 1px solid #3189c9; position: relative;}
+.side-panel .fa-caret-down{display: flex; margin-top: -14px; align-items: center; justify-content: center; color: #3189c8; position: absolute; bottom: -10px; left:48%;}
+.side-panel h4 span{white-space: normal !important;}
+.side-panel p{font-size: 0.85em; font-weight: 300; margin: 0;}
+.ss-content {padding: 0; right: 0;}
+.ss-wrapper{width:100%;}
+.ss-scroll{left:216px; right: -216px;}
+.sidenav-title{background-color: #fff; padding: 5px 10px 5px 8px; overflow: hidden; display: flex; align-items: center; justify-content: space-between; border-top:1px solid #cfe4f5; border-left:5px solid #3189c9;}
+.sidenav-title .sb-nav-link-icon{font-weight: 300; font-size: 1.1rem;}
+.sidenav-title .sb-nav-link-icon i{color:#3289c9; font-size: 1.3em; margin-right: 0.1em;}
+.main-high-level-fugure{display:block; padding: 0 1rem 1rem 1rem;}
+.main-high-level-fugure .panel{float:left; background-color: #D2E5F5; padding: 0.5rem; margin: 0.2rem; width: 46%; text-align: center;     border-radius: 15px 0;}
+.main-high-level-fugure .panel h3{font-size:1.2rem; font-weight:400; margin-bottom: 0;} 
+.main-high-level-fugure .panel p{font-size:0.8rem; font-weight:300; margin-bottom: 0;}
+.brdr-btm{border-bottom: 1px solid #ddd; padding: 0 1rem; display: block; margin-left: 1rem; margin-right: 1rem;}
+.cerf-link{border: 1px solid #e8c760; color: #333 !important; padding: 0 7px 0 0 !important; margin-right: 10px; transition: all 0.2s linear; display: flex; align-items: center; border-radius:3px; background-color: #fbd45c;}
+.cerf-link .icon-chart{background-color: #fff; padding: 3px 5px; display: inline-flex; margin-right: 7px; font-size: 1.3em; color: #333;}
+.cerf-link:hover .icon-chart{background-color: #fbd45c;}
+.cerf-link .icon-chart svg{opacity:0.6;}
+.cerf-link:hover{color:#333 !important; background-color: #fff; border-radius:3px;}
+.cbpf-link{border: 1px solid #f37261; color: #fff !important; padding: 0 7px 0 0 !important; transition: all 0.2s linear; display: flex; align-items: center; border-radius:3px; background-color:#f37261;}
+.cbpf-link .icon-chart{background-color: #fff; padding: 3px 5px; display: inline-flex; margin-right: 7px; font-size: 1.3em; color: #333;}
+.cbpf-link:hover .icon-chart{background-color: #f37261;}
+.cbpf-link .icon-chart svg{opacity:0.6;}
+.cbpf-link:hover{color:#333 !important; background-color: #fff; border-radius:3px;}
+.un-icon{font-family: 'humanitarian-icons-v02'; font-style: normal; font-weight: normal; speak: never; display: inline-block;       text-decoration: inherit; width: 1em; margin-right: .2em; text-align: center; font-variant: normal; text-transform: none; line-height: 1em; margin-left: .2em; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
+footer{position: fixed; bottom: 0; width: calc(100% - 225px);}
+footer a{color:#3289c9;}
+footer a:hover{color:#2270aa;}
+
+.map-section{display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;}
+.scroll-panel{width:100%; height: 100%; /*min-width: calc(100% + 225px);*/ margin-left:225px; transition: all 0.5s ease-in-out;}
+.second-nav-title{position: sticky; width: 100%; background-color: #fff; top: 0; padding-bottom: 3px;}
+.second-nav-chart{display: flex; justify-content: center; width: 100%; min-height: calc(100% - 353px);}
+.data-update{text-align: center; font-size: 0.69rem; color: #777;}
+.mobile-menu{margin-left: 235px; position: absolute; background-color: #555; margin-top: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);    color: #fff;}
+.mobile-menu:focus, .mobile-menu:not(:disabled):not(.disabled){color:#fff;}
+.options-btn-panel{position: fixed; right: -95px; top: 95px; transition-duration: 0.3s; z-index: 100; min-width: 128px;}
+.options-btn-panel:hover{right:0;}
+.options-btn-panel:hover .btn-panel{box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);}
+.options-btn-panel .hd-panel{background-color: #3289c9; padding: 3px 5px; border-radius: 5px 0 0 5px; cursor: pointer; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);}
+.options-btn-panel .hd-panel .btn-icon{background: #3289c9 url(../img/info-button-icon.svg) 0 0 no-repeat; width: 16px; height: 16px; display: inline-block; margin: 5px 20px 5px 5px; vertical-align: middle; line-height: normal;}
+.options-btn-panel .hd-panel .btn-title{font-size: 14px; font-weight: bold; color:#fff; display: inline-block; vertical-align: middle;
+    line-height: normal;} 
+.options-btn-panel .btn-panel{background-color: #fff; padding: 12px; border-radius: 0 0 3px 3px; transition-duration: 0.3s; left: 34px; position: absolute;}
+
+/*DS: Start*/
+.options-btn-panel-fix{position: fixed; right: 0px; top: 95px; transition-duration: 0.3s; z-index: 100; min-width: 128px;}
+.options-btn-panel-fix:hover{right:0;}
+.options-btn-panel-fix:hover .btn-panel{box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);}
+.options-btn-panel-fix .hd-panel{background-color: #3289c9; padding: 3px 5px; border-radius: 5px 0 0 5px; cursor: pointer; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);}
+.options-btn-panel-fix .hd-panel .btn-icon{background: #3289c9 url(../img/info-button-icon.svg) 0 0 no-repeat; width: 16px; height: 16px; display: inline-block; margin: 5px 20px 5px 5px; vertical-align: middle; line-height: normal;}
+.options-btn-panel-fix .hd-panel .btn-title{font-size: 14px; font-weight: bold; color:#fff; display: inline-block; vertical-align: middle;
+    line-height: normal;} 
+.options-btn-panel-fix .btn-panel{background-color: #fff; padding: 12px; border-radius: 0 0 3px 3px; transition-duration: 0.3s; left: 34px; position: absolute; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);}
+/*DS: End*/
+
+.browser-notification{
+	background-color: #f5f5f5;
+}
+.container{
+	min-height: 100vh; 
+  	display: flex;
+    justify-content: center;
+  	align-items: center;
+}
+.browser-notification-panel{	
+	background-color: #fff;
+	border:1px solid #3289c9;
+	border-radius: 4px;
+	max-width: 500px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+.browser-notification-panel .title{
+	font-size: 1.5rem;
+    color: #fff;
+    padding: 18px;
+    line-height: normal;
+    font-weight: 400;
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid #dee2e6;
+	background-color: #3289c9;
+}
+.browser-notification-panel .content{
+	padding: 18px;
+	font-size: 0.9rem;
+	color:#555;
+}
+.browser-notification-panel .content ul{
+	list-style-type: none;
+	color:#555;	
+	margin-bottom: 0;
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+	padding: 0 15px;
+}
+.browser-notification-panel .content ul li {	
+	font-size: 0.9rem;	
+	font-weight: 600;	
+    padding-bottom: 5px;
+	text-align: center;
+	line-height: 20px;
+}
+.browser-notification-panel .content ul li img{
+	vertical-align: middle;
+	display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+.browser-notification-panel .content ul li span{	
+	font-size: 0.8rem;	
+	font-weight: 300;
+	display: block;
+}
+.browser-notification-panel .content ul li a{
+	font-size: 0.8rem;
+	font-weight: 300;
+	display: block;
+}
+
+.url-notofication .modal-header .close{color:#aaa !important;}
+.url-notofication .modal-body h4{font-weight: 400; margin-top: -13px;}
+.url-notofication .modal-body p{font-weight: 300; font-size: 0.9em; width: 97%; margin: 0 auto; margin-bottom: 2em;}
+.url-notofication .modal-body p b{font-weight: 600;}
+.url-notofication .modal-body .btn-custom {background-color: #3289c9; text-align: center; padding: 4px 30px; color:#fff; font-size: 1em; border-radius: 3px; text-decoration: none; margin-bottom: 1em; display: inline-block; box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);}
+.url-notofication .modal-body .btn-custom:hover{background-color: #2777b2; transition: all 0.2s linear;}
+.rotate {
+  animation: rotation 8s infinite linear;
+}
+
+.tooltip-inner {background-color:rgba(0, 0, 0, 0.7); font-size: 0.8rem;}
+.bs-tooltip-auto[x-placement^=bottom] .arrow::before, .bs-tooltip-bottom .arrow::before {border-bottom-color:rgba(0, 0, 0, 0.7);}
+a.video-tutorial{color:#333;}
+/*.video-tutorial {background-image: url("../img/video-tutorial-icon.svg"); background-repeat: no-repeat; background-position: left center;}*/
+.video-tutorial small{margin-left: 5px;}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@media (max-width: 575.98px) { 
+	#sidebarToggle{display:block !important;}
+	.cbpf-link, .cerf-link{display:none;}
+	.link-sidenav{left: 0;}
+	.pfbialtopButtonsDiv svg, .pfbicctopButtonsDiv svg, .pfbicdtopButtonsDiv svg{display:none;}
+	.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv{padding: 0 15px 0 50px !important;}
+}
+@media (min-width: 576px) { 
+	.link-sidenav{left: 0;}
+}
+@media (max-width: 767.98px) { 
+	#sidebarToggle{display:block !important;}
+}
+@media (max-width: 991.98px) {
+	#sidebarToggle{display:block !important;}
+	.link-sidenav{z-index: 1050; }
+}
+
+.loader  {
+  animation: rotate 1.5s infinite;  
+  height: 50px;
+  width: 50px;
+}
+
+.loader:before,
+.loader:after {   
+  border-radius: 50%;
+  content: '';
+  display: block;
+  height: 20px;  
+  width: 20px;
+}
+.loader:before {
+  animation: ball1 1.5s infinite;  
+  background-color: #F79C8F;
+  box-shadow: 30px 0 0 #F79C8F;
+  margin-bottom: 10px;
+}
+.loader:after {
+  animation: ball2 1.5s infinite; 
+  background-color: #FBDE8A;
+  box-shadow: 30px 0 0 #91C1E6;
+}
+
+@keyframes rotate {
+  0% { 
+    -webkit-transform: rotate(0deg) scale(0.8); 
+    -moz-transform: rotate(0deg) scale(0.8);
+  }
+  50% { 
+    -webkit-transform: rotate(360deg) scale(1.2); 
+    -moz-transform: rotate(360deg) scale(1.2);
+  }
+  100% { 
+    -webkit-transform: rotate(720deg) scale(0.8); 
+    -moz-transform: rotate(720deg) scale(0.8);
+  }
+}
+
+@keyframes ball1 {
+  0% {
+    box-shadow: 30px 0 0 #FBDE8A;
+  }
+  50% {
+    box-shadow: 0 0 0 #FBDE8A;
+    margin-bottom: 0;
+    -webkit-transform: translate(15px,15px);
+    -moz-transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #FBDE8A;
+    margin-bottom: 10px;
+  }
+}
+
+@keyframes ball2 {
+  0% {
+    box-shadow: 30px 0 0 #F79C8F;
+  }
+  50% {
+    box-shadow: 0 0 0 #F79C8F;
+    margin-top: -20px;
+    -webkit-transform: translate(15px,15px);
+    -moz-transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #F79C8F;
+    margin-top: 0;
+  }
+}
+
+/*D3 chart styles*/
+
+.pfbihpchartContainerDiv {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.pfbihpspinnerContainer {
+  display: flex;
+  width: 100%;
+  height:100%;
+  align-items: center;
+  flex-direction: column;
+  font-size: 18px;
+  color: #888;
+}
+
+.pfbihpspinnerText {
+  margin-bottom: 10px;
+  margin-top: 30vh;
+}
+
+.pfbialcontainerDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/*tooltip styles*/
+
+#pfbialtooltipDivMap, #pfbialtooltipDivBarChart, #pfbicctooltipDiv, #pfbicdtooltipDiv, #pfbihptopTooltipDiv {    
+  position: absolute;
+  text-align: left;
+  color: darkslategray;
+  font-family: "Roboto", sans-serif;
+  white-space: normal;
+  padding: 0;
+  line-height: 120%;
+  font-size: 14px;
+  background: #f2f4f4; 
+  border: none; 
+  border-radius: 4px;
+  pointer-events: none;
+  cursor: none;
+  z-index: 1500;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+#pfbicctooltipDiv{
+	padding: 8px !important;
+}
+#pfbialinnerTooltipDiv {max-width: 308px !important;}
+#pfbialinnerTooltipDiv > div:nth-child(2){padding:8px !important;}
+#pfbialinnerTooltipDiv > div:nth-child(2) > div:nth-child(3){margin-bottom: 10px !important; border-bottom: 1px dotted #999 !important; padding-bottom: 5px !important;}
+
+.pfbialtooltipTitleDiv, .pfbicdtooltipTitleDiv {
+	margin-bottom: 3px !important;
+    background-color: #3189c9;
+    padding: 8px 8px;
+    color: #fff;
+    border-radius: 5px 5px 0 0;
+}
+
+.pfbialtooltipTitleDiv strong, .pfbicdtooltipTitleDiv strong{
+	font-size: 15px !important;
+}
+
+.pfbialtooltipTotalValue{
+	display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px !important;
+    border-bottom: 1px solid #999;
+    padding-bottom: 5px;
+}
+
+.pfbicctooltipTitleDiv {
+  display: flex;
+  align-items: center;
+  white-space: pre-wrap;
+}
+
+.pfbialtooltipRank {
+	font-size: 12px;
+    color: #c1dff6;
+}
+
+.pfbicctooltipRank {
+  font-weight: 400;
+  font-size: 12px;
+  color: #c1dff6;
+}
+
+.pfbicctooltipFooter {
+  width: 100%;
+  margin-top: 4px;
+  font-weight: 300;
+  font-size: 12px;
+  font-style: italic;
+  padding: 8px;
+}
+
+.pfbialtooltipCerfValue .pfbialtooltipKeys {
+	font-weight: 600 !important;
+    border-radius: 15px;
+    border: 2px solid #e8c760;
+    padding: 2px 10px;
+    font-size: 12px;
+} 
+
+.pfbialtooltipCbpfValue .pfbialtooltipKeys {
+	font-weight: 600 !important;
+    border-radius: 15px;
+    border: 2px solid #e17165;
+    padding: 2px 10px;
+    font-size: 12px;
+}
+
+.pfbialtooltipZeroValueCerf, .pfbialtooltipZeroValueCbpf {
+
+}
+
+.pfbialtooltipProjectsTotal, .pfbialtooltipProjectsCerf, .pfbialtooltipProjectsCbpf {
+	font-weight: 600;
+}
+
+.pfbialtooltipValues, .pfbialtooltipKeys, .pfbicctooltipValues, .pfbicctooltipYears {
+  flex: 1 0 auto;
+}
+
+.pfbialtooltipKeys{
+	font-weight: 600;
+}
+
+.pfbialtooltipLeader, .pfbicctooltipLeader {
+  flex: 0 1 auto;
+  overflow: hidden;
+  color: #ccc;
+}
+
+.pfbialtooltipLeader::before, .pfbicctooltipLeader::before {
+   display: block;
+   overflow: hidden;
+   text-overflow: clip;
+   content: 
+     ". . . . . . . . . . . . . . . . . . . . "
+     ". . . . . . . . . . . . . . . . . . . . "
+     ". . . . . . . . . . . . . . . . . . . . "
+     ". . . . . . . . . . . . . . . . . . . . "
+}
+
+.pfbicdtooltipNameDiv {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-right: 4px;
+  padding-left: 4px;
+}
+
+.pfbicdtooltipNameDiv span {
+  font-size: 1.1rem;
+  padding-left: 0.5rem;
+  font-family: "Roboto", sans-serif;
+  color: #5f6969;
+  line-height: 1;
+}
+
+/*end of tooltip styles*/
+
+#byCountryRegionsText, #bySectorSectorsText, #byTypeCerfText, #byTypeCbpfText {
+  font-size: 0.7em;
+  white-space: pre;
+}
+
+.pfbialmapDiv {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.pfbialmapInnerDiv {
+  width: 100%;
+  height: 100%;
+}
+
+.pfbialbarChartDivOuter {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  background-color: rgb(255,255,255,0.6);
+}
+
+.pfbialbarChartDivTitle, .pfbiccbarChartRankingDivTitle {
+  width:100%;
+  display: flex;
+  height: 26px;
+  flex-direction: row;
+}
+
+.pfbialbarChartDivTitleText, .pfbiccbarChartRankingDivTitleText {
+  flex-basis: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  color: #444;
+  padding-top: 2px;
+}
+
+.pfbialbarChartDiv, .pfbiccbarChartRankingDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+}
+
+.pfbicdcontainerDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pfbicccontainerDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.pfbialzoomPath {
+  fill: white;
+}
+
+.pfbialzoomPath:hover {
+  fill: #f4f4f4;
+}
+
+.pfbialzoomText {
+  font-family: "Arial", sans-serif;
+  font-size: 20px;
+  fill: #222;
+  pointer-events: none; 
+}
+
+.pfbialbuttonsDiv {
+  position: absolute;
+  top: 1.2vh;
+  width: 50%;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+}
+
+.pfbialgroupName {
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+  pointer-events: none;
+  fill: darkslategray;
+  stroke: white;
+  stroke-width: 2px;
+  paint-order: stroke;
+}
+
+.pfbialmapContainer {
+  pointer-events: none;
+}
+
+.pfbiallegendCirclesText {
+  font-family: "Arial", sans-serif;
+  font-size: 10px;
+  fill: darkslategray;  
+}
+
+.pfbiallegendColors text {
+  font-family: "Arial", sans-serif;
+  font-size: 11px;
+  fill: darkslategray;  
+}
+
+.pfbialshowNamesText {
+  font-family: "Arial", sans-serif;
+  font-size: 11px;
+  fill: darkslategray;
+}
+
+.pfbialbarTitle {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  fill: #666;
+}
+
+.pfbiccbarTitle {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  fill: #666;
+  font-weight: 300;
+}
+
+.pfbialbarTitleSpan, .pfbiccbarTitleSpan {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  fill: #666;
+}
+
+.pfbialxAxisGroup line, .pfbiccxAxisGroupBarChart line, .pfbicdxAxisGroupTooltip line, .pfbicdcurrentYearTick, .pfbicdyAxisGroupColumn line, .pfbiccyAxisGroupColumn line, .pfbialyAxisGroupColumnByCountry line, .pfbialyAxisGroupColumnBySector line, .pfbialyAxisGroupColumnByTypeCerf line, .pfbialyAxisGroupColumnByTypeCbpf line {
+  stroke: darkslategray;
+}
+
+.pfbialxAxisGroup path, .pfbiccxAxisGroupBarChart path, .pfbicdyAxisGroupTooltip path, .pfbicdxAxisGroupTooltip path, .pfbicdxAxisGroupColumn path, .pfbiccxAxisGroupColumn path, .pfbialxAxisGroupColumnByCountry path, .pfbialxAxisGroupColumnBySector path, .pfbialxAxisGroupColumnByType path, .pfbialyAxisGroup path, .pfbiccyAxisGroupBarChart path, .pfbicdyAxisGroupColumn path, .pfbiccyAxisGroupColumn path, .pfbialyAxisGroupColumnByCountry path, .pfbialyAxisGroupColumnBySector path, .pfbialyAxisGroupColumnByTypeCerf path, .pfbialyAxisGroupColumnByTypeCbpf path {
+  stroke: none;
+}
+
+.pfbialxAxisGroup text {
+  font-family: "Roboto", sans-serif;
+  font-size: 9px;
+  text-anchor: end;
+  letter-spacing: -0.25px;
+}
+
+.pfbiccxAxisGroupBarChart text {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+}
+
+.pfbicdxAxisGroupTooltip text, .pfbicdcurrentYearText {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #666;
+}
+
+.pfbialcountryRanking {
+  font-weight: 700;
+  font-size: 10px;
+  text-anchor: middle;
+}
+
+.pfbialyAxisGroup text, .pfbiccyAxisGroupBarChart text {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #999;
+  pointer-events: none;
+}
+
+.pfbicdlabelsColumn, .pfbicclabelsColumn, .pfbiallabelsColumnByCountry, .pfbiallabelsColumnBySector, .pfbiallabelsColumnByTypeCerf, .pfbiallabelsColumnByTypeCbpf {
+  font-family: "Roboto", sans-serif;
+  font-size: 9px;
+  fill: #333;
+  letter-spacing: -0.25px;
+  pointer-events: none;
+  dominant-baseline: central;
+} 
+
+.pfbicdxAxisGroupColumn text, .pfbicdyAxisGroupTooltip text, .pfbiccxAxisGroupColumn text, .pfbialxAxisGroupColumnByCountry text, .pfbialxAxisGroupColumnBySector text, .pfbialxAxisGroupColumnByType text {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #888;
+  pointer-events: none;
+}
+
+.pfbicdyAxisGroupColumn text, .pfbiccyAxisGroupColumn text, .pfbialyAxisGroupColumnByCountry text, .pfbialyAxisGroupColumnBySector text, .pfbialyAxisGroupColumnByTypeCerf text, .pfbialyAxisGroupColumnByTypeCbpf text {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #888;
+  pointer-events: none;
+  letter-spacing: -0.25px;
+}
+
+.pfbialdarkTick {
+  fill: black !important;
+  font-weight: 500;
+}
+  
+.pfbicdxAxisGroupColumn line, .pfbicdyAxisGroupTooltip line, .pfbiccxAxisGroupColumn line, .pfbialxAxisGroupColumnByCountry line, .pfbialxAxisGroupColumnBySector line, .pfbialxAxisGroupColumnByType line {
+  stroke: #ddd;
+  stroke-dasharray: 2, 2;
+}
+
+.pfbialyAxisGroup line, .pfbiccyAxisGroupBarChart line {
+  stroke: #ddd;
+  stroke-dasharray: 2, 2;
+}
+
+.pfbiccxAxisGroupedGroupCerf line, .pfbiccxAxisGroupedGroupCbpf line {
+  stroke: #777;
+}
+
+.pfbiccxAxisGroupedGroupCerf path, .pfbiccxAxisGroupedGroupCbpf path {
+  stroke: none;
+}
+
+.pfbiccxAxisGroupedGroupCerf text, .pfbiccxAxisGroupedGroupCbpf text {
+  font-family: "Roboto", sans-serif;
+  font-size: 7px;
+  fill: #888;
+  pointer-events: none;
+  letter-spacing: -1px;
+}
+
+.pfbialpiesNoData {
+  font-family: "Roboto", sans-serif;
+  font-size: 22px;
+  fill: #666;
+  pointer-events: none;
+  text-anchor: middle;
+}
+
+.pfbialbuttonsDiv button, .pfbicdbuttonsDiv button {
+  margin: 0px 0px 0px 8px;
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  font-size: 0.8rem;
+  padding: 0 10px 0 0;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfbialbuttonsDiv button .icon-circle, .pfbicdbuttonsDiv button .icon-circle{
+  background-color: #fff;
+  padding: 5px;
+  display: inline-flex;
+  margin-right: 5px;
+  border-radius: 3px 0 0 3px;
+}
+
+.pfbialbuttonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfbialbuttonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfbicdbuttonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfbicdbuttonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.fa-adjust {
+  color: transparent;
+  background: linear-gradient(to right, #FBD45C 0%, #FBD45C 50%, #F37261 50%, #F37261 100%);
+  border-radius: 50%;
+}
+
+.pfbialbarsLabels {
+  text-anchor: middle;
+  font-family: "Roboto", sans-serif;
+  font-size: 9px;
+  fill: #888;
+}
+
+.pfbiccbarsLabels {
+  text-anchor: middle;
+  font-family: "Roboto", sans-serif;
+  font-size: 9px;
+  fill: #333;
+  letter-spacing: -0.25px;
+}
+
+.pfbicdmemberStatesContainerDiv {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pfbicdnonMemberStatesContainerDiv {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pfbicdmemberStatesTopDiv, .pfbicdnonMemberStatesTopDiv {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 5vh;
+}
+
+.pfbicdnonMemberStatesTopDiv {
+  align-items: center;
+  box-shadow: 0px -3px 3px 0 #ccc;
+}
+
+.pfbicdmemberStatesTitleDiv {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.pfbicdmemberStatesTitleDiv span, .pfbicdnonMemberStatesTopDiv span {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-left: 1rem;
+}
+
+.pfbicdbuttonsContainerDiv {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.pfbicdbuttonsDiv {
+  display: flex;
+  padding-right: 1rem;
+}
+
+.pfbicdmemberStatesChartAreaDiv {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
+  overflow-y: scroll;
+  padding-top: 4px;
+}
+
+.pfbicdnonMemberStatesChartAreaDiv {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
+  overflow-y: scroll;
+}
+
+.pfbicdnonMemberStatesChartAreaDiv > :last-child, .pfbicdmemberStatesChartAreaDiv > :last-child {
+    margin-bottom: 22px;
+}
+
+.pfbicddonorDiv {
+  justify-self: center;
+  margin-bottom: 12px;
+  transition:all 0.2s ease;
+}
+
+.pfbicdnonMemberDonorDiv {
+  justify-self: center;
+  margin-bottom: 12px;
+}
+
+#layoutSidenav_content {
+  height: calc(100vh - 56px);
+}
+
+.pfbicddonorNameDiv {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 4px;
+  padding-left: 4px;
+}
+
+.pfbicddonorNameDiv span {
+  font-size: 0.75rem;
+  padding-left: 0.2rem;
+  font-family: "Roboto", sans-serif;
+  color: #5f6969;
+  line-height: 1;
+}
+
+.pfbicdnonMemberDonorNameDiv {
+  text-align: center;
+  font-size: 0.7rem;
+  padding-left: 0.2rem;
+  font-family: "Roboto", sans-serif;
+  color: #5f6969;
+  line-height: 1;
+}
+
+.pfbicdxAxisGroup text {
+  font-family: "Roboto", sans-serif;
+  font-size: 8px;
+  fill: #aaa;
+  font-weight: 300;
+  pointer-events: none;
+  letter-spacing: -0.25px;
+}
+
+.pfbicdxAxisGroup path, .pfbicdxAxisGroup line {
+  stroke: #ccc;
+}
+
+.pfbicdxAxisGroup line {
+  stroke: #888;
+}
+
+.pfbicdbarLabel {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #444;
+  pointer-events: none;
+  dominant-baseline: middle;
+  letter-spacing: -0.25px;
+}
+
+.pfbicdtooltipBarLabel, .pfbicdtooltipBarLabelCerfValue {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  pointer-events: none;
+  dominant-baseline: middle;
+  text-anchor: middle;
+  stroke: white;
+  stroke-width: 2px;
+  paint-order: stroke;
+}
+
+.pfbicctopDiv {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 8vh;
+}
+
+.pfbiccyearButtonsDiv {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  flex: 0 80%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.pfbiccpaidPledgedButtonsDiv {
+  flex: 0 20%;
+  height: 100%;
+  padding-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.pfbiccchartAreaDiv {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.pfbiccbarChartRankingDivOuter {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pfbicccerfContainerDiv {
+  flex: 0 50%;
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.pfbicccbpfContainerDiv {
+  flex: 0 50%;
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.pfbiccyearButtonsDiv button, .pfbiccpaidPledgedButtonsDiv button {
+  margin: 0px 0px 0px 8px;
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  font-size: 0.8rem;
+  padding: 2px 10px 2px 10px;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfbiccyearButtonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfbiccyearButtonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfbiccpaidPledgedButtonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfbiccpaidPledgedButtonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfbiccxAxisGroupCerf text, .pfbiccxAxisGroupCbpf text {
+  font-family: "Roboto", sans-serif;
+  font-size: 11px;
+  fill: #666;
+  pointer-events: none;
+}
+
+.pfbiccyAxisGroupCerf text, .pfbiccyAxisGroupCbpf text {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #999;
+  pointer-events: none;
+}
+  
+.pfbiccyAxisGroupCerf line, .pfbiccyAxisGroupCbpf line {
+  stroke: #ddd;
+  stroke-dasharray: 2, 2;
+}
+
+.pfbiccxAxisGroupCerf path, .pfbiccxAxisGroupCbpf path, .pfbiccyAxisGroupCerf path, .pfbiccyAxisGroupCbpf path {
+  stroke: none;
+}
+
+.pfbicclabelsCerf, .pfbicclabelsCbpf {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #666;
+  font-weight: bold;
+  text-anchor: middle;
+  pointer-events: none;
+} 
+
+.pfbiccchartTitleCerf, .pfbiccchartTitleCbpf {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  fill: #666;
+  font-weight: 300;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.pfbiccchartTitleSpanCerf, .pfbiccchartTitleSpanCbpf {
+  font-size: 14px;
+} 
+
+.pfbialouterDiv, .pfbiccouterDiv, .pfbicdouterDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}  
+
+.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 5vh;
+  align-items: center;
+  z-index: 1036;
+  border-bottom: 1px solid #3289c9;
+  padding: 0 15px;
+}
+
+.pfbialbreadcrumbDivInner, .pfbiccbreadcrumbDivInner, .pfbicdbreadcrumbDivInner {
+  display: flex;
+  flex:0 50%;
+}
+
+.pfbialtopButtonsDiv, .pfbicctopButtonsDiv, .pfbicdtopButtonsDiv {
+  display: flex;
+  flex:0 50%;
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+}
+
+.pfbialtopButtonsDiv button, .pfbicdtopButtonsDiv button, .pfbicctopButtonsDiv button{
+	border: 1px solid #3289c9;
+  border-radius: 3px;
+  font-size: 0.7em;
+  padding: 0 10px;
+  line-height: normal;
+  height: 21px;
+  color: #3289c9;
+  background-color: #fff;
+  margin-left: 7px;
+	vertical-align: top;
+}
+
+.pfbialtopButtonsDiv .pfbihpSnapshotDiv, .pfbicctopButtonsDiv .pfbihpSnapshotDiv, .pfbicdtopButtonsDiv .pfbihpSnapshotDiv {line-height: normal;}
+.pfbialtopButtonsDiv button:hover, .pfbicctopButtonsDiv button:hover, .pfbicdtopButtonsDiv button:hover {background-color: #3289c9; color:#fff;}
+
+.pfbihpSnapshotContent {
+  position: absolute;
+  min-width: 100px;
+  display: none;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.25);
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;  
+  right: 11px;
+}
+
+.pfbihpSnapshotContent #pfbihpSnapshotPdfText, .pfbihpSnapshotContent #pfbihpSnapshotPngText, .pfbihpSnapshotContent #pfbihpSnapshotTooltipPdfText, .pfbihpSnapshotContent #pfbihpSnapshotTooltipPngText {
+  font-size: 12px;
+  padding: 4px 10px;
+  margin: 0px;
+  color: #333;  
+}
+
+.pfbihpSnapshotContent #pfbihpBestVisualizedText, .pfbihpSnapshotContent #pfbihpTooltipBestVisualizedText {
+  font-size: 11px;
+  padding: 10px;
+  margin: 0px;
+  color: #222;
+  font-family: "Arial", sans-serif;
+  border-top: 1px solid lightgray;
+  width: 202px;
+}
+
+.pfbihpSnapshotContent #pfbihpSnapshotPdfText:hover, .pfbihpSnapshotContent #pfbihpSnapshotPngText:hover, .pfbihpSnapshotContent #pfbihpSnapshotTooltipPdfText:hover, .pfbihpSnapshotContent #pfbihpSnapshotTooltipPngText:hover {
+  background-color: #777;
+  color: white;
+}
+
+.pfbialfirstBreadcrumb, .pfbialsecondBreadcrumb, .pfbiccfirstBreadcrumb, .pfbiccsecondBreadcrumb, .pfbicdfirstBreadcrumb, .pfbicdsecondBreadcrumb {
+  margin-left: 0; text-transform: capitalize; font-size: 0.8em;
+} 
+
+.pfbialmiddleBreadcrumb, .pfbiccmiddleBreadcrumb, .pfbicdmiddleBreadcrumb {
+  background-image: url("../img/breadcrumb-arrow-icon.png"); background-position: center center; width: 6px; height: 10px; margin: auto 7px auto 7px;
+}
+.pfbialfirstBreadcrumb span{font-weight: 400;}
+.pfbiccfirstBreadcrumb span{font-weight: 400;}
+.pfbicdfirstBreadcrumb span{font-weight: 400;}
+
+.pfbicclegendGroupCerf text, .pfbicclegendGroupCbpf text {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  dominant-baseline: central;
+  fill: #777;
+}
+
+.pfbicclabelsGroupCerf, .pfbicclabelsGroupCbpf {
+  font-family: "Roboto", sans-serif;
+  font-size: 8px;
+  fill: #666;
+  font-weight: bold;
+  text-anchor: middle;
+  pointer-events: none;
+  letter-spacing: -0.5px;
+}
+
+.pfbialtwoColorsBorder {
+  border-image: linear-gradient(to right, #FBD45C 45%, #F37261 55%, #F37261 100%); 
+  border-image-slice: 1;
+}
+
+.pfbicddonorDivActive {
+  position: relative;
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0px 5px 10px 0px #aaa, 0px 2px 16px 16px rgba(0,0,0,0);  
+}
+
+.pfbicddonorDivActive .pfbicddonorNameDiv{
+	background-color: #3189c9;    
+    border-radius: 0 0 4px 4px;
+}
+
+.pfbicddonorDivActive .pfbicddonorNameDiv span{
+	color:#fff !important;
+}
+
+.pfbicddonorExpandDiv {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  color: #aaa;
+  font-size: 20px;
+  text-align: center;
+  padding: 0px;
+  pointer-events: none;
+}
+
+.pfbicdtooltipTopDiv {
+  width: 100%;
+  display: flex;
+  margin-bottom: 6px;
+  align-items: center;
+}
+
+.pfbicdtooltipTopDivMain {
+  flex: 0 80%;
+}
+
+.pfbicdtooltipTopDivClose {
+  flex: 0 20%;
+  font-size: 25px;
+  text-align: right;
+}
+
+.btn-panel button {
+  white-space: pre;
+  font-size: 12px;
+  font-weight: normal;
+  color: #3289c9;
+  background-color: #fff;
+  padding: 3px 8px 3px 8px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid #3289c9;  
+  margin-bottom: 8px;
+  line-height: normal !important;
+  display:block;
+  transition: all 0.2s linear;
+  }
+
+.pfbihpSnapshotDiv button{margin-bottom: 0 !important;}
+
+.btn-panel button:hover {
+  background-color: #3289c9;
+  border-color: #3289c9;
+  cursor: pointer;
+  color:#fff;
+}
+
+.btn-panel button:active {
+  background-color: #3289c9;
+  border-color: #3289c9;
+  color:#fff;
+}
+
+.btn-panel button:focus {
+  outline: none;
+}
+
+.btn-panel button:disabled {
+  color: #bbb;
+  border-color: #bbb;
+  opacity: 0.75;
+  outline: none;
+}
+
+.btn-panel button:disabled:hover {
+  background-color: #fff;
+  color: #bbb;
+  border-color: #bbb;
+  cursor: default;
+}
+
+#pfbiccinnerTooltipDiv{
+  background-color: #f2f4f4;
+  border-radius: 4px;
+}
+
+#pfbiccinnerTooltipDiv > div:nth-child(1){
+	padding:8px !important;
+	background-color: #3189c9;
+	color: #fff;
+	border-radius: 4px 4px 0 0;
+    line-height: normal;
+	margin-top: -8px;
+    margin-left: -8px;
+    margin-right: -8px;
+} 
+
+#pfbiccinnerTooltipDiv > div:nth-child(1) strong{font-size: 14px !important;}
+
+#pfbiccinnerTooltipDiv > div:nth-child(2) .pfbicctooltipYears, .pfbicctooltipValues{
+	font-weight: 600;
+}
+
+#pfbihpinnerTooltipDiv > div:nth-child(1) {
+	background-color: #3189c9;
+    padding: 6px 8px;
+    border-radius: 4px 4px 0 0;
+    color: #fff;
+	margin-bottom: 0 !important;
+}
+
+#pfbihpinnerTooltipDiv > div:nth-child(1) strong{
+	font-size: 13px;
+    font-weight: normal;
+}
+
+#pfbihpinnerTooltipDiv > div:nth-child(2) {
+	padding: 8px;
+    font-weight: 600;
+}
+
+#pfbicdtooltipDiv > div:nth-child(1){
+	width: 525px !important;
+    height: 335px !important;
+}
+
+#pfbicdtooltipDiv > div:nth-child(1) > div:nth-child(2) {
+	padding: 8px !important;
+}
+
+#pfbicdtooltipDiv .pfbicdtooltipTopDiv {
+	height: 35px !important;
+    background-color: #3289c9;
+    padding: 8px;
+    border-radius: 4px 4px 0 0;
+	margin-bottom: 0 !important;
+}
+
+#pfbicdtooltipDiv .pfbicdtooltipTopDiv .pfbicdtooltipTopDivMain .pfbicdtooltipNameDiv{
+	padding-left:0 !important;
+	padding-right: 0 !important;
+}
+
+#pfbicdtooltipDiv .pfbicdtooltipTopDiv .pfbicdtooltipTopDivMain .pfbicdtooltipNameDiv img{
+	width:25px !important;
+	height: 25px !important;
+}
+
+#pfbicdtooltipDiv .pfbicdtooltipTopDiv .pfbicdtooltipTopDivMain .pfbicdtooltipNameDiv span{
+	font-size: 1rem !important;
+	color: #fff !important;
+}
+
+#pfbicdtooltipDiv .pfbicdtooltipTopDiv .pfbicdtooltipTopDivClose svg{
+	color: #b2d3ed !important;
+    font-weight: normal !important;
+    width: 20px !important;
+}
+
+#pfbihpDownloadingDiv {
+  position: absolute;
+  padding: 8px;
+  background: #fcfcfc; 
+  border: 1px solid #999; 
+  border-radius: 8px;
+  pointer-events: none;
+  cursor: none;
+  min-width: 200px;
+  min-height: 100px;
+  z-index: 1500;
+}
+
+.pfbihpDownloadingDivSvg {
+  fill: #3289c9;
+}
+
+#pfbihpSnapshotTooltip {
+  z-index: 1600;
+  right: initial;
+}
+
+#pfbialyearNumberText {
+  fill: #dadcdf;
+  font-size: 20em;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+#bycerf-bar-chart, #bycbpf-bar-chart {
+  overflow-y: hidden;
+}
+
+.pfbihpinnerTooltipDivContributions {
+  
+}
+
+.pfbihpinnerTooltipDivAllocations {
+  
+}
+
+.pfbihptooltipTable, .pfbihptooltipTable{
+	margin: 5px;
+    font-size: 0.8em;
+    width: calc(100% - 10px);
+	margin-top: 0;
+}
+
+.pfbihptooltipTable th, .pfbihptooltipTable th {
+  background-color: #ddd;
+}
+
+.pfbihptooltipTable th:nth-child(2), .pfbihptooltipTable th:nth-child(2) {
+  background-color: #fbd45c !important;
+}
+.pfbihptooltipTable th:nth-child(3), .pfbihptooltipTable th:nth-child(3) {
+  background-color: #f37261 !important;
+	color:#fff !important;
+}
+
+.pfbihptooltipTable td, .pfbihptooltipTable th {
+  border: 1px solid #ccc;
+  padding: 2px;
+}

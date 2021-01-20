@@ -1,0 +1,414 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>OCHA - PFONE BI</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+    <link href="assets/css/simple-scrollbar.css" rel="stylesheet" />
+    <link href="https://www.cssscript.com/wp-includes/css/sticky.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <!--<script src="assets/js/CheckBrowserCompatibility.js"></script>-->
+
+</head>
+<body class="sb-nav-fixed">
+    <!--Main Nav-->
+    <nav class="sb-topnav navbar navbar-expand navbar-dark logo-panel">
+        <a class="navbar-brand" href="index.html"><img src="assets/img/pfbi-logo.svg" alt="PF BI" class="mr-2" title="Pooled Fund Business Intelligence"></a>
+        <!-- Navbar-->
+        <ul class="navbar-nav ml-auto order-3">
+            <li><a class="nav-link small cerf-link" href="https://cbpfgms.github.io/cerf-bi-stag/" title="CERF BI" target="_blank"><span class="icon-chart"><i class="fas fa-chart-bar"></i></span><span>CERF BI</span></a></li>
+            <li><a class="nav-link small cbpf-link" href="https://pfbi.unocha.org" title="CBPF BI" target="_blank"><span class="icon-chart"><i class="fas fa-chart-bar"></i></span><span>CBPF BI</span></a></li>
+            <!--<li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="#">Settings</a>
+                    <a class="dropdown-item" href="#">Activity Log</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="login.html">Logout</a>
+                </div>
+            </li>-->
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <!--By Country Second Nav-->
+        <div id="byCountry" class="link-sidenav">
+            <div class="second-nav-title">
+                <div class="sidenav-title">
+                    <div class="sb-nav-link-icon"><i class="un-icon icon-Location">&#xe99b;</i> By Country</div>
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" data-toggle="tooltip" title="Close">&times;</a>
+                </div>
+                <div class="side-panel mt-2">
+                    <h6 id="byCountryAllocationsValue">$0</h6>
+                    <p id="byCountryAllocationsText">Total Allocations</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="byCountryCountriesValue">0</h6>
+                    <p id="byCountryCountriesText">Countries</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="byCountryProjectsValue">0</h6>
+                    <p id="byCountryProjectsText">Projects</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="byCountryPartnersValue">0</h6>
+                    <p id="byCountryPartnersText">Partners</p>
+                </div>
+                <!--By Country Bar Chart-->
+                <div class="side-panel border-bottom-0 p-0"><h4 class="pt-2">Regions <i class="fa fa-caret-down"></i></h4></div>
+            </div>
+            <div class="second-nav-chart" id="bycountry-bar-chart"></div>
+        </div>
+        <!--By Sector Second Nav-->
+        <div id="bySector" class="link-sidenav">
+            <div class="second-nav-title">
+                <div class="sidenav-title">
+                    <div class="sb-nav-link-icon"><i class="un-icon icon-Multi-cluster-sector">&#xe9ae;</i> By Sector</div>
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" data-toggle="tooltip" title="Close">&times;</a>
+                </div>
+                <div class="side-panel mt-2">
+                    <h6 id="bySectorAllocationsValue">$0</h6>
+                    <p id="bySectorAllocationsText">Total Allocations</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="bySectorCountriesValue">0</h6>
+                    <p id="bySectorCountriesText">Countries</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="bySectorProjectsValue">0</h6>
+                    <p id="bySectorProjectsText">Projects</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="bySectorPartnersValue">0</h6>
+                    <p id="bySectorPartnersText">Partners</p>
+                </div>
+                <!--By Sector Bar Chart-->
+                <div class="side-panel border-bottom-0 p-0"><h4 class="pt-2 pb-1">Sectors <i class="fa fa-caret-down"></i></h4></div>
+            </div>
+            <div class="second-nav-chart" id="bysector-bar-chart"></div>
+        </div>
+        <!--By Allocation Type Second Nav-->
+        <div id="byAllocationType" class="link-sidenav">
+            <div class="sidenav-title">
+                <div class="sb-nav-link-icon"><i class="un-icon icon-Response">&#xe9e2;</i> By Allocation Type</div>
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" data-toggle="tooltip" title="Close">&times;</a>
+            </div>
+            <div class="side-panel mt-2">
+                <h6 id="byTypeAllocationsValue">$0</h6>
+                <p id="byTypeAllocationsText">Total Allocations</p>
+            </div>
+            <div class="side-panel">
+                <h6 id="byTypeCountriesValue">0</h6>
+                <p id="byTypeCountriesText">Countries</p>
+            </div>
+            <div class="side-panel">
+                <h6 id="byTypeProjectsValue">0</h6>
+                <p id="byTypeProjectsText">Projects</p>
+            </div>
+            <div class="side-panel">
+                <h6 id="byTypePartnersValue">0</h6>
+                <p id="byTypePartnersText">Partners</p>
+            </div>
+            <!--By Allocation Type Bar Chart-->
+            <div class="side-panel border-bottom-0 p-0">
+                <h4 class="pt-2 pb-1 mb-3">CERF Window <i class="fa fa-caret-down"></i></h4>
+                <div id="bycerf-bar-chart"></div>
+                <h4 class="pt-2 pb-1 mb-3">CBPF Allocation Types <i class="fa fa-caret-down"></i></h4>
+                <div id="bycbpf-bar-chart"></div>
+            </div>
+        </div>
+        <!--By CERF CBPF Second Nav-->
+        <div id="byCerfCbpf" class="link-sidenav">
+            <div class="second-nav-title">
+                <div class="sidenav-title">
+                    <div class="sb-nav-link-icon"><i class="un-icon icon-Fund">&#xe96a;</i> By CERF/CBPF</div>
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" data-toggle="tooltip" title="Close">&times;</a>
+                </div>
+                <div class="side-panel mt-2">
+                    <h6 id="byCerfCbpfContributionsValue">$0M</h6>
+                    <p id="byCerfCbpfContributionsText">Total Contributions</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="byCerfCbpfPaidValue">$0M</h6>
+                    <p id="byCerfCbpfPaidText">Total Paid</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="byCerfCbpfPledgedValue">$0M</h6>
+                    <p id="byCerfCbpfPledgedText">Total Pledged</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="byCerfCbpfDonorsValue">0</h6>
+                    <p id="byCerfCbpfDonorsText">Donors</p>
+                </div>
+                <!--By CERF CBPF Bar Chart-->
+                <div class="side-panel border-bottom-0 p-0">
+                    <h4 class="pt-2 pb-1">Top 10 Donors <i class="fa fa-caret-down"></i></h4>
+                </div>
+            </div>
+            <div class="second-nav-chart" id="bycerfcbpf-bar-chart"></div>
+        </div>
+        <!--By Donor Second Nav-->
+        <div id="byDonor" class="link-sidenav">
+            <div class="second-nav-title">
+                <div class="sidenav-title">
+                    <div class="sb-nav-link-icon"><i class="un-icon icon-Partnership" data-toggle="tooltip" title="donor">&#xe9bc;</i> By Donor</div>
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                </div>
+                <div class="side-panel mt-2">
+                    <h6 id="byDonorContributionsValue">$0M</h6>
+                    <p id="byDonorContributionsText">Total Contributions</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="byDonorPaidValue">$0M</h6>
+                    <p id="byDonorPaidText">Total Paid</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="byDonorPledgedValue">$0M</h6>
+                    <p id="byDonorPledgedText">Total Pledged</p>
+                </div>
+                <div class="side-panel">
+                    <h6 id="byDonorDonorsValue">0</h6>
+                    <p id="byDonorDonorsText">Donors</p>
+                </div>
+                <!--By Donor Bar Chart-->
+                <div class="side-panel border-bottom-0 p-0">
+                    <h4 class="pt-2 pb-1">Top 10 Donors <i class="fa fa-caret-down"></i></h4>
+                </div>
+            </div>
+            <div class="second-nav-chart" id="bydonor-bar-chart"></div>
+        </div>
+        <div id="layoutSidenav_nav">
+            <button class="btn btn-link btn-sm order-2 order-lg-0 mobile-menu" id="sidebarToggle" href="#" style="display:none;"><i class="fas fa-bars"></i></button>
+            <div class="logo-panel">
+                <a class="navbar-brand" href="index.html"><img src="assets/img/unocha_logo.svg" alt="UN Ocha Pooled Fund Business Intelligence" class="" title="UN Ocha Pooled Fund Business Intelligence"></a>
+                <span>Pooled Funds Business Intelligence</span>
+            </div>
+            <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="select-panel">
+                            <form>
+                                <select class="form-control" id="ddlDropdown">
+                                </select>
+                            </form>
+                        </div>
+                        <div class="main-high-level-fugure">
+                            <div class="panel contributionsFigurePanel">
+                                <h3 id="high-level-fugure-contributions">$0</h3>
+                                <p>Contributed</p>
+                            </div>
+                            <div class="panel allocationsFigurePanel">
+                                <h3 id="high-level-fugure-allocations">$0</h3>
+                                <p>Allocated</p>
+                            </div>
+                            <div class="panel">
+                                <h3 id="high-level-fugure-donors">0</h3>
+                                <p>Donors</p>
+                            </div>
+                            <div class="panel">
+                                <h3 id="high-level-fugure-projects">0</h3>
+                                <p>Projects</p>
+                            </div>
+                        </div>
+                        <div class="brdr-btm"></div>
+                        <div class="sb-sidenav-menu-heading text-uppercase">Allocations</div>
+                        <a id="navAllocationsByCountry" class="nav-link" href="javascript:void(0)" onclick="openNav(this,'byCountry', false)">
+                            <div class="sb-nav-link-icon"><i class="un-icon icon-Location">&#xe99b;</i></div>
+                            By Country
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-right"></i></div>
+                        </a>
+                        <a id="navAllocationsBySector" class="nav-link" href="javascript:void(0)" onclick="openNav(this,'bySector', false)">
+                            <div class="sb-nav-link-icon"><i class="un-icon icon-Multi-cluster-sector">&#xe9ae;</i></div>
+                            By Sector
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-right"></i></div>
+                        </a>
+                        <a id="navAllocationsByType" class="nav-link" href="javascript:void(0)" onclick="openNav(this,'byAllocationType', false)">
+                            <div class="sb-nav-link-icon"><i class="un-icon icon-Response">&#xe9e2;</i></div>
+                            By Allocation Type
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-right"></i></div>
+                        </a>
+                    </div>
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading text-uppercase">Contributions</div>
+                        <a id="navContributionsByCerfCbpf" class="nav-link" href="javascript:void(0)" onclick="openNav(this,'byCerfCbpf', true)">
+                            <div class="sb-nav-link-icon"><i class="un-icon icon-Fund">&#xe96a;</i></div>
+                            By CERF/CBPF
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-right"></i></div>
+                        </a>
+                        <a id="navContributionsByDonor" class="nav-link" href="javascript:void(0)" onclick="openNav(this,'byDonor', true)">
+                            <div class="sb-nav-link-icon"><i class="un-icon icon-Partnership">&#xe9bc;</i></div>
+                            By Donor
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-right"></i></div>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main class="h-100 overflow-auto">
+                <div id="btnOptionDiv" class="options-btn-panel">
+                    <div class="hd-panel">
+                        <span class="btn-icon"></span><span class="btn-title">Options</span>
+                    </div>
+                    <div class="btn-panel">
+
+                    </div>
+                </div>
+                <!--Main Map Area-->
+                <div class="map-section" id="main-map-panel">
+
+                </div>
+            </main>
+
+            <div class="modal fade url-notofication" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header border-0" style="padding-bottom:0;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <h4 class="modal-title text-center">“CBPF BI” site moved to new address!</h4>
+                            <div class="text-center">
+                                <img src="assets/img/url-update-icon.png" alt="" class="mt-4 mb-4 rotate">
+                                <p>CBPF BI has been moved to <a href="https://cbpfbi.unocha.org/" target="_blank"><b>cbpfbi.unocha.org</b></a> and pfbi.unocha.org will be the home for Pooled Funds BI website. If you are looking for CBPF BI, <a href="https://cbpfbi.unocha.org/" target="_blank">click here</a> to navigate to new CBPF BI site and do not forget to update your bookmarks.</p>
+                                <a href="" data-dismiss="modal" class="btn-custom text-uppercase">Okay</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- The Modal -->
+            <div class="modal fade" id="videoModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">First time to PFBI ?</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="embed-responsive embed-responsive-16by9 z-depth-1-half" id="divEmbedVideo">
+                                <!--<iframe class="embed-responsive-item" src="https://youtu.be/VX4lw8ZTYFE" allowfullscreen></iframe>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Footer Area-->
+            <footer class="py-1 bg-light mt-auto">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted"><small>Copyright &copy; OCHA <span id="copyrightYear"></span></small></div>
+                        <div class="data-update"><span id="updatedOn"></span></div>
+                        <div>
+                            <a id="aShowVideoTutorial" href="#" data-toggle="modal" data-target="#videoModal" class="video-tutorial"><img src="assets/img/video-tutorial-icon.svg" width="16" height="16px;"><small>First time to PFBI ?</small></a>
+                            &middot;
+                            <a href="#" data-toggle="tooltip" title="Close"><small>Privacy Policy</small></a>
+                            &middot;
+                            <a href="#"><small>Terms &amp; Conditions</small></a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script>
+        function openNav(lnk, divID, disableDropdown) {
+            if (lnk == null || (lnk != null && $(lnk).length > 0 && !$(lnk).hasClass('active'))) {
+                closeNav(false);
+                $(document).prop('title', 'OCHA - PFONE BI - ' + $(lnk)[0].childNodes[2].nodeValue.trim());
+                document.getElementById(divID).style.width = "225px";
+                if (lnk != null && $(lnk).length > 0) {
+                    $("#layoutSidenav_nav .sb-sidenav a.nav-link").removeClass('active');
+                    $(lnk).addClass('active');
+                }
+
+                if (disableDropdown) {
+                    $("#ddlDropdown").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#ddlDropdown").removeAttr('disabled');
+                }
+
+            }
+            else {
+                closeNav(true);
+            }
+        }
+
+        function closeNav(removeActive) {
+            document.getElementById('byCountry').style.width = "0px";
+            document.getElementById('bySector').style.width = "0px";
+            document.getElementById('byAllocationType').style.width = "0px";
+            document.getElementById('byCerfCbpf').style.width = "0px";
+            document.getElementById('byDonor').style.width = "0px";
+            if (removeActive == undefined || removeActive == true) {
+                $("#layoutSidenav_nav .sb-sidenav a.nav-link").removeClass('active');
+            }
+
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/CookieHelper.js"></script>
+    <script>
+        $(document).ready(function () {
+            var cbpfBIMaxMessageCount = 3;
+            var cName = 'CBPFBISiteMovedMessageCount';
+            var cValue = GetCookie(cName);
+            var newCValue = 0;
+            if (cValue == "") {
+                newCValue = 1;
+                cValue = "0";
+            }
+            else {
+                newCValue = parseInt(cValue) + 1;
+            }
+
+            if (parseInt(cValue) < cbpfBIMaxMessageCount) {
+                $("#myModal").modal('show');
+                SetCookie(cName, newCValue, 730);
+            }
+
+            $('#aShowVideoTutorial').on("click", function (e) {
+                var iframe = document.createElement("iframe");
+                iframe.setAttribute("frameborder", "0");
+                iframe.setAttribute("class", "embed-responsive-item");
+                iframe.setAttribute("allowfullscreen", "");
+                iframe.setAttribute("src", 'https://www.youtube.com/embed/VX4lw8ZTYFE');
+                e.preventDefault();
+                $('#divEmbedVideo')[0].innerHTML = "";
+                $('#divEmbedVideo')[0].appendChild(iframe);
+
+            });
+        });
+
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'hover'
+        });
+
+        $("#copyrightYear").text(new Date().getFullYear());
+
+        $('#videoModal').on('hide.bs.modal', function (e) {
+            $(e.delegateTarget).find('iframe').remove();
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <script src="assets/js/scripts.js"></script>
+    <script src="assets/js/simple-scrollbar.js"></script>
+    <script src="assets/libs/html2canvasrc7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js" integrity="sha512-ToRWKKOvhBSS8EtqSflysM/S7v9bB9V0X3B1+E7xo7XZBEZCPL3VX5SFIp8zxY19r7Sz0svqQVbAOx+QcLQSAQ==" crossorigin="anonymous"></script>
+    <script type="module" src="./assets/js/main.js"></script>
+    <script>SimpleScrollbar.initAll();</script>
+</body>
+</html>
