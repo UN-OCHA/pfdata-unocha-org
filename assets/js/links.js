@@ -3,7 +3,7 @@ function createLinks(containerSelection) {
 	const cbpfLink = containerSelection.append("a")
 		.attr("class", "nav-link small cbpf-link")
 		.attr("data-toggle", "tooltip")
-		.attr("href", "https://cbpfdata.unocha.org")
+		.attr("href", "https://cbpf.data.unocha.org")
 		.attr("title", "Click here to navigate to CBPF Data Hub")
 		.attr("target", "_blank");
 
@@ -18,7 +18,7 @@ function createLinks(containerSelection) {
 	const cerfLink = containerSelection.append("a")
 		.attr("class", "nav-link small cerf-link")
 		.attr("data-toggle", "tooltip")
-		.attr("href", "https://cerfdata.unocha.org/")
+		.attr("href", "https://cerf.data.unocha.org/")
 		.attr("title", "Click here to navigate to CERF Data Hub")
 		.attr("target", "_blank");
 
