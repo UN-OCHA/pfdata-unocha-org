@@ -325,7 +325,7 @@
         function openNav(lnk, divID, disableDropdown) {
             if (lnk == null || (lnk != null && $(lnk).length > 0 && !$(lnk).hasClass('active'))) {
                 closeNav(false);
-                $(document).prop('title', 'OCHA - PFONE BI - ' + $(lnk)[0].childNodes[2].nodeValue.trim());
+                $(document).prop('title', 'OCHA - POOLED FUNDS DATA HUB - ' + $(lnk)[0].childNodes[2].nodeValue.trim());
                 document.getElementById(divID).style.width = "225px";
                 if (lnk != null && $(lnk).length > 0) {
                     $("#layoutSidenav_nav .sb-sidenav a.nav-link").removeClass('active');
