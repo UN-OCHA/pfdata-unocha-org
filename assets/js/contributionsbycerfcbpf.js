@@ -48,6 +48,7 @@ const classPrefix = "pfbicc",
 	xGroupExtraPadding = 18,
 	lineOpacity = 0.75,
 	fadeOpacity = 0.1,
+	legendPledgedPadding = 160,
 	formatMoney0Decimals = d3.format(",.0f"),
 	formatPercent = d3.format("%"),
 	monthFormat = d3.timeFormat("%b"),
@@ -479,6 +480,8 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			selections.yearDropdown.select("#pfbihpdisabledOption")
 				.html(selectedYear.length > 1 ? "Multiple years" : selectedYear[0] === allYears ? "All" : selectedYear[0]);
 
+			selections.yearDropdown.dispatch("change");
+
 			if (selectedYear[0] !== allYears) {
 				const yearValues = selectedYear.join("|");
 				if (lists.queryStringValues.has("contributionYear")) {
@@ -654,16 +657,23 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.append("text")
 			.attr("class", classPrefix + "labelsCerf")
 			.attr("x", d => xScaleCerf(d.year) + xScaleCerf.bandwidth() / 2)
-			.attr("y", d => yScaleCerf(0) - labelPadding);
+			.attr("y", d => d[`pledged${separator}cerf`] && selectedValue === "total" ? yScaleCerf(0) - (2 * labelPadding) : yScaleCerf(0) - labelPadding);
 
 		labelsCerf = labelsCerfEnter.merge(labelsCerf);
 
 		labelsCerf.transition()
 			.duration(duration)
-			.attr("y", d => yScaleCerf(d[`${selectedValue}${separator}cerf`]) - labelPadding)
-			.textTween((d, i, n) => {
+			.attr("y", d => d[`pledged${separator}cerf`] && selectedValue === "total" ? yScaleCerf(d[`total${separator}cerf`]) - (2 * labelPadding) : yScaleCerf(d[`${selectedValue}${separator}cerf`]) - labelPadding)
+			.tween("text", (d, i, n) => {
 				const interpolator = d3.interpolate(reverseFormat(n[i].textContent) || 0, d[`${selectedValue}${separator}cerf`]);
-				return t => d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B");
+				return !d[`pledged${separator}cerf`] || selectedValue !== "total" ?
+					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B")) :
+					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B"))
+					.append("tspan")
+					.attr("dy", "1.1em")
+					.classed(classPrefix + "pledgedValue", true)
+					.attr("x", xScaleCerf(d.year) + xScaleCerf.bandwidth() / 2)
+					.text("(" + d3.formatPrefix(".0", d[`pledged${separator}cerf`])(d[`pledged${separator}cerf`]) + ")");
 			});
 
 		let groupCerf = chartLayerCerf.selectAll("." + classPrefix + "groupCerf")
@@ -754,17 +764,24 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.append("text")
 			.attr("class", classPrefix + "labelsGroupCerf")
 			.attr("x", d => xScaleCerfInner(d.year) + xScaleCerfInner.bandwidth() / 2)
-			.attr("y", d => yScaleCerf(0) - labelPaddingInner);
+			.attr("y", d => d.pledged && selectedValue === "total" ? yScaleCerf(0) - (3 * labelPaddingInner) : yScaleCerf(0) - labelPaddingInner);
 
 		labelsGroupCerf = labelsGroupCerfEnter.merge(labelsGroupCerf);
 
 		labelsGroupCerf.transition()
 			.duration(duration)
 			.attr("x", d => xScaleCerfInner(d.year) + xScaleCerfInner.bandwidth() / 2)
-			.attr("y", d => yScaleCerf(d[selectedValue]) - labelPaddingInner)
-			.textTween((d, i, n) => {
+			.attr("y", d => d.pledged && selectedValue === "total" ? yScaleCerf(d[selectedValue]) - (3 * labelPaddingInner) : yScaleCerf(d[selectedValue]) - labelPaddingInner)
+			.tween("text", (d, i, n) => {
 				const interpolator = d3.interpolate(reverseFormat(n[i].textContent) || 0, d[selectedValue]);
-				return t => d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B");
+				return !d.pledged || selectedValue !== "total" ?
+					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B")) :
+					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B"))
+					.append("tspan")
+					.attr("dy", "1.1em")
+					.classed(classPrefix + "pledgedValue", true)
+					.attr("x", xScaleCerfInner(d.year) + xScaleCerfInner.bandwidth() / 2)
+					.text("(" + d3.formatPrefix(".0", d.pledged)(d.pledged) + ")");
 			});
 
 		let xAxisGroupedGroupCerf = groupCerf.selectAll("." + classPrefix + "xAxisGroupedGroupCerf")
@@ -925,6 +942,35 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.duration(duration)
 			.style("opacity", 1);
 
+		let legendPledgedCerf = svgCerf.selectAll("." + classPrefix + "legendPledgedCerf")
+			.data(dataYear.some(e => e[`pledged${separator}cerf`]) || dataMonth.some(e => e[`pledged${separator}cerf`]) ? [true] : []);
+
+		const legendPledgedExitCerf = legendPledgedCerf.exit()
+			.transition()
+			.duration(duration)
+			.style("opacity", 0)
+			.remove();
+
+		const legendPledgedEnterCerf = legendPledgedCerf.enter()
+			.append("text")
+			.attr("class", classPrefix + "legendPledgedCerf")
+			.style("opacity", 0)
+			.attr("x", legendGroupCerf.size() ? legendPledgedPadding : svgPaddingsCerf[3] + xScaleCerf.paddingOuter() * xScaleCerf.step())
+			.attr("y", svgHeightCerf - legendPadding + legendRectSize / 2)
+			.classed(classPrefix + "pledgedValue", true)
+			.text("(*)");
+
+		legendPledgedEnterCerf.append("tspan")
+			.style("fill", "#777")
+			.text(": Pledged Values");
+
+		legendPledgedCerf = legendPledgedEnterCerf.merge(legendPledgedCerf);
+
+		legendPledgedCerf.transition()
+			.duration(duration)
+			.attr("x", legendGroupCerf.size() ? legendPledgedPadding : svgPaddingsCerf[3] + xScaleCerf.paddingOuter() * xScaleCerf.step())
+			.style("opacity", 1);
+
 		//end of drawCerf
 	};
 
@@ -1039,16 +1085,23 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.append("text")
 			.attr("class", classPrefix + "labelsCbpf")
 			.attr("x", d => xScaleCbpf(d.year) + xScaleCbpf.bandwidth() / 2)
-			.attr("y", d => yScaleCbpf(0) - labelPadding);
+			.attr("y", d => d[`pledged${separator}cbpf`] && selectedValue === "total" ? yScaleCbpf(0) - (2 * labelPadding) : yScaleCbpf(0) - labelPadding);
 
 		labelsCbpf = labelsCbpfEnter.merge(labelsCbpf);
 
 		labelsCbpf.transition()
 			.duration(duration)
-			.attr("y", d => yScaleCbpf(d[`${selectedValue}${separator}cbpf`]) - labelPadding)
-			.textTween((d, i, n) => {
+			.attr("y", d => d[`pledged${separator}cbpf`] && selectedValue === "total" ? yScaleCbpf(d[`total${separator}cbpf`]) - (2 * labelPadding) : yScaleCbpf(d[`${selectedValue}${separator}cbpf`]) - labelPadding)
+			.tween("text", (d, i, n) => {
 				const interpolator = d3.interpolate(reverseFormat(n[i].textContent) || 0, d[`${selectedValue}${separator}cbpf`]);
-				return t => d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B");
+				return !d[`pledged${separator}cbpf`] || selectedValue !== "total" ?
+					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B")) :
+					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B"))
+					.append("tspan")
+					.attr("dy", "1.1em")
+					.classed(classPrefix + "pledgedValue", true)
+					.attr("x", xScaleCbpf(d.year) + xScaleCbpf.bandwidth() / 2)
+					.text("(" + d3.formatPrefix(".0", d[`pledged${separator}cbpf`])(d[`pledged${separator}cbpf`]) + ")");
 			});
 
 		let groupCbpf = chartLayerCbpf.selectAll("." + classPrefix + "groupCbpf")
@@ -1139,17 +1192,24 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.append("text")
 			.attr("class", classPrefix + "labelsGroupCbpf")
 			.attr("x", d => xScaleCbpfInner(d.year) + xScaleCbpfInner.bandwidth() / 2)
-			.attr("y", d => yScaleCbpf(0) - labelPaddingInner);
+			.attr("y", d => d.pledged && selectedValue === "total" ? yScaleCbpf(0) - (3 * labelPaddingInner) : yScaleCbpf(0) - labelPaddingInner);
 
 		labelsGroupCbpf = labelsGroupCbpfEnter.merge(labelsGroupCbpf);
 
 		labelsGroupCbpf.transition()
 			.duration(duration)
 			.attr("x", d => xScaleCbpfInner(d.year) + xScaleCbpfInner.bandwidth() / 2)
-			.attr("y", d => yScaleCbpf(d[selectedValue]) - labelPaddingInner)
-			.textTween((d, i, n) => {
+			.attr("y", d => d.pledged && selectedValue === "total" ? yScaleCbpf(d[selectedValue]) - (3 * labelPaddingInner) : yScaleCbpf(d[selectedValue]) - labelPaddingInner)
+			.tween("text", (d, i, n) => {
 				const interpolator = d3.interpolate(reverseFormat(n[i].textContent) || 0, d[selectedValue]);
-				return t => d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B");
+				return !d.pledged || selectedValue !== "total" ?
+					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B")) :
+					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B"))
+					.append("tspan")
+					.attr("dy", "1.1em")
+					.classed(classPrefix + "pledgedValue", true)
+					.attr("x", xScaleCbpfInner(d.year) + xScaleCbpfInner.bandwidth() / 2)
+					.text("(" + d3.formatPrefix(".0", d.pledged)(d.pledged) + ")");
 			});
 
 		let xAxisGroupedGroupCbpf = groupCbpf.selectAll("." + classPrefix + "xAxisGroupedGroupCbpf")
@@ -1308,6 +1368,35 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 		legendGroupCbpf.transition()
 			.duration(duration)
+			.style("opacity", 1);
+
+		let legendPledgedCbpf = svgCbpf.selectAll("." + classPrefix + "legendPledgedCbpf")
+			.data(dataYear.some(e => e[`pledged${separator}cbpf`]) || dataMonth.some(e => e[`pledged${separator}cbpf`]) ? [true] : []);
+
+		const legendPledgedExitCbpf = legendPledgedCbpf.exit()
+			.transition()
+			.duration(duration)
+			.style("opacity", 0)
+			.remove();
+
+		const legendPledgedEnterCbpf = legendPledgedCbpf.enter()
+			.append("text")
+			.attr("class", classPrefix + "legendPledgedCbpf")
+			.style("opacity", 0)
+			.attr("x", legendGroupCbpf.size() ? legendPledgedPadding : svgPaddingsCbpf[3] + xScaleCbpf.paddingOuter() * xScaleCbpf.step())
+			.attr("y", svgHeightCbpf - legendPadding + legendRectSize / 2)
+			.classed(classPrefix + "pledgedValue", true)
+			.text("(*)");
+
+		legendPledgedEnterCbpf.append("tspan")
+			.style("fill", "#777")
+			.text(": Pledged Values");
+
+		legendPledgedCbpf = legendPledgedEnterCbpf.merge(legendPledgedCbpf);
+
+		legendPledgedCbpf.transition()
+			.duration(duration)
+			.attr("x", legendGroupCbpf.size() ? legendPledgedPadding : svgPaddingsCbpf[3] + xScaleCbpf.paddingOuter() * xScaleCbpf.step())
 			.style("opacity", 1);
 
 		//end of drawCbpf

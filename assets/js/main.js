@@ -303,12 +303,12 @@ function controlCharts([worldMap,
 
 	//|event listeners
 	selections.yearDropdown.on("change", event => {
-		chartState.selectedYear = +event.target.value;
+		if (chartTypesAllocations.includes(chartState.selectedChart)) chartState.selectedYear = +event.target.value;
 		resetTopValues(topValues);
 		allocationsData = processDataAllocations(rawAllocationsData);
 		processContributionsYearData(rawContributionsData);
 		updateTopValues(topValues, selections);
-		drawAllocations(allocationsData);
+		if (chartTypesAllocations.includes(chartState.selectedChart)) drawAllocations(allocationsData);
 		setQueryString("year", chartState.selectedYear);
 	});
 
@@ -474,14 +474,14 @@ function mouseoverTopFigures(event, d, value) {
 			})))
 			.enter()
 			.append("td")
-			.html((d, i) => !i ? capitalize(d.name) : topValues[d.value] ? "$" + formatSIFloat(topValues[d.value]) : "$0");
+			.html((d, i) => !i ? capitalize(d.name) : topValues[d.value] ? "$" + formatSIFloat(topValues[d.value]).replace("G", "B") : "$0");
 	} else {
 		tooltipTable.append("tr")
 			.selectAll(null)
 			.data([" ", "cerf", "cbpf"])
 			.enter()
 			.append("td")
-			.html((d, i) => !i ? "Allocated" : topValues[`${d}${separator}allocated`] ? "$" + formatSIFloat(topValues[`${d}${separator}allocated`]) : "$0");
+			.html((d, i) => !i ? "Allocated" : topValues[`${d}${separator}allocated`] ? "$" + formatSIFloat(topValues[`${d}${separator}allocated`]).replace("G", "B") : "$0");
 	};
 
 	const thisBox = event.currentTarget.getBoundingClientRect();

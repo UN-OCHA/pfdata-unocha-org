@@ -360,7 +360,7 @@ footer a:hover{color:#2270aa;}
 .second-nav-title{position: sticky; width: 100%; background-color: #fff; top: 0; padding-bottom: 3px;}
 .second-nav-chart{display: flex; justify-content: center; width: 100%; min-height: calc(100% - 353px);}
 .data-update{text-align: center; font-size: 0.69rem; color: #777;}
-.mobile-menu{margin-left: 235px; position: absolute; background-color: #555; margin-top: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);    color: #fff;}
+.mobile-menu{margin-left: 235px; position: absolute; background-color: #555; margin-top: 60px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);    color: #fff;}
 .mobile-menu:focus, .mobile-menu:not(:disabled):not(.disabled){color:#fff;}
 .options-btn-panel{position: fixed; right: -95px; top: 95px; transition-duration: 0.3s; z-index: 100; min-width: 128px;}
 .options-btn-panel:hover{right:0;}
@@ -1397,7 +1397,7 @@ a.video-tutorial{color:#333;}
 .pfbiccfirstBreadcrumb span{font-weight: 400;}
 .pfbicdfirstBreadcrumb span{font-weight: 400;}
 
-.pfbicclegendGroupCerf text, .pfbicclegendGroupCbpf text {
+.pfbicclegendGroupCerf text, .pfbicclegendGroupCbpf text, .pfbicclegendPledgedCerf, .pfbicclegendPledgedCbpf {
   font-family: "Roboto", sans-serif;
   font-size: 12px;
   dominant-baseline: central;
@@ -1656,4 +1656,8 @@ a.video-tutorial{color:#333;}
 .pfbihptooltipTable td, .pfbihptooltipTable th {
   border: 1px solid #ccc;
   padding: 2px;
+}
+
+.pfbiccpledgedValue {
+  fill: crimson;
 }

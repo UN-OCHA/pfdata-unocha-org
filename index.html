@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>OCHA - PFONE BI</title>
+    <title>OCHA Pooled Funds Data Hub</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
@@ -22,8 +22,8 @@
         <a class="navbar-brand" href="index.html"><img src="assets/img/pfbi-logo.svg" alt="PF BI" class="mr-2" title="Pooled Fund Business Intelligence"></a>
         <!-- Navbar-->
         <ul class="navbar-nav ml-auto order-3">
-            <li><a class="nav-link small cerf-link" href="https://cbpfgms.github.io/cerf-bi-stag/" title="CERF BI" target="_blank"><span class="icon-chart"><i class="fas fa-chart-bar"></i></span><span>CERF BI</span></a></li>
-            <li><a class="nav-link small cbpf-link" href="https://pfbi.unocha.org" title="CBPF BI" target="_blank"><span class="icon-chart"><i class="fas fa-chart-bar"></i></span><span>CBPF BI</span></a></li>
+            <li><a class="nav-link small cerf-link" href="https://cbpf.data.unocha.org" title="CERF BI" target="_blank"><span class="icon-chart"><i class="fas fa-chart-bar"></i></span><span>CERF Data</span></a></li>
+            <li><a class="nav-link small cbpf-link" href="https://cerf.data.unocha.org" title="CBPF BI" target="_blank"><span class="icon-chart"><i class="fas fa-chart-bar"></i></span><span>CBPF Data</span></a></li>
             <!--<li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
@@ -183,10 +183,10 @@
             <div class="second-nav-chart" id="bydonor-bar-chart"></div>
         </div>
         <div id="layoutSidenav_nav">
-            <button class="btn btn-link btn-sm order-2 order-lg-0 mobile-menu" id="sidebarToggle" href="#" style="display:none;"><i class="fas fa-bars"></i></button>
+            <button class="btn btn-link btn-md order-2 order-lg-0 mobile-menu" id="sidebarToggle" href="#" style="display:none;"><i class="fas fa-bars"></i></button>
             <div class="logo-panel">
                 <a class="navbar-brand" href="index.html"><img src="assets/img/unocha_logo.svg" alt="UN Ocha Pooled Fund Business Intelligence" class="" title="UN Ocha Pooled Fund Business Intelligence"></a>
-                <span>Pooled Funds Business Intelligence</span>
+                <span>Pooled Funds Data Hub</span>
             </div>
             <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
@@ -265,14 +265,14 @@
                 </div>
             </main>
 
-            <div class="modal fade url-notofication" id="myModal">
+            <!--<div class="modal fade url-notofication" id="myModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <!-- Modal Header -->
+                        
                         <div class="modal-header border-0" style="padding-bottom:0;">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
-                        <!-- Modal body -->
+                        
                         <div class="modal-body">
                             <h4 class="modal-title text-center">“CBPF BI” site moved to new address!</h4>
                             <div class="text-center">
@@ -284,14 +284,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <!-- The Modal -->
             <div class="modal fade" id="videoModal">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h4 class="modal-title">First time to PFBI ?</h4>
+                            <h4 class="modal-title">First time to the PF Data Hub ?</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <!-- Modal body -->
@@ -310,7 +310,7 @@
                         <div class="text-muted"><small>Copyright &copy; OCHA <span id="copyrightYear"></span></small></div>
                         <div class="data-update"><span id="updatedOn"></span></div>
                         <div>
-                            <a id="aShowVideoTutorial" href="#" data-toggle="modal" data-target="#videoModal" class="video-tutorial"><img src="assets/img/video-tutorial-icon.svg" width="16" height="16px;"><small>First time to PFBI ?</small></a>
+                            <a id="aShowVideoTutorial" href="#" data-toggle="modal" data-target="#videoModal" class="video-tutorial"><img src="assets/img/video-tutorial-icon.svg" width="16" height="16px;"><small>First time to the PF Data Hub ?</small></a>
                             &middot;
                             <a href="#" data-toggle="tooltip" title="Close"><small>Privacy Policy</small></a>
                             &middot;
@@ -359,25 +359,9 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="assets/js/CookieHelper.js"></script>
+    
     <script>
-        $(document).ready(function () {
-            var cbpfBIMaxMessageCount = 3;
-            var cName = 'CBPFBISiteMovedMessageCount';
-            var cValue = GetCookie(cName);
-            var newCValue = 0;
-            if (cValue == "") {
-                newCValue = 1;
-                cValue = "0";
-            }
-            else {
-                newCValue = parseInt(cValue) + 1;
-            }
-
-            if (parseInt(cValue) < cbpfBIMaxMessageCount) {
-                $("#myModal").modal('show');
-                SetCookie(cName, newCValue, 730);
-            }
+        $(document).ready(function () {            
 
             $('#aShowVideoTutorial').on("click", function (e) {
                 var iframe = document.createElement("iframe");
