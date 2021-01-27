@@ -1627,22 +1627,19 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbihpinnerTooltipDivContributions {
-  
+  min-width: 220px;
 }
 
 .pfbihpinnerTooltipDivAllocations {
-  
+  min-width: 200px;
 }
 
 .pfbihptooltipTable, .pfbihptooltipTable{
 	margin: 5px;
-    font-size: 0.8em;
-    width: calc(100% - 10px);
+  font-size: 0.8em;
+  width: calc(100% - 10px);
 	margin-top: 0;
-}
-
-.pfbihptooltipTable th, .pfbihptooltipTable th {
-  background-color: #ddd;
+  border-collapse: collapse;
 }
 
 .pfbihptooltipTable th:nth-child(2), .pfbihptooltipTable th:nth-child(2) {
@@ -1654,8 +1651,16 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbihptooltipTable td, .pfbihptooltipTable th {
-  border: 1px solid #ccc;
+  border-bottom: 1px solid #ddd;
   padding: 2px;
+}
+
+.pfbihptooltipTable td:nth-last-child(-n+2){
+  text-align: right;
+}
+
+.pfbihptooltipTable th {
+  text-align: center;
 }
 
 .pfbiccpledgedValue {
