@@ -1,0 +1,82 @@
+/*Global Classes*/
+body{font-family: "Roboto",sans-serif; color:#231f20; background: #fff; padding: 0; margin: 0;}
+a{cursor: pointer}
+.wrapper{display: block; overflow: auto; margin-top: 83px; padding: 0;}
+.container {width: 100%; padding-right: 15px; padding-left: 15px; margin-right: auto; margin-left: auto; box-sizing: border-box;}
+header{background-color: #fff; padding: 15px 0; display: block; box-shadow: 0 1px 20px 1px rgba(0,0,0,.1); position: fixed; top: 0; width: 100%; margin: 0; z-index: 1000;} 
+header a img{max-width: 100%; height: auto;}
+.main-logo{background-repeat: no-repeat; background-size: contain; background-position: center; background-image: url(../../assets/img/cbpf-cerf-logo-hi-resolution.svg); float: left; width: 42%; min-height: 53px; margin: 0;}
+footer{background-color: #5392cb; padding: 15px 0; width: 100%; overflow: auto;}
+.covid-19-hd{background-color: #df6269; font-family: "Montserrat",sans-serif; color:#fff; text-align: center; padding: 6px; font-size: 18px; font-weight: 700; line-height: normal;}
+.covid-19-hd span{font-weight:300;}
+.covid-19-hd img{margin-bottom: 2px;}
+.covid-19-panel{border:1px solid #eee; padding: 5px 10px 10px 10px;}
+.covid-bi{position: relative; min-height: 450px; margin:25px 0;}
+.nav-links{float:right; font-family: "Montserrat", sans-serif; font-weight: 600; font-size: .8rem; padding: 20px 0;}
+.intro-txt{font-style: normal; font-family: "Montserrat", sans-serif; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; text-align: left; opacity: 0.8;}
+.nav-links a{text-decoration: none; color: #5392cb; }
+.nav-links a:hover{text-decoration: none; color: #146eb4;}
+.footer-links{float:left; margin-top: 6px;}
+.footer-logo{float:right; line-height: 0;}
+.footer-links a{text-decoration: none; color: #fff; font-size: 11px; font-family: "Arial", sans-serif; margin-right: 30px;}
+.footer-links a:hover{text-decoration: none; color: #333;}
+.covmaplistContainerDiv{width:auto !important;}
+
+.modal-dialog {
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+.modal-body {
+    position: relative;
+    padding: 0px;
+}
+
+.close {
+    position: absolute;
+    right: -30px;
+    top: 0;
+    z-index: 999;
+    font-size: 2rem;
+    font-weight: normal;
+    color: #fff;
+    opacity: 1;
+}
+
+.video-info {
+    color: #fff;
+	vertical-align: middle;
+}
+
+.video-info:hover {
+    color: #fff;
+    opacity: 50%;
+}
+
+.video-btn {
+    background: none!important;
+    border: none;
+    cursor: pointer;
+	line-height: normal;
+}
+
+.cbpf-link{border: 1px solid #f37261; color: #fff !important; padding: 0 7px 0 0 !important; transition: all 0.2s linear; display: flex; align-items: center; border-radius:3px; background-color:#f37261;}
+.cbpf-link .icon-chart{background-color: #fff; padding: 3px 5px; display: inline-flex; margin-right: 7px; font-size: 1.3em; color: #333;}
+.cbpf-link:hover .icon-chart{background-color: #f37261;}
+.cbpf-link .icon-chart svg{opacity:0.6;}
+.cbpf-link:hover{color:#333 !important; background-color: #fff; border-radius:3px;}
+
+.cerf-link{border: 1px solid #e8c760; color: #333 !important; padding: 0 7px 0 0 !important; margin-right: 10px; transition: all 0.2s linear; display: flex; align-items: center; border-radius:3px; background-color: #fbd45c;}
+.cerf-link .icon-chart{background-color: #fff; padding: 3px 5px; display: inline-flex; margin-right: 7px; font-size: 1.3em; color: #333;}
+.cerf-link:hover .icon-chart{background-color: #fbd45c;}
+.cerf-link .icon-chart svg{opacity:0.6;}
+.cerf-link:hover{color:#333 !important; background-color: #fff; border-radius:3px;}
+
+.navbar-nav {
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+@media (min-width: 1200px){
+.container {max-width: 1100px;}
+}
