@@ -14,7 +14,7 @@
     <link href="https://www.cssscript.com/wp-includes/css/sticky.css" rel="stylesheet" type="text/css">
     <link href="assets/css/style.css" rel="stylesheet" />
     <!--<script src="assets/js/CheckBrowserCompatibility.js"></script>-->
-
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1884029-23"></script>
 </head>
 <body class="sb-nav-fixed">
     <!--Main Nav-->
@@ -385,6 +385,17 @@
         $('#videoModal').on('hide.bs.modal', function (e) {
             $(e.delegateTarget).find('iframe').remove();
         });
+    </script>
+    <script type="text/javascript">
+        if (document.location.hostname.search("pfdata.unocha.org") !== -1) {
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'UA-1884029-23');
+        }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/topojson@3"></script>

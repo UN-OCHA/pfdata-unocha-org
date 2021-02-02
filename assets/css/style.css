@@ -417,18 +417,17 @@ footer a:hover{color:#2270aa;}
 .browser-notification-panel .content ul{
 	list-style-type: none;
 	color:#555;	
-	margin-bottom: 0;
-	display: flex;
-    justify-content: space-between;
-    align-items: center;
+	margin-bottom: 0;	
 	padding: 0 15px;
+	text-align: center;
 }
 .browser-notification-panel .content ul li {	
 	font-size: 0.9rem;	
 	font-weight: 600;	
-    padding-bottom: 5px;
+    padding: 0 10px;
 	text-align: center;
 	line-height: 20px;
+	display: inline-block;
 }
 .browser-notification-panel .content ul li img{
 	vertical-align: middle;
