@@ -14,5 +14,17 @@
         e.preventDefault();
         $("body").toggleClass("sb-sidenav-toggled");
     });
+	
+	$(window).resize(function () {
+        ToggleSideNav();
+    });
+
+    var ToggleSideNav = function () {
+        var $body = $('body');
+        if (window.innerWidth <= 992) $body.addClass('sb-sidenav-toggled');
+        else $body.removeClass('sb-sidenav-toggled');
+    };
+
+    ToggleSideNav();
 
 })(jQuery);

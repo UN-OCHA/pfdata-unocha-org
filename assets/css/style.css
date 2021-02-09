@@ -462,6 +462,15 @@ a.video-tutorial{color:#333;}
 /*.video-tutorial {background-image: url("../img/video-tutorial-icon.svg"); background-repeat: no-repeat; background-position: left center;}*/
 .video-tutorial small{margin-left: 5px;}
 
+.timer-countdown {display: inline-block;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    width: 27% !important;
+    padding: 31px;
+    text-align: center; }
+.timer-countdown b{font-size: 2em !important; color: #3289c9; display: block; font-weight: bold !important; line-height: normal;}
+.timer-countdown span{font-size: 1.2em !important; color: #3289c9; display: block; font-weight: 300 !important; line-height: normal;}
+
 @keyframes rotation {
   from {
     transform: rotate(0deg);
@@ -473,20 +482,32 @@ a.video-tutorial{color:#333;}
 
 @media (max-width: 575.98px) { 
 	#sidebarToggle{display:block !important;}
-	.cbpf-link, .cerf-link{display:none;}
+	.pfbialtopButtonsDiv .cbpf-link, .pfbicctopButtonsDiv .cbpf-link {padding: 3px 7px !important; font-size: 0.7em; line-height: normal; text-align: center;}
+	.pfbialtopButtonsDiv .cbpf-link .icon-chart, .pfbicctopButtonsDiv .cbpf-link .icon-chart{display: none !important;}
+	.pfbialtopButtonsDiv .cerf-link, .pfbicctopButtonsDiv .cerf-link {padding: 3px 7px !important; font-size: 0.7em; line-height: normal; text-align: center;}
+	.pfbialtopButtonsDiv .cerf-link .icon-chart, .pfbicctopButtonsDiv .cerf-link .icon-chart{display: none !important;}	
 	.link-sidenav{left: 0;}
 	.pfbialtopButtonsDiv svg, .pfbicctopButtonsDiv svg, .pfbicdtopButtonsDiv svg{display:none;}
-	.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv{padding: 0 15px 0 50px !important;}
+	.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv{padding: 0 15px 0 60px !important;}
+	footer{width: 100% !important;}
+	.mobile-menu{margin-top:7px !important;}	
 }
 @media (min-width: 576px) { 
-	.link-sidenav{left: 0;}
+	.link-sidenav{left: 0;}	
 }
 @media (max-width: 767.98px) { 
 	#sidebarToggle{display:block !important;}
+	.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;} 
+	footer{width: 100% !important;}
+	.mobile-menu{margin-top:7px !important;}
+	
 }
 @media (max-width: 991.98px) {
 	#sidebarToggle{display:block !important;}
 	.link-sidenav{z-index: 1050; }
+	.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;}
+	footer{width: 100% !important;}
+	.mobile-menu{margin-top:7px !important;}
 }
 
 .loader  {
@@ -1198,18 +1219,18 @@ a.video-tutorial{color:#333;}
   display: flex;
   align-items: center;
   margin-left: 1rem;
-  flex: 0 80%;
+  flex: 0 70%;
   height: 100%;
   overflow-y: auto;
 }
 
 .pfbiccpaidPledgedButtonsDiv {
-  flex: 0 20%;
+  flex: 0 30%;
   height: 100%;
   padding-right: 1rem;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .pfbiccchartAreaDiv {
@@ -1326,6 +1347,7 @@ a.video-tutorial{color:#333;}
 .pfbialbreadcrumbDivInner, .pfbiccbreadcrumbDivInner, .pfbicdbreadcrumbDivInner {
   display: flex;
   flex:0 50%;
+  align-items: center;
 }
 
 .pfbialtopButtonsDiv, .pfbicctopButtonsDiv, .pfbicdtopButtonsDiv {

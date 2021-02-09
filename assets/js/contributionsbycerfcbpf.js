@@ -60,7 +60,7 @@ const classPrefix = "pfbicc",
 	monthsArray = d3.range(1, 13, 1).map(d => monthFormat(monthParse(d))),
 	separator = "##",
 	stackKeys = ["cerf", "cbpf"],
-	valueTypes = ["total", "paid", "pledged"],
+	valueTypes = ["pledged", "paid", "total"],
 	barAxisTextObj = {
 		"Private": "P",
 		"Regional Local Authority": "RLA",
@@ -408,17 +408,20 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.on("click", (event, d) => {
 				tooltipDiv.style("display", "none");
 				const self = event.currentTarget;
-				if (event.altKey) clickyearButtons(d, true);
+				if (event.altKey) {
+					clickyearButtons(d, false);
+					return;
+				};
 				if (localVariable.get(self) !== "clicked") {
 					localVariable.set(self, "clicked");
 					setTimeout(() => {
 						if (localVariable.get(self) === "clicked") {
-							clickyearButtons(d, false);
+							clickyearButtons(d, true);
 						};
 						localVariable.set(self, null);
 					}, 250);
 				} else {
-					clickyearButtons(d, true);
+					clickyearButtons(d, false);
 					localVariable.set(self, null);
 				};
 			});
@@ -431,7 +434,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 				.style("max-width", "180px")
 				.attr("id", classPrefix + "innerTooltipDiv");
 
-			innerTooltip.html(d === allYears ? "Click to show all years" : "Click for selecting a year, double-click or ALT + click for selecting a single year. Maximum: " + maxYearNumber + " years.");
+			innerTooltip.html(d === allYears ? "Click to show all years" : "Click for selecting a single year, double-click or ALT + click for selecting multiple years. Maximum: " + maxYearNumber + " years.");
 
 			const containerSize = containerDiv.node().getBoundingClientRect();
 			const thisSize = this.getBoundingClientRect();
@@ -1456,7 +1459,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.html("Donors, " + selectedValue + " values ")
 			.append("span")
 			.attr("class", classPrefix + "barTitleSpan")
-			.html("(" + (selectedYear[0] === allYears ? "all years" : makeList(selectedYear)) + ")");
+			.html("(" + (selectedYear[0] === allYears ? "all years" : makeList(selectedYear.slice())) + ")");
 
 		barChartRankingDivTitleText.transition()
 			.duration(duration)
