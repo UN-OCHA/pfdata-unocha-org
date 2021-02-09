@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>OCHA Pooled Funds Data Hub - Mobile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Bootstrap core CSS -->	  
+	<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <style>
+      #reportContainer {
+          min-height: 700px;
+          min-width: 350px;
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="assets/dist/css/mobile-style.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#"><img src="assets/dist/img/unocha_logo.svg" alt="UN Ocha Pooled Fund Business Intelligence" class="w-30" title="UN Ocha Pooled Fund Business Intelligence"> <span>Pooled Funds Data Hub</span></a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>  
+  <ul class="navbar-nav px-3 flex-row m-auto">
+    <li class="nav-item mt-2 mb-2">
+      <p class="text-white small m-0">Please note that Pooled Funds Data Hub is fully optimized for the desktop users, mobile users will see limited # of visuals and data details using PowerBI. </p>
+    </li>
+	
+  </ul>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link active text-uppercase" href="#">              
+              Allocations <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link float-left" href="/mobile">              
+              <i class="un-icon icon-Location">&#xe99b;</i> By Country
+            </a>
+            <!--
+			<a class="nav-link float-left" href="#">
+              <i class="un-icon icon-Multi-cluster-sector">&#xe9ae;</i>
+              By Sector
+            </a>
+			<a class="nav-link float-left" href="#">
+              <i class="un-icon icon-Response">&#xe9e2;</i>
+              By Allocation Type
+            </a>
+            -->
+          </li>
+        </ul>        
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link active text-uppercase" href="/mobile/by_donor.html">              
+              Contributions <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <!--
+            <a class="nav-link float-left" href="#">
+              <i class="un-icon icon-Fund">&#xe96a;</i>
+              By CERF/CBPF
+            </a>
+            -->
+			<a class="nav-link float-left" href="#">
+              <i class="un-icon icon-Partnership">&#xe9bc;</i>
+              By Donor
+            </a>  
+          </li>          
+        </ul>
+		<ul class="nav flex-column mb-2">
+          <li class="nav-item mb-2">
+            <a class="nav-link active text-uppercase" href="#">              
+              External Links <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item px-3">
+            <a class="nav-link cerf-link float-left" href="https://cerf.data.unocha.org">CERF Data Hub</a>
+			      <a class="nav-link cbpf-link float-left" href="https://cbpf.data.unocha.org">CBPF Data Hub</a>  
+          </li>          
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom">
+        <div id="reportContainer">
+          <iframe width="100%" height="100%" src="https://app.powerbi.com/view?r=eyJrIjoiYzgzZTAyN2ItZWYwMi00ZmI5LWExMDMtZDM5ZWU1NzJhMDc0IiwidCI6IjBmOWUzNWRiLTU0NGYtNGY2MC1iZGNjLTVlYTQxNmU2ZGM3MCIsImMiOjh9" frameborder="0"></iframe>
+        </div>
+      </div>    
+    </main>
+  </div>
+</div>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+	<script src="assets/dist/js/bootstrap.bundle.min.js"></script> 
+  <script>
+
+    // make this a function so you can pass in a DIV name to support the ability to have multiple reports on a page
+
+    function resizeIFrameToFitContent(iFrame) {
+
+        var reportContainer = document.getElementById('reportContainer');
+
+        iFrame.width = reportContainer.clientWidth;
+        iFrame.height = reportContainer.clientHeight;
+
+        console.log("hi");
+
+    }
+
+    window.addEventListener('DOMContentLoaded', function (e)
+    {
+        // powerbi.js doesnt give the embeeded iframe's an ID so we need to loop to find them.
+        // assuming the only iframes that should be on any of our pages is the one we are embedding.
+        var iframes = document.querySelectorAll("iframe");
+        for (var i = 0; i < iframes.length; i++) {
+            resizeIFrameToFitContent(iframes[i]);
+
+            // PowerBI JavaScript adds "width:100%;height:100%;" in the style attribute which causes sizing issues. We'll style it from JavaScript and CSS. So we'll strip the inline style attribute from the iFrame.
+            iframes[i].attributes.removeNamedItem("style");
+
+            //alert(iframes[i].parentNode.id); // gets the parent div containing the iFrame. Can use this to make sure were re-rizing the right iFrame if we have multiple reports on one page.
+
+        }
+        });
+
+</script>       
+</body>
+</html>

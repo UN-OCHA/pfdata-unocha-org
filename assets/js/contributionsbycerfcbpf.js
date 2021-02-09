@@ -49,6 +49,8 @@ const classPrefix = "pfbicc",
 	lineOpacity = 0.75,
 	fadeOpacity = 0.1,
 	legendPledgedPadding = 160,
+	memberStateString = "Member State",
+	privateIsoCode = "xprv",
 	formatMoney0Decimals = d3.format(",.0f"),
 	formatPercent = d3.format("%"),
 	monthFormat = d3.timeFormat("%b"),
@@ -64,6 +66,8 @@ const classPrefix = "pfbicc",
 	barAxisTextObj = {
 		"Private": "P",
 		"Regional Local Authority": "RLA",
+		"Regional/ Local Authorities": "RLA",
+		"Regional/Local Authorities": "RLA",
 		"Private Contributions through UNF": "UNF",
 		"Observer": "OB"
 	};
@@ -1574,9 +1578,9 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			const sel = group.selection ? group.selection() : group;
 			group.call(xAxisBarChart);
 			sel.selectAll(".tick text")
-				.text(d => d !== null ? (lists.donorTypesList[d] !== "Member State" ? barAxisTextObj[lists.donorTypesList[d]] : null) : "O");
+				.text(d => d !== null ? (lists.donorTypesList[d] !== memberStateString ? barAxisTextObj[lists.donorTypesList[d]] : null) : "O");
 			sel.selectAll(".tick")
-				.filter(d => lists.donorIsoCodesList[d])
+				.filter(d => lists.donorTypesList[d] === memberStateString)
 				.append("image")
 				.attr("width", flagSize)
 				.attr("height", flagSize)
@@ -1620,13 +1624,13 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 				.attr("class", classPrefix + "tooltipTitleDiv")
 				.style("margin-bottom", "18px");
 
-			if (d.isoCode) {
+			if (donorsFlagsData[d.isoCode] || barAxisTextObj[lists.donorTypesList[d.donorId]] === "P") {
 				titleDiv.append("img")
 					.attr("width", flagSize)
-					.attr("height", flagSize)
+					.attr("height", barAxisTextObj[lists.donorTypesList[d.donorId]] === "P" ? null : flagSize)
 					.style("margin-right", "4px")
 					.style("margin-bottom", "2px")
-					.attr("src", donorsFlagsData[d.isoCode])
+					.attr("src", barAxisTextObj[lists.donorTypesList[d.donorId]] === "P" ? donorsFlagsData[privateIsoCode] : donorsFlagsData[d.isoCode])
 			};
 
 			titleDiv.append("strong")
@@ -1664,7 +1668,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 					.html("$" + formatMoney0Decimals(d[key]));
 			});
 
-			if (!d.isoCode && lists.donorTypesList[d.donorId]) {
+			if (lists.donorTypesList[d.donorId] !== memberStateString) {
 				innerTooltipDiv.append("div")
 					.attr("class", classPrefix + "tooltipFooter")
 					.html("(" + lists.donorTypesList[d.donorId] + ")");
