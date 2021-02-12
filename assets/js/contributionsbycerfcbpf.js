@@ -82,7 +82,8 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 	d3.select("#pfbihpPlayButton")
 		.property("disabled", false);
 
-	selectedYear = lists.queryStringValues.has("contributionYear") ? lists.queryStringValues.get("contributionYear").split("|").map(e => +e) : [allYears];
+	selectedYear = lists.queryStringValues.has("contributionYear") ? lists.queryStringValues.get("contributionYear").split("|").map(e => +e) :
+		lists.queryStringValues.has("year") ? [+lists.queryStringValues.get("year")] : [allYears];
 	selectedValue = lists.queryStringValues.has("value") ? lists.queryStringValues.get("value") : "total";
 
 	const outerDiv = selections.chartContainerDiv.append("div")

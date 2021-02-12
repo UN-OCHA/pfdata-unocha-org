@@ -162,7 +162,9 @@ body {
 }
 
 @media (max-width: 320px){
-	.navbar-brand span {display: inline-block !important; font-size: 0.7rem !important;}
+	#reportContainer {min-width:300px;}
+	.navbar-brand span {display: inline-block !important; font-size: 0.7rem !important;} 
+	#reportContainer iframe{width: 300px;}
 	
 }
 
