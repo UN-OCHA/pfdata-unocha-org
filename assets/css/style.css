@@ -457,6 +457,7 @@ footer a:hover{color:#2270aa;}
 }
 
 .tooltip-inner {background-color:rgba(0, 0, 0, 0.7); font-size: 0.8rem;}
+.info-pdf{padding-right: 10px; height: 16px; display: inline-block; border-right: 1px solid #ccc; margin-right: 7px; vertical-align: middle; line-height: normal;}
 .bs-tooltip-auto[x-placement^=bottom] .arrow::before, .bs-tooltip-bottom .arrow::before {border-bottom-color:rgba(0, 0, 0, 0.7);}
 a.video-tutorial{color:#333;}
 /*.video-tutorial {background-image: url("../img/video-tutorial-icon.svg"); background-repeat: no-repeat; background-position: left center;}*/
@@ -1552,8 +1553,13 @@ a.video-tutorial{color:#333;}
 
 #pfbiccinnerTooltipDiv > div:nth-child(1) strong{font-size: 14px !important;}
 
-#pfbiccinnerTooltipDiv > div:nth-child(2) .pfbicctooltipYears, .pfbicctooltipValues{
+.pfbicctooltipValues{
 	font-weight: 600;
+}
+
+.pfbicctooltipYears{
+  font-weight: 400;
+  font-size: 12px;
 }
 
 #pfbihpinnerTooltipDiv > div:nth-child(1) {

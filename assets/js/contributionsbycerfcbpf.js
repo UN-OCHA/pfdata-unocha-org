@@ -25,14 +25,18 @@ const classPrefix = "pfbicc",
 	svgBarChartPaddings = [14, 14, 36, 46],
 	barWidth = 24,
 	tooltipMargin = 4,
-	innerTooltipDivWidth = 220,
+	innerTooltipDivWidth = 290,
+	innerTooltipDivWidthRanking = 220,
 	maxBarChartDonorNumber = 45,
+	maxTooltipDonorNumber = 20,
+	maxTooltipNameLength = 26,
 	svgColumnChartWidth = 195,
 	maxColumnRectHeight = 16,
 	svgColumnChartHeight = 380,
 	labelsColumnPadding = 2,
 	maxYearNumber = 4,
 	flagSize = 16,
+	flagSizeTooltip = 20,
 	flagPadding = 2,
 	duration = 1000,
 	labelMargin = 22,
@@ -49,6 +53,7 @@ const classPrefix = "pfbicc",
 	lineOpacity = 0.75,
 	fadeOpacity = 0.1,
 	legendPledgedPadding = 160,
+	blankImg = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
 	memberStateString = "Member State",
 	privateIsoCode = "xprv",
 	formatMoney0Decimals = d3.format(",.0f"),
@@ -807,7 +812,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.call(xAxisGroupedCerf);
 
 		let tooltipRectCerf = tooltipRectLayerCerf.selectAll("." + classPrefix + "tooltipRectCerf")
-			.data(selectedYear[0] === allYears ? dataYear : dataMonth, d => selectedYear[0] === allYears ? d.year : d.month);
+			.data(dataYear, d => d.year);
 
 		const tooltipRectCerfExit = tooltipRectCerf.exit()
 			.remove();
@@ -827,12 +832,63 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 		tooltipRectCerf.attr("x", d => xScaleCerf(d[xValue]))
 			.attr("width", xScaleCerf.bandwidth());
 
-		tooltipRectCerf.on("mouseover", mouseoverTooltipCerf)
+		let tooltipGroupCerf = chartLayerCerf.selectAll("." + classPrefix + "tooltipGroupCerf")
+			.data(dataMonth, d => d.month);
+
+		const tooltipGroupExitCerf = tooltipGroupCerf.exit()
+			.remove();
+
+		const tooltipGroupEnterCerf = tooltipGroupCerf.enter()
+			.append("g")
+			.attr("class", classPrefix + "tooltipGroupCerf")
+			.attr("transform", d => "translate(" + xScaleCerf(d.month) + ",0)");
+
+		tooltipGroupCerf = tooltipGroupEnterCerf.merge(tooltipGroupCerf);
+
+		tooltipGroupCerf.attr("transform", d => "translate(" + xScaleCerf(d.month) + ",0)")
+			.each(d => d.cerfMonthlyData.forEach(e => e.parentData = d));
+
+		let tooltipRectGroupCerf = tooltipGroupCerf.selectAll("." + classPrefix + "tooltipRectGroupCerf")
+			.data(d => d.cerfMonthlyData, d => d.year);
+
+		const tooltipRectGroupExitCerf = tooltipRectGroupCerf.exit()
+			.remove();
+
+		const tooltipRectGroupEnterCerf = tooltipRectGroupCerf.enter()
+			.append("rect")
+			.attr("class", classPrefix + "tooltipRectGroupCerf")
+			.attr("x", d => xScaleCerfInner(d.year))
+			.attr("width", xScaleCerfInner.bandwidth())
+			.attr("y", svgPaddingsCerf[0])
+			.attr("height", svgHeightCerf - svgPaddingsCerf[0] - svgPaddingsCerf[2])
+			.style("opacity", 0)
+			.attr("pointer-events", "all");
+
+		tooltipRectGroupCerf = tooltipRectGroupEnterCerf.merge(tooltipRectGroupCerf);
+
+		tooltipRectGroupCerf.transition()
+			.duration(duration)
+			.attr("x", d => xScaleCerfInner(d.year))
+			.attr("width", xScaleCerfInner.bandwidth());
+
+		tooltipRectCerf.on("mouseover", (event, d) => mouseoverTooltipCerf(event, d, "yearTooltip"))
 			.on("mouseout", mouseoutTooltipCerf);
 
-		function mouseoverTooltipCerf(event, d) {
+		tooltipRectGroupCerf.on("mouseover", (event, d) => mouseoverTooltipCerf(event, d, "monthTooltip"))
+			.on("mouseout", mouseoutTooltipCerf);
+
+		function mouseoverTooltipCerf(event, d, tooltipType) {
 
 			chartState.currentHoveredElement = event.currentTarget;
+
+			groupCerf.call(highlightSelection);
+			labelsCerf.call(highlightSelection);
+			barsCerf.call(highlightSelection);
+
+			function highlightSelection(selection) {
+				selection.style("opacity", e => d.parentData ? (e.month === d.parentData.month ? 1 : fadeOpacity) :
+					e.year === d.year ? 1 : fadeOpacity);
+			};
 
 			tooltipDiv.style("display", "block")
 				.html(null);
@@ -844,7 +900,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			innerTooltipDiv.append("div")
 				.style("margin-bottom", "8px")
 				.append("strong")
-				.html(selectedYear[0] === allYears ? d.year : monthFormatFull(monthAbbrvParse(d.month)));
+				.html(tooltipType === "yearTooltip" ? d.year : monthFormatFull(monthAbbrvParse(d.parentData.month)) + " " + d.year);
 
 			const tooltipContainer = innerTooltipDiv.append("div")
 				.style("margin", "0px")
@@ -854,13 +910,42 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 				.style("line-height", 1.4)
 				.style("width", "100%");
 
-			const tooltipData = selectedYear[0] === allYears ?
-				[{
-					year: d.year,
-					total: d[`total${separator}cerf`],
-					paid: d[`paid${separator}cerf`],
-					pledged: d[`pledged${separator}cerf`]
-				}] : d.cerfMonthlyData;
+			const valuesArray = tooltipType === "yearTooltip" ? d.yearValues : d.parentData.monthValues.filter(e => e.FiscalYear === d.year);
+
+			let tooltipData = valuesArray.reduce((acc, curr) => {
+				if (curr.PooledFundId === lists.cerfPooledFundId) {
+					const foundDonor = acc.find(e => e.donorId === curr.DonorId);
+					if (foundDonor) {
+						foundDonor.total += curr.PaidAmt + curr.PledgeAmt;
+						foundDonor.paid += curr.PaidAmt;
+						foundDonor.pledged += curr.PledgeAmt;
+					} else {
+						acc.push({
+							donorId: curr.DonorId,
+							total: curr.PaidAmt + curr.PledgeAmt,
+							paid: curr.PaidAmt,
+							pledged: curr.PledgeAmt
+						});
+					};
+				};
+				return acc;
+			}, []);
+
+			tooltipData.sort((a, b) => b[selectedValue] - a[selectedValue]);
+
+			tooltipData = tooltipData.reduce((acc, curr, index) => {
+				if (index < maxTooltipDonorNumber) {
+					acc.push(curr)
+				} else if (index === maxTooltipDonorNumber) {
+					curr.donorId = null;
+					acc.push(curr);
+				} else {
+					acc[maxTooltipDonorNumber].total += curr.total;
+					acc[maxTooltipDonorNumber].paid += curr.paid;
+					acc[maxTooltipDonorNumber].pledged += curr.pledged;
+				};
+				return acc;
+			}, []);
 
 			tooltipData.forEach(row => {
 				const rowDiv = tooltipContainer.append("div")
@@ -868,9 +953,15 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 					.style("align-items", "center")
 					.style("width", "100%");
 
+				rowDiv.append("img")
+					.attr("width", flagSizeTooltip)
+					.attr("height", lists.donorIsoCodesList[row.donorId] && lists.donorIsoCodesList[row.donorId].toLowerCase() === privateIsoCode ? null : flagSizeTooltip)
+					.style("margin-right", "4px")
+					.attr("src", row.donorId ? (donorsFlagsData[lists.donorIsoCodesList[row.donorId].toLowerCase()] || blankImg) : blankImg);
+
 				rowDiv.append("span")
 					.attr("class", classPrefix + "tooltipYears")
-					.html(selectedYear[0] === allYears ? capitalize(selectedValue) : row.year);
+					.html(row.donorId ? lists.donorNamesList[row.donorId].substring(0, maxTooltipNameLength) : "Others");
 
 				rowDiv.append("span")
 					.attr("class", classPrefix + "tooltipLeader");
@@ -881,21 +972,25 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			});
 
 			const containerSize = containerDiv.node().getBoundingClientRect();
-			const thisSize = this.getBoundingClientRect();
+			const thisSize = event.currentTarget.getBoundingClientRect();
 			const tooltipSize = tooltipDiv.node().getBoundingClientRect();
 
-			const thisoffsetLeft = (tooltipPadding + thisSize.left + thisSize.width / 2 - tooltipSize.width / 2) < containerSize.left ?
-				tooltipPadding : (tooltipPadding + thisSize.left + thisSize.width / 2 - tooltipSize.width / 2) > containerSize.width ?
-				containerSize.width - tooltipSize.width - tooltipPadding : (thisSize.left + thisSize.width / 2 - tooltipSize.width / 2) - containerSize.left;
+			const thisOffsetLeft = tooltipSize.width > containerSize.right - thisSize.right - tooltipPadding ?
+				thisSize.left - containerSize.left - thisSize.width - tooltipSize.width - tooltipPadding :
+				thisSize.left - containerSize.left + thisSize.width + tooltipPadding;
 
-			tooltipDiv.style("left", thisoffsetLeft + "px")
-				.style("top", (thisSize.top + thisSize.height / 2 - tooltipSize.height / 2) - containerSize.top + "px");
+			tooltipDiv.style("left", thisOffsetLeft + "px")
+				.style("top", Math.max((thisSize.top + thisSize.height / 2 - tooltipSize.height / 2) - containerSize.top, 0) + "px");
 
 		};
 
 		function mouseoutTooltipCerf() {
 			if (chartState.isSnapshotTooltipVisible) return;
 			chartState.currentHoveredElement = null;
+
+			groupCerf.style("opacity", 1);
+			labelsCerf.style("opacity", 1);
+			barsCerf.style("opacity", 1);
 
 			tooltipDiv.html(null)
 				.style("display", "none");
@@ -1235,7 +1330,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.call(xAxisGroupedCbpf);
 
 		let tooltipRectCbpf = tooltipRectLayerCbpf.selectAll("." + classPrefix + "tooltipRectCbpf")
-			.data(selectedYear[0] === allYears ? dataYear : dataMonth, d => selectedYear[0] === allYears ? d.year : d.month);
+			.data(dataYear, d => d.year);
 
 		const tooltipRectCbpfExit = tooltipRectCbpf.exit()
 			.remove();
@@ -1255,12 +1350,63 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 		tooltipRectCbpf.attr("x", d => xScaleCbpf(d[xValue]))
 			.attr("width", xScaleCbpf.bandwidth());
 
-		tooltipRectCbpf.on("mouseover", mouseoverTooltipCbpf)
+		let tooltipGroupCbpf = chartLayerCbpf.selectAll("." + classPrefix + "tooltipGroupCbpf")
+			.data(dataMonth, d => d.month);
+
+		const tooltipGroupExitCbpf = tooltipGroupCbpf.exit()
+			.remove();
+
+		const tooltipGroupEnterCbpf = tooltipGroupCbpf.enter()
+			.append("g")
+			.attr("class", classPrefix + "tooltipGroupCbpf")
+			.attr("transform", d => "translate(" + xScaleCbpf(d.month) + ",0)");
+
+		tooltipGroupCbpf = tooltipGroupEnterCbpf.merge(tooltipGroupCbpf);
+
+		tooltipGroupCbpf.attr("transform", d => "translate(" + xScaleCbpf(d.month) + ",0)")
+			.each(d => d.cerfMonthlyData.forEach(e => e.parentData = d));
+
+		let tooltipRectGroupCbpf = tooltipGroupCbpf.selectAll("." + classPrefix + "tooltipRectGroupCbpf")
+			.data(d => d.cerfMonthlyData, d => d.year);
+
+		const tooltipRectGroupExitCbpf = tooltipRectGroupCbpf.exit()
+			.remove();
+
+		const tooltipRectGroupEnterCbpf = tooltipRectGroupCbpf.enter()
+			.append("rect")
+			.attr("class", classPrefix + "tooltipRectGroupCbpf")
+			.attr("x", d => xScaleCbpfInner(d.year))
+			.attr("width", xScaleCbpfInner.bandwidth())
+			.attr("y", svgPaddingsCbpf[0])
+			.attr("height", svgHeightCbpf - svgPaddingsCbpf[0] - svgPaddingsCbpf[2])
+			.style("opacity", 0)
+			.attr("pointer-events", "all");
+
+		tooltipRectGroupCbpf = tooltipRectGroupEnterCbpf.merge(tooltipRectGroupCbpf);
+
+		tooltipRectGroupCbpf.transition()
+			.duration(duration)
+			.attr("x", d => xScaleCbpfInner(d.year))
+			.attr("width", xScaleCbpfInner.bandwidth());
+
+		tooltipRectCbpf.on("mouseover", (event, d) => mouseoverTooltipCbpf(event, d, "yearTooltip"))
 			.on("mouseout", mouseoutTooltipCbpf);
 
-		function mouseoverTooltipCbpf(event, d) {
+		tooltipRectGroupCbpf.on("mouseover", (event, d) => mouseoverTooltipCbpf(event, d, "monthTooltip"))
+			.on("mouseout", mouseoutTooltipCbpf);
+
+		function mouseoverTooltipCbpf(event, d, tooltipType) {
 
 			chartState.currentHoveredElement = event.currentTarget;
+
+			groupCbpf.call(highlightSelection);
+			labelsCbpf.call(highlightSelection);
+			barsCbpf.call(highlightSelection);
+
+			function highlightSelection(selection) {
+				selection.style("opacity", e => d.parentData ? (e.month === d.parentData.month ? 1 : fadeOpacity) :
+					e.year === d.year ? 1 : fadeOpacity);
+			};
 
 			tooltipDiv.style("display", "block")
 				.html(null);
@@ -1272,7 +1418,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			innerTooltipDiv.append("div")
 				.style("margin-bottom", "8px")
 				.append("strong")
-				.html(selectedYear[0] === allYears ? d.year : monthFormatFull(monthAbbrvParse(d.month)));
+				.html(tooltipType === "yearTooltip" ? d.year : monthFormatFull(monthAbbrvParse(d.parentData.month)) + " " + d.year);
 
 			const tooltipContainer = innerTooltipDiv.append("div")
 				.style("margin", "0px")
@@ -1282,13 +1428,42 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 				.style("line-height", 1.4)
 				.style("width", "100%");
 
-			const tooltipData = selectedYear[0] === allYears ?
-				[{
-					year: d.year,
-					total: d[`total${separator}cbpf`],
-					paid: d[`paid${separator}cbpf`],
-					pledged: d[`pledged${separator}cbpf`]
-				}] : d.cbpfMonthlyData;
+			const valuesArray = tooltipType === "yearTooltip" ? d.yearValues : d.parentData.monthValues.filter(e => e.FiscalYear === d.year);
+
+			let tooltipData = valuesArray.reduce((acc, curr) => {
+				if (curr.PooledFundId !== lists.cerfPooledFundId) {
+					const foundDonor = acc.find(e => e.donorId === curr.DonorId);
+					if (foundDonor) {
+						foundDonor.total += curr.PaidAmt + curr.PledgeAmt;
+						foundDonor.paid += curr.PaidAmt;
+						foundDonor.pledged += curr.PledgeAmt;
+					} else {
+						acc.push({
+							donorId: curr.DonorId,
+							total: curr.PaidAmt + curr.PledgeAmt,
+							paid: curr.PaidAmt,
+							pledged: curr.PledgeAmt
+						});
+					};
+				};
+				return acc;
+			}, []);
+
+			tooltipData.sort((a, b) => b[selectedValue] - a[selectedValue]);
+
+			tooltipData = tooltipData.reduce((acc, curr, index) => {
+				if (index < maxTooltipDonorNumber) {
+					acc.push(curr)
+				} else if (index === maxTooltipDonorNumber) {
+					curr.donorId = null;
+					acc.push(curr);
+				} else {
+					acc[maxTooltipDonorNumber].total += curr.total;
+					acc[maxTooltipDonorNumber].paid += curr.paid;
+					acc[maxTooltipDonorNumber].pledged += curr.pledged;
+				};
+				return acc;
+			}, []);
 
 			tooltipData.forEach(row => {
 				const rowDiv = tooltipContainer.append("div")
@@ -1296,9 +1471,15 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 					.style("align-items", "center")
 					.style("width", "100%");
 
+				rowDiv.append("img")
+					.attr("width", flagSizeTooltip)
+					.attr("height", lists.donorIsoCodesList[row.donorId] && lists.donorIsoCodesList[row.donorId].toLowerCase() === privateIsoCode ? null : flagSizeTooltip)
+					.style("margin-right", "4px")
+					.attr("src", row.donorId ? (donorsFlagsData[lists.donorIsoCodesList[row.donorId].toLowerCase()] || blankImg) : blankImg);
+
 				rowDiv.append("span")
 					.attr("class", classPrefix + "tooltipYears")
-					.html(selectedYear[0] === allYears ? capitalize(selectedValue) : row.year);
+					.html(row.donorId ? lists.donorNamesList[row.donorId].substring(0, maxTooltipNameLength) : "Others");
 
 				rowDiv.append("span")
 					.attr("class", classPrefix + "tooltipLeader");
@@ -1309,21 +1490,25 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			});
 
 			const containerSize = containerDiv.node().getBoundingClientRect();
-			const thisSize = this.getBoundingClientRect();
+			const thisSize = event.currentTarget.getBoundingClientRect();
 			const tooltipSize = tooltipDiv.node().getBoundingClientRect();
 
-			const thisoffsetLeft = (tooltipPadding + thisSize.left + thisSize.width / 2 - tooltipSize.width / 2) < containerSize.left ?
-				tooltipPadding : (tooltipPadding + thisSize.left + thisSize.width / 2 - tooltipSize.width / 2) > containerSize.width ?
-				containerSize.width - tooltipSize.width - tooltipPadding : (thisSize.left + thisSize.width / 2 - tooltipSize.width / 2) - containerSize.left;
+			const thisOffsetLeft = tooltipSize.width > containerSize.right - thisSize.right - tooltipPadding ?
+				thisSize.left - containerSize.left - thisSize.width - tooltipSize.width - tooltipPadding :
+				thisSize.left - containerSize.left + thisSize.width + tooltipPadding;
 
-			tooltipDiv.style("left", thisoffsetLeft + "px")
-				.style("top", (thisSize.top + thisSize.height / 2 - tooltipSize.height / 2) - containerSize.top + "px");
+			tooltipDiv.style("left", thisOffsetLeft + "px")
+				.style("top", Math.max((thisSize.top + thisSize.height / 2 - tooltipSize.height / 2) - containerSize.top, 0) + "px");
 
 		};
 
 		function mouseoutTooltipCbpf() {
 			if (chartState.isSnapshotTooltipVisible) return;
 			chartState.currentHoveredElement = null;
+
+			groupCbpf.style("opacity", 1);
+			labelsCbpf.style("opacity", 1);
+			barsCbpf.style("opacity", 1);
 
 			tooltipDiv.html(null)
 				.style("display", "none");
@@ -1618,7 +1803,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 				.html(null);
 
 			const innerTooltipDiv = tooltipDiv.append("div")
-				.style("max-width", innerTooltipDivWidth + "px")
+				.style("max-width", innerTooltipDivWidthRanking + "px")
 				.attr("id", classPrefix + "innerTooltipDiv");
 
 			const titleDiv = innerTooltipDiv.append("div")

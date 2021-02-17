@@ -156,8 +156,6 @@ function loopYears(yearsArray, selections) {
 		const yearButton = d3.select(".pfbiccyearButtonsDiv")
 			.selectAll("button")
 			.filter(d => d === chartState.selectedYear);
-
-		yearButton.dispatch("click");
 		yearButton.dispatch("click");
 	};
 };
