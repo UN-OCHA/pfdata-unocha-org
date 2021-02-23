@@ -955,7 +955,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 				rowDiv.append("img")
 					.attr("width", flagSizeTooltip)
-					.attr("height", lists.donorIsoCodesList[row.donorId] && lists.donorIsoCodesList[row.donorId].toLowerCase() === privateIsoCode ? null : flagSizeTooltip)
+					.attr("height", flagSizeTooltip)
 					.style("margin-right", "4px")
 					.attr("src", row.donorId ? (donorsFlagsData[lists.donorIsoCodesList[row.donorId].toLowerCase()] || blankImg) : blankImg);
 
@@ -1473,7 +1473,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 				rowDiv.append("img")
 					.attr("width", flagSizeTooltip)
-					.attr("height", lists.donorIsoCodesList[row.donorId] && lists.donorIsoCodesList[row.donorId].toLowerCase() === privateIsoCode ? null : flagSizeTooltip)
+					.attr("height", flagSizeTooltip)
 					.style("margin-right", "4px")
 					.attr("src", row.donorId ? (donorsFlagsData[lists.donorIsoCodesList[row.donorId].toLowerCase()] || blankImg) : blankImg);
 
