@@ -604,7 +604,8 @@ function processDataAllocations(rawAllocationsData) {
 	const data = [];
 
 	rawAllocationsData.forEach(row => {
-		if (row.AllocationYear === chartState.selectedYear) {
+		//THIS IS A TEMPORARY FILTER: && +row.PooledFundId
+		if (row.AllocationYear === chartState.selectedYear && +row.PooledFundId) {
 
 			const foundFund = data.find(d => d.country === row.PooledFundId);
 
