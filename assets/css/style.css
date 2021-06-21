@@ -472,6 +472,8 @@ a.video-tutorial{color:#333;}
 .timer-countdown b{font-size: 2em !important; color: #3289c9; display: block; font-weight: bold !important; line-height: normal;}
 .timer-countdown span{font-size: 1.2em !important; color: #3289c9; display: block; font-weight: 300 !important; line-height: normal;}
 
+.overflow-x-hide{overflow-x: hidden;}
+
 @keyframes rotation {
   from {
     transform: rotate(0deg);
