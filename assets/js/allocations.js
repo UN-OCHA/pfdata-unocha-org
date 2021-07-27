@@ -68,6 +68,8 @@ const classPrefix = "pfbial",
 let svgMapWidth,
 	svgMapHeight,
 	allocationsProperty,
+	showCovidDisclaimer = true,
+	covid19InCluster = false,
 	clickableButtons = true,
 	mouseoverBarsColumnTimeout;
 
@@ -150,6 +152,35 @@ function createAllocations(selections, colors, mapData, lists) {
 
 	const buttonsDiv = mapDiv.append("div")
 		.attr("class", classPrefix + "buttonsDiv");
+
+	const covidDisclaimer = barChartDivOuter.append("div")
+		.attr("class", classPrefix + "covidDisclaimer")
+		.style("display", "none");
+
+	const covidDisclaimerTopDiv = covidDisclaimer.append("div")
+		.attr("class", classPrefix + "covidDisclaimerTopDiv")
+		.style("width", "100%");
+
+	const covidDisclaimerTopDivMain = covidDisclaimerTopDiv.append("div")
+		.attr("class", classPrefix + "covidDisclaimerTopDivMain")
+		.append("b")
+		.html("Disclaimer:")
+
+	const covidDisclaimerTopDivClose = covidDisclaimerTopDiv.append("div")
+		.attr("class", classPrefix + "covidDisclaimerTopDivClose")
+		.on("click", () => {
+			showCovidDisclaimer = false;
+			covidDisclaimer.remove()
+		});
+
+	covidDisclaimerTopDivClose.append("i")
+		.attr("class", "far fa-window-close")
+		.style("cursor", "pointer");
+
+	const covidDisclaimerDivMain = covidDisclaimer.append("div")
+		.attr("class", classPrefix + "covidDisclaimerDivMain")
+		.append("p")
+		.html("A temporary COVID-19 cluster was established in four countries while the Global HRP to COVID-19 was being released. Funding and people targeted within the temporary COVID-19 cluster do not include the whole CBPF response to COVID-19. Comprehensive data and information on CBPFs response to COVID-19 can be found here <a href='https://pfdata.unocha.org/COVID19/' target='_blank'>https://pfdata.unocha.org/COVID19/</a><br>");
 
 	chartState.currentTooltip = tooltipDivMap;
 
@@ -1212,6 +1243,12 @@ function createAllocations(selections, colors, mapData, lists) {
 
 	function drawBarChart(unfilteredData, originalData) {
 
+		if (covid19InCluster && showCovidDisclaimer) {
+			covidDisclaimer.style("display", "block");
+		} else {
+			covidDisclaimer.style("display", "none");
+		};
+
 		const data = unfilteredData.filter(d => chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]);
 
 		data.sort((a, b) => chartState.selectedFund === "cerf/cbpf" ? ((b.cerf + b.cbpf) - (a.cerf + a.cbpf)) :
@@ -1961,7 +1998,7 @@ function createAllocations(selections, colors, mapData, lists) {
 			columnData.sort((a, b) => chartState.selectedFund === "cerf/cbpf" ? ((b.cerf + b.cbpf) - (a.cerf + a.cbpf)) :
 				b[chartState.selectedFund] - a[chartState.selectedFund]);
 			columnData.forEach(row => row.clicked = chartState.selectedRegion.indexOf(row.region) > -1);
-			createAllocationsByCountryColumnChart(columnData)
+			createAllocationsByCountryColumnChart(columnData);
 		};
 		if (chartState.selectedChart === "allocationsBySector") {
 			const columnData = originalData.reduce((acc, curr) => {
@@ -1986,7 +2023,7 @@ function createAllocations(selections, colors, mapData, lists) {
 			columnData.sort((a, b) => chartState.selectedFund === "cerf/cbpf" ? ((b.cerf + b.cbpf) - (a.cerf + a.cbpf)) :
 				b[chartState.selectedFund] - a[chartState.selectedFund]);
 			columnData.forEach(row => row.clicked = chartState.selectedCluster.indexOf(row.clusterId) > -1);
-			createAllocationsBySectorColumnChart(columnData)
+			createAllocationsBySectorColumnChart(columnData);
 		};
 		if (chartState.selectedChart === "allocationsByType") {
 			const columnData = originalData.reduce((acc, curr) => {
@@ -2011,7 +2048,7 @@ function createAllocations(selections, colors, mapData, lists) {
 			columnData.sort((a, b) => chartState.selectedFund === "cerf/cbpf" ? ((b.cerf + b.cbpf) - (a.cerf + a.cbpf)) :
 				b[chartState.selectedFund] - a[chartState.selectedFund]);
 			columnData.forEach(row => row.clicked = chartState.selectedType.indexOf(row.allocationTypeId) > -1);
-			createAllocationsByTypeColumnChart(columnData)
+			createAllocationsByTypeColumnChart(columnData);
 		};
 
 		function createAllocationsByCountryColumnChart(columnData) {
@@ -2113,8 +2150,8 @@ function createAllocations(selections, colors, mapData, lists) {
 				.attr("pointer-events", "all")
 				.style("cursor", "pointer")
 				.style("opacity", 0)
-				.attr("x", svgColumnChartPaddingByCountry[3])
-				.attr("width", svgColumnChartWidth - svgColumnChartPaddingByCountry[1] - svgColumnChartPaddingByCountry[3])
+				.attr("x", 0)
+				.attr("width", svgColumnChartWidth)
 				.attr("height", yScaleColumnByCountry.step())
 				.attr("y", d => yScaleColumnByCountry(d.region) - yScaleColumnByCountry.bandwidth() / 2);
 
@@ -2372,8 +2409,8 @@ function createAllocations(selections, colors, mapData, lists) {
 				.attr("pointer-events", "all")
 				.style("cursor", "pointer")
 				.style("opacity", 0)
-				.attr("x", svgColumnChartPaddingBySector[3])
-				.attr("width", svgColumnChartWidth - svgColumnChartPaddingBySector[1] - svgColumnChartPaddingBySector[3])
+				.attr("x", 0)
+				.attr("width", svgColumnChartWidth)
 				.attr("height", yScaleColumnBySector.step())
 				.attr("y", d => yScaleColumnBySector(d.cluster) - yScaleColumnBySector.bandwidth() / 2);
 
@@ -2392,6 +2429,8 @@ function createAllocations(selections, colors, mapData, lists) {
 				if (!d.clicked) {
 					chartState.selectedCluster.push(d.clusterId);
 				};
+
+				covid19InCluster = chartState.selectedCluster.includes("16");
 
 				const data = filterData(originalData);
 
@@ -2495,6 +2534,15 @@ function createAllocations(selections, colors, mapData, lists) {
 					.attr("dy", "1.1em")
 					.attr("x", -(yAxisColumnBySector.tickPadding() + yAxisColumnBySector.tickSize()))
 					.text(d => clusterNamesScale(d).split(" ")[1]);
+				sel.selectAll(".tick")
+					.filter(d => d === "COVID-19")
+					.append("text")
+					.attr("width", 14)
+					.attr("height", 14)
+					.attr("x", -88)
+					.attr("y", -8)
+					.attr("class", "fas fa-info-circle")
+					.style("color", "#666");
 				if (sel !== group) group.selectAll(".tick text")
 					.filter(d => d.indexOf(" ") > -1)
 					.attrTween("x", null)
@@ -2632,8 +2680,8 @@ function createAllocations(selections, colors, mapData, lists) {
 				.attr("pointer-events", "all")
 				.style("cursor", "pointer")
 				.style("opacity", 0)
-				.attr("x", svgColumnChartPaddingByType[3])
-				.attr("width", svgColumnChartWidth - svgColumnChartPaddingByType[1] - svgColumnChartPaddingByType[3])
+				.attr("x", 0)
+				.attr("width", svgColumnChartWidth)
 				.attr("height", yScaleColumnByTypeCerf.step())
 				.attr("y", d => yScaleColumnByTypeCerf(d.allocationType) - yScaleColumnByTypeCerf.bandwidth() / 2);
 
@@ -2847,8 +2895,8 @@ function createAllocations(selections, colors, mapData, lists) {
 				.attr("pointer-events", "all")
 				.style("cursor", "pointer")
 				.style("opacity", 0)
-				.attr("x", svgColumnChartPaddingByType[3])
-				.attr("width", svgColumnChartWidth - svgColumnChartPaddingByType[1] - svgColumnChartPaddingByType[3])
+				.attr("x", 0)
+				.attr("width", svgColumnChartWidth)
 				.attr("height", yScaleColumnByTypeCbpf.step())
 				.attr("y", d => yScaleColumnByTypeCbpf(d.allocationType) - yScaleColumnByTypeCbpf.bandwidth() / 2);
 

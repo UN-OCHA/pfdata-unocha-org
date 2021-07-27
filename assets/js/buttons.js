@@ -5,7 +5,8 @@ import {
 } from "./chartstate.js";
 
 const generalClassPrefix = "pfbihp",
-	allocationsDataUrl = "https://cbpfgms.github.io/pfbi-data/download/pfmb_allocations.csv",
+	allocationsBySectorDataUrl = "https://cbpfgms.github.io/pfbi-data/download/pfmb_allocations.csv",
+	allocationsDataUrl = "https://cbpfgms.github.io/pfbi-data/download/full_pfmb_allocations.csv",
 	contributionsDataUrl = "https://cbpfgms.github.io/pfbi-data/download/pfmb_contributions.csv",
 	helpPortalUrl = "https://gms.unocha.org/content/pooled-funds-business-intelligence",
 	dateFormat = d3.utcFormat("_%Y%m%d_%H%M%S_UTC"),
@@ -114,6 +115,8 @@ const buttonsObject = {
 		downloadIcon.on("click", () => {
 			if (chartState.selectedChart.includes("contributions")) {
 				window.open(contributionsDataUrl, "_blank");
+			} else if (chartState.selectedChart === "allocationsBySector") {
+				window.open(allocationsBySectorDataUrl, "_blank");
 			} else {
 				window.open(allocationsDataUrl, "_blank");
 			};

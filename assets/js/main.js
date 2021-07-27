@@ -22,7 +22,7 @@ const generalClassPrefix = "pfbihp",
 	masterFundTypesUrl = "https://cbpfgms.github.io/pfbi-data/mst/MstFund.json",
 	masterPartnerTypesUrl = "https://cbpfgms.github.io/pfbi-data/mst/MstOrganization.json",
 	masterClusterTypesUrl = "https://cbpfgms.github.io/pfbi-data/mst/MstCluster.json",
-	contributionsDataUrl = "https://cbpfgms.github.io/pfbi-data/contributionbycerfcbpf.csv",
+	contributionsDataUrl = "https://cbpfgms.github.io/pfbi-data/contributionbycerfcbpfAll.csv",
 	allocationsDataUrl = "https://cbpfgms.github.io/pfbi-data/allocationSummary.csv",
 	chartTypesAllocations = ["allocationsByCountry", "allocationsBySector", "allocationsByType"],
 	chartTypesContributions = ["contributionsByCerfCbpf", "contributionsByDonor"],
@@ -862,7 +862,7 @@ function createFundNamesList(fundsData) {
 		fundNamesList[row.id + ""] = row.PooledFundName;
 		fundAbbreviatedNamesList[row.id + ""] = row.PooledFundNameAbbrv;
 		fundNamesListKeys.push(row.id + "");
-		fundRegionsList[row.id + ""] = row.RegionName;
+		fundRegionsList[row.id + ""] = row.RegionNameArr;
 		fundIsoCodesList[row.id + ""] = row.ISO2Code;
 		fundIsoCodes3List[row.id + ""] = row.CountryCode;
 		fundLatLongList[row.ISO2Code] = [row.latitude, row.longitude];
