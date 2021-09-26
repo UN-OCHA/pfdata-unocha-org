@@ -36,7 +36,7 @@ const classPrefix = "pfbicd",
 	currentYearOpacity = 0.6,
 	tooltipBarsColor = "#CBCBCB",
 	duration = 1000,
-	barLabelPadding = 6,
+	barLabelPadding = 12,
 	tooltipBarLabelPadding = 12,
 	tooltipCircleRadius = 5,
 	labelMinPadding = 5,
@@ -44,10 +44,11 @@ const classPrefix = "pfbicd",
 	svgColumnChartWidth = 195,
 	svgColumnChartHeight = 380,
 	topDonors = 10,
-	tooltipWidth = 520,
+	tooltipWidth = 640,
 	tooltipSvgHeight = 280,
 	tooltipDonorNameHeight = 30,
 	tooltipLabelCerfPadding = 10,
+	lastYearCircleRadius = 3,
 	yScaleTooltipRange = [tooltipSvgHeight - tooltipSvgPadding[2], tooltipSvgPadding[0]],
 	formatPercent = d3.format("%"),
 	stackKeys = ["total", "cerf", "cbpf"],
@@ -145,16 +146,24 @@ function createContributionsByDonor(selections, colors, lists) {
 
 	const xScale = d3.scaleBand()
 		.range([svgPadding[3], svgWidth - svgPadding[1]])
-		.domain(d3.range(lists.yearsArrayContributions[0], currentYear, 1))
+		.domain(d3.range((chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf" ? lists.yearsArrayContributions[0] :
+			chartState.selectedFund === "cbpf" ? lists.yearsArrayContributionsCbpf[0] : lists.yearsArrayContributionsCerf[0]), currentYear, 1))
 		.paddingInner(0.4)
 		.paddingOuter(0);
 
 	const allYearsTooltipArray = d3.range(lists.yearsArrayContributions[0], currentYear + 1, 1);
 	allYearsTooltipArray.splice(-1, 0, null);
 
+	const allYearsTooltipArrayCbpf = d3.range(lists.yearsArrayContributionsCbpf[0], currentYear + 1, 1);
+	allYearsTooltipArrayCbpf.splice(-1, 0, null);
+
+	const allYearsTooltipArrayCerf = d3.range(lists.yearsArrayContributionsCerf[0], currentYear + 1, 1);
+	allYearsTooltipArrayCerf.splice(-1, 0, null);
+
 	const xScaleTooltip = d3.scaleBand()
 		.range([tooltipSvgPadding[3], tooltipWidth - tooltipSvgPadding[1]])
-		.domain(allYearsTooltipArray)
+		.domain(chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf" ? allYearsTooltipArray :
+			chartState.selectedFund === "cbpf" ? allYearsTooltipArrayCbpf : allYearsTooltipArrayCerf)
 		.paddingInner(0.4)
 		.paddingOuter(0.2);
 
@@ -180,6 +189,7 @@ function createContributionsByDonor(selections, colors, lists) {
 		.tickPadding(2);
 
 	const xAxisTooltip = d3.axisBottom(xScaleTooltip)
+		.tickFormat((d, i) => xScaleTooltip.domain()[0] % 2 ? (i % 2 ? d : null) : (i % 2 ? null : d))
 		.tickSizeOuter(4)
 		.tickSizeInner(4)
 		.tickPadding(3);
@@ -237,6 +247,14 @@ function createContributionsByDonor(selections, colors, lists) {
 			chartState.selectedFund = d;
 
 			buttons.classed("active", d => chartState.selectedFund === d);
+
+			xScale.domain(d3.range((chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf" ? lists.yearsArrayContributions[0] :
+				chartState.selectedFund === "cbpf" ? lists.yearsArrayContributionsCbpf[0] : lists.yearsArrayContributionsCerf[0]), currentYear, 1));
+
+			xScaleTooltip.domain(chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf" ? allYearsTooltipArray :
+				chartState.selectedFund === "cbpf" ? allYearsTooltipArrayCbpf : allYearsTooltipArrayCerf)
+
+			xAxis.tickValues(d3.extent(xScale.domain()));
 
 			const data = filterData(originalData);
 
@@ -296,148 +314,7 @@ function createContributionsByDonor(selections, colors, lists) {
 		data.sort((a, b) => chartState.selectedFund === "cerf/cbpf" ? (b.cbpf + b.cerf) - (a.cbpf + a.cerf) :
 			b[chartState.selectedFund] - a[chartState.selectedFund]);
 
-		let donorDiv = memberStatesChartAreaDiv.selectAll("." + classPrefix + "donorDiv")
-			.data(data, d => d.donorId);
-
-		const donorDivExit = donorDiv.exit()
-			.remove();
-
-		const donorDivEnter = donorDiv.enter()
-			.append("div")
-			.attr("class", classPrefix + "donorDiv")
-			.style("width", svgWidth + "px")
-			.style("min-height", svgHeight + donorNameDivHeight + "px");
-
-		const donorSvgEnter = donorDivEnter.append("svg")
-			.attr("width", svgWidth)
-			.attr("height", svgHeight)
-			.style("overflow", "visible")
-
-		const xAxisGroup = donorSvgEnter.append("g")
-			.attr("class", classPrefix + "xAxisGroup")
-			.attr("transform", "translate(0," + (svgHeight - svgPadding[2]) + ")")
-			.call(xAxis);
-
-		const donorNameDiv = donorDivEnter.append("div")
-			.attr("class", classPrefix + "donorNameDiv")
-			.style("min-height", donorNameDivHeight + "px");
-
-		const donorFlag = donorNameDiv.append("img")
-			.attr("width", flagSize)
-			.attr("height", flagSize)
-			.attr("src", d => donorsFlagsData[d.isoCode.toLowerCase()]);
-
-		const donorName = donorNameDiv.append("span")
-			.html(d => d.donor);
-
-		donorDiv = donorDivEnter.merge(donorDiv);
-
-		donorDiv.order();
-
-		const donorSvg = donorDiv.select("svg");
-
-		donorSvg.each((d, i, n) => {
-			const yScale = localyScale.set(n[i], d3.scaleLinear()
-				.range(yScaleRange)
-				.domain([0, d3.max(d.contributions, e => d3.max(d.contributions, e => chartState.selectedFund === "cerf/cbpf" ? e.cerf + e.cbpf : e[chartState.selectedFund]))]));
-
-			localLine.set(n[i], d3.line()
-				.x(d => xScale(d.year) + xScale.bandwidth() / 2)
-				.y(d => yScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))
-				.curve(d3.curveMonotoneX));
-		});
-
-		let barsGroups = donorSvg.selectAll("." + classPrefix + "barsGroups")
-			.data(d => stack(d.contributions.filter(e => e.year < currentYear)), d => d.key);
-
-		const barGroupsExit = barsGroups.exit().remove();
-
-		const barGroupsEnter = barsGroups.enter()
-			.append("g")
-			.attr("class", classPrefix + "barsGroups")
-			.attr("pointer-events", "none")
-			.style("fill", d => colors[d.key]);
-
-		barsGroups = barGroupsEnter.merge(barsGroups);
-
-		let bars = barsGroups.selectAll("." + classPrefix + "bars")
-			.data(d => d, d => d.data.year);
-
-		const barsExit = bars.exit()
-			.transition()
-			.duration(duration)
-			.attr("height", 0)
-			.attr("y", svgHeight - svgPadding[2])
-			.style("opacity", 0)
-			.remove();
-
-		const barsEnter = bars.enter()
-			.append("rect")
-			.attr("class", classPrefix + "bars")
-			.attr("width", xScale.bandwidth())
-			.attr("height", 0)
-			.attr("y", svgHeight - svgPadding[2])
-			.attr("x", d => xScale(d.data.year))
-
-		bars = barsEnter.merge(bars);
-
-		bars.transition()
-			.duration(duration)
-			.attr("y", (d, i, n) => d[0] === d[1] ? svgHeight - svgPadding[2] : localyScale.get(n[i])(d[1]))
-			.attr("height", (d, i, n) => localyScale.get(n[i])(d[0]) - localyScale.get(n[i])(d[1]));
-
-		let barLine = donorSvg.selectAll("." + classPrefix + "barLine")
-			.data(d => fillWithZeros(d.contributions.filter(e => e.year < currentYear)));
-
-		const barLineExit = barLine.exit()
-			.remove();
-
-		const barLineEnter = barLine.enter()
-			.append("path")
-			.attr("class", classPrefix + "barLine")
-			.style("stroke", "#888")
-			.style("stroke-width", "1.5px")
-			.style("fill", "none")
-			.style("opacity", 0)
-			.attr("d", (d, i, n) => localLine.get(n[i])(d));
-
-		barLine = barLineEnter.merge(barLine);
-
-		barLine.transition()
-			.duration(duration)
-			.style("opacity", chartState.selectedFund !== "cerf/cbpf" ? 1 : 0)
-			.attr("d", (d, i, n) => localLine.get(n[i])(d));
-
-		let barLabel = donorSvg.selectAll("." + classPrefix + "barLabel")
-			.data(d => [d.contributions.find(e => e.year === currentYear - 1) || zeroObject]);
-
-		const barLabelExit = barLabel.exit()
-			.transition()
-			.duration(duration)
-			.style("opacity", 0)
-			.remove();
-
-		const barLabelEnter = barLabel.enter()
-			.append("text")
-			.attr("class", classPrefix + "barLabel")
-			.style("opacity", 0)
-			.attr("x", xScale(currentYear - 1) + barLabelPadding)
-			.attr("y", svgHeight - svgPadding[2]);
-
-		barLabel = barLabelEnter.merge(barLabel);
-
-		barLabel.transition()
-			.duration(duration)
-			.style("opacity", 1)
-			.attr("y", (d, i, n) => Math.min(svgHeight - svgPadding[2] - labelMinPadding, localyScale.get(n[i])(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])))
-			.textTween((d, i, n) => {
-				const interpolator = d3.interpolate(reverseFormat(n[i].textContent) || 0, chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]);
-				return t => d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B");
-			});
-
-		donorDiv.on("mouseover", donorDivMouseOver)
-			.on("mouseout", donorDivMouseOut)
-			.on("click", (_, d) => donorDivClick(d, true));
+		createSmallMultiple(data, "member");
 
 		//end of drawMemberStates
 	};
@@ -497,52 +374,79 @@ function createContributionsByDonor(selections, colors, lists) {
 		data.sort((a, b) => chartState.selectedFund === "cerf/cbpf" ? (b.cbpf + b.cerf) - (a.cbpf + a.cerf) :
 			b[chartState.selectedFund] - a[chartState.selectedFund]);
 
-		let nonMemberDonorDiv = nonMemberStatesChartAreaDiv.selectAll("." + classPrefix + "nonMemberDonorDiv")
-			.data(data, d => d.donor);
+		createSmallMultiple(data, "nonMember");
 
-		const nonMemberDonorDivExit = nonMemberDonorDiv.exit()
+		//end of drawNonMemberStates
+	};
+
+	function createSmallMultiple(data, memberType) {
+
+		const chartAreaDiv = memberType === "member" ? memberStatesChartAreaDiv : nonMemberStatesChartAreaDiv;
+
+		const bandwidth = xScale.bandwidth();
+
+		const syncedTransition = d3.transition()
+			.duration(duration);
+
+		let donorDiv = chartAreaDiv.selectAll("." + classPrefix + "donorDiv")
+			.data(data, d => d.donorId);
+
+		const donorDivExit = donorDiv.exit()
 			.remove();
 
-		const nonMemberDonorDivEnter = nonMemberDonorDiv.enter()
+		const donorDivEnter = donorDiv.enter()
 			.append("div")
-			.attr("class", classPrefix + "nonMemberDonorDiv")
+			.attr("class", classPrefix + "donorDiv")
 			.style("width", svgWidth + "px")
 			.style("min-height", svgHeight + donorNameDivHeight + "px");
 
-		const nonMemberDonorSvgEnter = nonMemberDonorDivEnter.append("svg")
+		const donorSvgEnter = donorDivEnter.append("svg")
 			.attr("width", svgWidth)
 			.attr("height", svgHeight)
 			.style("overflow", "visible")
 
-		const xAxisGroup = nonMemberDonorSvgEnter.append("g")
+		const xAxisGroup = donorSvgEnter.append("g")
 			.attr("class", classPrefix + "xAxisGroup")
 			.attr("transform", "translate(0," + (svgHeight - svgPadding[2]) + ")")
 			.call(xAxis);
 
-		const nonMemberDonorNameDiv = nonMemberDonorDivEnter.append("div")
-			.attr("class", classPrefix + "nonMemberDonorNameDiv")
-			.style("min-height", donorNameDivHeight + "px")
+		const donorNameDiv = donorDivEnter.append("div")
+			.attr("class", classPrefix + "donorNameDiv")
+			.style("min-height", donorNameDivHeight + "px");
+
+		if (memberType === "member") {
+			const donorFlag = donorNameDiv.append("img")
+				.attr("width", flagSize)
+				.attr("height", flagSize)
+				.attr("src", d => donorsFlagsData[d.isoCode.toLowerCase()]);
+		};
+
+		const donorName = donorNameDiv.append("span")
 			.html(d => d.donor);
 
-		nonMemberDonorDiv = nonMemberDonorDivEnter.merge(nonMemberDonorDiv);
+		donorDiv = donorDivEnter.merge(donorDiv);
 
-		nonMemberDonorDiv.order();
+		donorDiv.order();
 
-		const nonMemberDonorSvg = nonMemberDonorDiv.select("svg");
+		const donorSvg = donorDiv.select("svg");
 
-		nonMemberDonorSvg.each((d, i, n) => {
+		donorSvg.select("." + classPrefix + "xAxisGroup")
+			.transition(syncedTransition)
+			.call(xAxis);
+
+		donorSvg.each((d, i, n) => {
 			const yScale = localyScale.set(n[i], d3.scaleLinear()
 				.range(yScaleRange)
 				.domain([0, d3.max(d.contributions, e => d3.max(d.contributions, e => chartState.selectedFund === "cerf/cbpf" ? e.cerf + e.cbpf : e[chartState.selectedFund]))]));
 
 			localLine.set(n[i], d3.line()
-				.x(d => xScale(d.year) + xScale.bandwidth() / 2)
+				.x(d => xScale(d.year) + bandwidth / 2)
 				.y(d => yScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))
 				.curve(d3.curveMonotoneX));
 		});
 
-		let barsGroups = nonMemberDonorSvg.selectAll("." + classPrefix + "barsGroups")
-			.data(d => stack(d.contributions.filter(e => e.year < currentYear)), d => d.key);
+		let barsGroups = donorSvg.selectAll("." + classPrefix + "barsGroups")
+			.data(d => stack(d.contributions.filter(e => e.year < currentYear && e.year >= xScale.domain()[0])), d => d.key);
 
 		const barGroupsExit = barsGroups.exit().remove();
 
@@ -558,8 +462,7 @@ function createContributionsByDonor(selections, colors, lists) {
 			.data(d => d, d => d.data.year);
 
 		const barsExit = bars.exit()
-			.transition()
-			.duration(duration)
+			.transition(syncedTransition)
 			.attr("height", 0)
 			.attr("y", svgHeight - svgPadding[2])
 			.style("opacity", 0)
@@ -568,20 +471,21 @@ function createContributionsByDonor(selections, colors, lists) {
 		const barsEnter = bars.enter()
 			.append("rect")
 			.attr("class", classPrefix + "bars")
-			.attr("width", xScale.bandwidth())
+			.attr("width", bandwidth)
 			.attr("height", 0)
 			.attr("y", svgHeight - svgPadding[2])
 			.attr("x", d => xScale(d.data.year))
 
 		bars = barsEnter.merge(bars);
 
-		bars.transition()
-			.duration(duration)
+		bars.transition(syncedTransition)
+			.attr("x", d => xScale(d.data.year))
+			.attr("width", bandwidth)
 			.attr("y", (d, i, n) => d[0] === d[1] ? svgHeight - svgPadding[2] : localyScale.get(n[i])(d[1]))
 			.attr("height", (d, i, n) => localyScale.get(n[i])(d[0]) - localyScale.get(n[i])(d[1]));
 
-		let barLine = nonMemberDonorSvg.selectAll("." + classPrefix + "barLine")
-			.data(d => fillWithZeros(d.contributions.filter(e => e.year < currentYear)));
+		let barLine = donorSvg.selectAll("." + classPrefix + "barLine")
+			.data(d => fillWithZeros(d.contributions.filter(e => e.year < currentYear && e.year >= xScale.domain()[0])));
 
 		const barLineExit = barLine.exit()
 			.remove();
@@ -597,19 +501,71 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		barLine = barLineEnter.merge(barLine);
 
-		barLine.transition()
-			.duration(duration)
+		barLine.transition(syncedTransition)
 			.style("opacity", chartState.selectedFund !== "cerf/cbpf" ? 1 : 0)
 			.attr("d", (d, i, n) => localLine.get(n[i])(d));
 
-		let barLabel = nonMemberDonorSvg.selectAll("." + classPrefix + "barLabel")
+		let lastYearCircle = donorSvg.selectAll("." + classPrefix + "lastYearCircle")
+			.data(d => [d.contributions.find(e => e.year === currentYear - 1) || zeroObject]);
+
+		const lastYearCircleExit = lastYearCircle.exit()
+			.call(exitSelection, syncedTransition);
+
+		const lastYearCircleEnter = lastYearCircle.enter()
+			.append("circle")
+			.attr("class", classPrefix + "lastYearCircle")
+			.style("opacity", 0)
+			.attr("cx", xScale(currentYear - 1) + bandwidth / 2)
+			.attr("cy", (d, i, n) => localyScale.get(n[i])(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))
+			.attr("r", lastYearCircleRadius)
+			.style("fill", "#888");
+
+		lastYearCircle = lastYearCircleEnter.merge(lastYearCircle);
+
+		lastYearCircle.transition(syncedTransition)
+			.style("opacity", 1)
+			.attr("cx", xScale(currentYear - 1) + bandwidth / 2)
+			.attr("cy", (d, i, n) => localyScale.get(n[i])(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]));
+
+		let lastYearLine = donorSvg.selectAll("." + classPrefix + "lastYearLine")
+			.data(d => [d.contributions.find(e => e.year === currentYear - 1) || zeroObject]);
+
+		const lastYearLineExit = lastYearLine.exit()
+			.call(exitSelection, syncedTransition);
+
+		const lastYearLineEnter = lastYearLine.enter()
+			.append("polyline")
+			.attr("class", classPrefix + "lastYearLine")
+			.style("opacity", 0)
+			.attr("points", (d, i, n) => {
+				const thisLocalScale = localyScale.get(n[i]);
+				return `${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
+				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2 + (barLabelPadding - lastYearCircleRadius - bandwidth/2)/2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
+				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2 + (barLabelPadding - lastYearCircleRadius - bandwidth/2)/2},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))} 
+				${xScale(currentYear - 1) + barLabelPadding},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))}`
+			})
+			.style("stroke", "#bbb")
+			.style("stroke-width", "1px")
+			.style("fill", "none");
+
+		lastYearLine = lastYearLineEnter.merge(lastYearLine);
+
+		lastYearLine.transition(syncedTransition)
+			.style("opacity", 1)
+			.attr("points", (d, i, n) => {
+				const thisLocalScale = localyScale.get(n[i]);
+				return `${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
+				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2 + (barLabelPadding - lastYearCircleRadius - bandwidth/2)/2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
+				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2 + (barLabelPadding - lastYearCircleRadius - bandwidth/2)/2},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))} 
+				${xScale(currentYear - 1) + barLabelPadding},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))}`
+			});
+
+
+		let barLabel = donorSvg.selectAll("." + classPrefix + "barLabel")
 			.data(d => [d.contributions.find(e => e.year === currentYear - 1) || zeroObject]);
 
 		const barLabelExit = barLabel.exit()
-			.transition()
-			.duration(duration)
-			.style("opacity", 0)
-			.remove();
+			.call(exitSelection, syncedTransition);
 
 		const barLabelEnter = barLabel.enter()
 			.append("text")
@@ -620,8 +576,7 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		barLabel = barLabelEnter.merge(barLabel);
 
-		barLabel.transition()
-			.duration(duration)
+		barLabel.transition(syncedTransition)
 			.style("opacity", 1)
 			.attr("y", (d, i, n) => Math.min(svgHeight - svgPadding[2] - labelMinPadding, localyScale.get(n[i])(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])))
 			.textTween((d, i, n) => {
@@ -629,11 +584,11 @@ function createContributionsByDonor(selections, colors, lists) {
 				return t => d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B");
 			});
 
-		nonMemberDonorDiv.on("mouseover", donorDivMouseOver)
+		donorDiv.on("mouseover", donorDivMouseOver)
 			.on("mouseout", donorDivMouseOut)
-			.on("click", (_, d) => donorDivClick(d, false));
+			.on("click", (event, d) => donorDivClick(event, d, memberType === "member"));
 
-		//end of drawNonMemberStates
+		//end of createSmallMultiple
 	};
 
 	function donorDivMouseOver() {
@@ -651,10 +606,10 @@ function createContributionsByDonor(selections, colors, lists) {
 			.remove();
 	};
 
-	function donorDivClick(datum, isMember) {
+	function donorDivClick(event, datum, isMember) {
 
-		d3.select(this).classed(classPrefix + "donorDivActive", false);
-		d3.select(this)
+		d3.select(event.currentTarget).classed(classPrefix + "donorDivActive", false);
+		d3.select(event.currentTarget)
 			.select("." + classPrefix + "donorExpandDiv")
 			.remove();
 
@@ -731,7 +686,10 @@ function createContributionsByDonor(selections, colors, lists) {
 			.filter(d => d === 0)
 			.remove();
 
-		const stackedData = stack(datum.contributions);
+		const stackedData = stack(datum.contributions.filter(e => e.year >= xScaleTooltip.domain()[0]));
+
+		const tooltipTransition = d3.transition()
+			.duration(duration);
 
 		localTooltip.set(tooltipSvg.node(), datum);
 
@@ -756,13 +714,12 @@ function createContributionsByDonor(selections, colors, lists) {
 			.attr("height", 0)
 			.attr("y", tooltipSvgHeight - tooltipSvgPadding[2])
 			.attr("x", d => xScaleTooltip(d.data.year))
-			.transition()
-			.duration(duration)
+			.transition(tooltipTransition)
 			.attr("y", (d, i, n) => d[0] === d[1] ? tooltipSvgHeight - tooltipSvgPadding[2] : yScaleTooltip(d[1]))
 			.attr("height", (d, i, n) => yScaleTooltip(d[0]) - yScaleTooltip(d[1]));
 
 		const tooltipLine = tooltipSvg.selectAll(null)
-			.data(fillWithZeros(datum.contributions.filter(e => e.year < currentYear)))
+			.data(fillWithZeros(datum.contributions.filter(e => e.year < currentYear && e.year >= xScaleTooltip.domain()[0])))
 			.enter()
 			.append("path")
 			.attr("class", classPrefix + "tooltipBarLine")
@@ -771,13 +728,12 @@ function createContributionsByDonor(selections, colors, lists) {
 			.style("fill", "none")
 			.style("opacity", 0)
 			.attr("d", lineGeneratorTooltipBase)
-			.transition()
-			.duration(duration)
+			.transition(tooltipTransition)
 			.style("opacity", chartState.selectedFund !== "cerf/cbpf" ? 1 : 0)
 			.attr("d", lineGeneratorTooltip);
 
 		const tooltipCircles = tooltipSvg.selectAll(null)
-			.data(datum.contributions.filter(e => e.year < currentYear))
+			.data(datum.contributions.filter(e => e.year < currentYear && e.year >= xScaleTooltip.domain()[0]), d => d.year)
 			.enter()
 			.append("circle")
 			.attr("class", classPrefix + "tooltipBarCircles")
@@ -786,8 +742,7 @@ function createContributionsByDonor(selections, colors, lists) {
 			.attr("r", tooltipCircleRadius)
 			.attr("cx", d => xScaleTooltip(d.year) + xScaleTooltip.bandwidth() / 2)
 			.attr("cy", d => yScaleTooltip(0))
-			.transition()
-			.duration(duration)
+			.transition(tooltipTransition)
 			.style("opacity", chartState.selectedFund !== "cerf/cbpf" ? 1 : 0)
 			.attr("cx", d => xScaleTooltip(d.year) + xScaleTooltip.bandwidth() / 2)
 			.attr("cy", d => yScaleTooltip(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]));
@@ -801,8 +756,7 @@ function createContributionsByDonor(selections, colors, lists) {
 			.style("fill", chartState.selectedFund === "cerf/cbpf" ? d3.color(colors.cbpf).darker(0.3) : "#444")
 			.attr("x", d => xScaleTooltip(d.year) + xScaleTooltip.bandwidth() / 2)
 			.attr("y", tooltipSvgHeight - tooltipSvgPadding[2])
-			.transition()
-			.duration(duration)
+			.transition(tooltipTransition)
 			.style("opacity", 1)
 			.attr("y", d => yScaleTooltip(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]) - tooltipBarLabelPadding)
 			.textTween((d, i, n) => {
@@ -819,8 +773,7 @@ function createContributionsByDonor(selections, colors, lists) {
 			.style("fill", d3.color(colors.cerf).darker(0.8))
 			.attr("x", d => xScaleTooltip(d.year) + xScaleTooltip.bandwidth() / 2)
 			.attr("y", tooltipSvgHeight - tooltipSvgPadding[2])
-			.transition()
-			.duration(duration)
+			.transition(tooltipTransition)
 			.style("opacity", 1)
 			.attr("y", d => yScaleTooltip(d.cerf + d.cbpf) - tooltipBarLabelPadding - (d.cbpf ? tooltipLabelCerfPadding : 0))
 			.textTween((d, i, n) => {
@@ -888,17 +841,23 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		const minScaleValue = 1e4;
 
+		const updateTooltipTransition = d3.transition()
+			.duration(duration);
+
 		yScaleTooltip.domain([0, d3.max(thisDonor.contributions, e => chartState.selectedFund === "cerf/cbpf" ? e.cerf + e.cbpf : e[chartState.selectedFund]) || minScaleValue]);
 
 		tooltipSvg.select("." + classPrefix + "yAxisGroupTooltip")
-			.transition()
-			.duration(duration)
+			.transition(updateTooltipTransition)
 			.call(yAxisTooltip)
 			.selectAll(".tick")
 			.filter(d => d === 0)
 			.remove();
 
-		const stackedData = stack(thisDonor.contributions);
+		tooltipSvg.select("." + classPrefix + "xAxisGroupTooltip")
+			.transition(updateTooltipTransition)
+			.call(xAxisTooltip);
+
+		const stackedData = stack(thisDonor.contributions.filter(e => e.year >= xScaleTooltip.domain()[0]));
 
 		const tooltipBarsGroups = tooltipSvg.selectAll("." + classPrefix + "tooltipBarsGroups")
 			.data(stackedData, d => d.key);
@@ -910,23 +869,22 @@ function createContributionsByDonor(selections, colors, lists) {
 				d.forEach(e => e.key = d.key);
 				return d
 			}, d => d.data.year)
-			.transition()
-			.duration(duration)
+			.transition(updateTooltipTransition)
+			.attr("width", xScaleTooltip.bandwidth())
+			.attr("x", d => xScaleTooltip(d.data.year))
 			.attr("y", (d, i, n) => d[0] === d[1] ? tooltipSvgHeight - tooltipSvgPadding[2] : yScaleTooltip(d[1]))
 			.attr("height", (d, i, n) => yScaleTooltip(d[0]) - yScaleTooltip(d[1]));
 
 		const tooltipLine = tooltipSvg.selectAll("." + classPrefix + "tooltipBarLine")
-			.data(fillWithZeros(thisDonor.contributions.filter(e => e.year < currentYear)))
-			.transition()
-			.duration(duration)
+			.data(fillWithZeros(thisDonor.contributions.filter(e => e.year < currentYear && e.year >= xScaleTooltip.domain()[0])))
+			.transition(updateTooltipTransition)
 			.style("opacity", chartState.selectedFund !== "cerf/cbpf" ? 1 : 0)
 			.style("stroke", chartState.selectedFund !== "cerf/cbpf" ? colors[chartState.selectedFund] : null)
 			.attr("d", lineGeneratorTooltip);
 
 		const tooltipCircles = tooltipSvg.selectAll("." + classPrefix + "tooltipBarCircles")
-			.data(thisDonor.contributions.filter(e => e.year < currentYear))
-			.transition()
-			.duration(duration)
+			.data(thisDonor.contributions.filter(e => e.year < currentYear && e.year >= xScaleTooltip.domain()[0]), d => d.year)
+			.transition(updateTooltipTransition)
 			.style("fill", chartState.selectedFund !== "cerf/cbpf" ? colors[chartState.selectedFund] : null)
 			.style("opacity", chartState.selectedFund !== "cerf/cbpf" ? 1 : 0)
 			.attr("cx", d => xScaleTooltip(d.year) + xScaleTooltip.bandwidth() / 2)
@@ -936,10 +894,7 @@ function createContributionsByDonor(selections, colors, lists) {
 			.data(thisDonor.contributions.filter(d => chartState.selectedFund === "cerf/cbpf" ? d.cbpf : d[chartState.selectedFund]), d => d.year);
 
 		const tooltipLabelExit = tooltipLabel.exit()
-			.transition()
-			.duration(duration)
-			.style("opacity", 0)
-			.remove();
+			.call(exitSelection, updateTooltipTransition);
 
 		const tooltipLabelEnter = tooltipLabel.enter()
 			.append("text")
@@ -951,10 +906,10 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		tooltipLabel = tooltipLabelEnter.merge(tooltipLabel);
 
-		tooltipLabel.transition()
-			.duration(duration)
+		tooltipLabel.transition(updateTooltipTransition)
 			.style("opacity", 1)
 			.style("fill", chartState.selectedFund === "cerf/cbpf" ? d3.color(colors.cbpf).darker(0.3) : "#444")
+			.attr("x", d => xScaleTooltip(d.year) + xScaleTooltip.bandwidth() / 2)
 			.attr("y", d => yScaleTooltip(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]) - tooltipBarLabelPadding)
 			.textTween((d, i, n) => {
 				const interpolator = d3.interpolate(0, chartState.selectedFund === "cerf/cbpf" ? d.cbpf : d[chartState.selectedFund]);
@@ -962,13 +917,10 @@ function createContributionsByDonor(selections, colors, lists) {
 			});
 
 		let tooltipLabelCerfValue = tooltipSvg.selectAll("." + classPrefix + "tooltipBarLabelCerfValue")
-			.data(chartState.selectedFund === "cerf/cbpf" ? thisDonor.contributions.filter(d => d.cerf) : []);
+			.data(chartState.selectedFund === "cerf/cbpf" ? thisDonor.contributions.filter(d => d.cerf) : [], d => d.year);
 
 		const tooltipLabelCerfValueExit = tooltipLabelCerfValue.exit()
-			.transition()
-			.duration(duration)
-			.style("opacity", 0)
-			.remove();
+			.call(exitSelection, updateTooltipTransition);
 
 		const tooltipLabelCerfValueEnter = tooltipLabelCerfValue.enter()
 			.append("text")
@@ -980,9 +932,9 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		tooltipLabelCerfValue = tooltipLabelCerfValueEnter.merge(tooltipLabelCerfValue);
 
-		tooltipLabelCerfValue.transition()
-			.duration(duration)
+		tooltipLabelCerfValue.transition(updateTooltipTransition)
 			.style("opacity", 1)
+			.attr("x", d => xScaleTooltip(d.year) + xScaleTooltip.bandwidth() / 2)
 			.attr("y", d => yScaleTooltip(d.cerf + d.cbpf) - tooltipBarLabelPadding - (d.cbpf ? tooltipLabelCerfPadding : 0))
 			.textTween((d, i, n) => {
 				const interpolator = d3.interpolate(0, d.cerf);
@@ -1073,6 +1025,9 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		const stackedData = stack(columnData);
 
+		const columnTransition = d3.transition()
+			.duration(duration);
+
 		let barsGroupsColumn = svgColumnChart.selectAll("." + classPrefix + "barsGroupsColumn")
 			.data(stackedData, d => d.key);
 
@@ -1089,8 +1044,7 @@ function createContributionsByDonor(selections, colors, lists) {
 			.data(d => d, d => d.data.donor);
 
 		const barsColumnExit = barsColumn.exit()
-			.transition()
-			.duration(duration)
+			.transition(columnTransition)
 			.attr("width", 0)
 			.attr("x", svgColumnPadding[3])
 			.style("opacity", 0)
@@ -1110,8 +1064,7 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		barsColumn = barsColumnEnter.merge(barsColumn);
 
-		barsColumn.transition()
-			.duration(duration)
+		barsColumn.transition(columnTransition)
 			.attr("height", yScaleColumn.bandwidth())
 			.attr("y", d => yScaleColumn(d.data.donor))
 			.attr("x", d => d[0] === d[1] ? xScaleColumn(0) : xScaleColumn(d[0]))
@@ -1121,10 +1074,7 @@ function createContributionsByDonor(selections, colors, lists) {
 			.data(columnData, d => d.donor);
 
 		const labelsColumnExit = labelsColumn.exit()
-			.transition()
-			.duration(duration)
-			.style("opacity", 0)
-			.remove();
+			.call(exitSelection, columnTransition);
 
 		const labelsColumnEnter = labelsColumn.enter()
 			.append("text")
@@ -1135,8 +1085,7 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		labelsColumn = labelsColumnEnter.merge(labelsColumn);
 
-		labelsColumn.transition()
-			.duration(duration)
+		labelsColumn.transition(columnTransition)
 			.style("opacity", 1)
 			.attr("x", d => xScaleColumn(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]) + labelsColumnPadding)
 			.attr("y", d => yScaleColumn(d.donor) + yScaleColumn.bandwidth() / 2)
@@ -1149,10 +1098,7 @@ function createContributionsByDonor(selections, colors, lists) {
 			.data(columnData.slice(0, topDonors), d => d.donor);
 
 		const flagsColumnExit = flagsColumn.exit()
-			.transition()
-			.duration(duration)
-			.style("opacity", 0)
-			.remove();
+			.call(exitSelection, columnTransition);
 
 		const flagsColumnEnter = flagsColumn.enter()
 			.append("image")
@@ -1166,23 +1112,20 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		flagsColumn = flagsColumnEnter.merge(flagsColumn);
 
-		flagsColumn.transition()
-			.duration(duration)
+		flagsColumn.transition(columnTransition)
 			.style("opacity", 1)
 			.attr("y", d => yScaleColumn(d.donor));
 
 		xAxisColumn.tickSizeInner(-(yScaleColumn.range()[1] - yScaleColumn.range()[0]));
 
-		xAxisGroupColumn.transition()
-			.duration(duration)
+		xAxisGroupColumn.transition(columnTransition)
 			.call(xAxisColumn);
 
 		xAxisGroupColumn.selectAll(".tick")
 			.filter(d => d === 0)
 			.remove();
 
-		yAxisGroupColumn.transition()
-			.duration(duration)
+		yAxisGroupColumn.transition(columnTransition)
 			.call(customAxis);
 
 		function customAxis(group) {
@@ -1322,6 +1265,12 @@ function reverseFormat(s) {
 
 function capitalize(str) {
 	return str[0].toUpperCase() + str.substring(1)
+};
+
+function exitSelection(selection, transition) {
+	selection.transition(transition)
+		.style("opacity", 0)
+		.remove();
 };
 
 export {

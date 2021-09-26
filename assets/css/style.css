@@ -303,25 +303,6 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
 	line-height: normal;
 }
 
-.pfbiccyearButtonsDiv {
-  scrollbar-width: thin;
-  scrollbar-color: lightgray white;
-  display: flex;
-  flex-direction: row-reverse;
-}
-
-.pfbiccyearButtonsDiv::-webkit-scrollbar {
-  height: 12px;               /* width of the entire scrollbar */
-}
-.pfbiccyearButtonsDiv::-webkit-scrollbar-track {
-  background: transparent;        /* color of the tracking area */
-}
-.pfbiccyearButtonsDiv::-webkit-scrollbar-thumb {
-  background-color: #eee;    /* color of the scroll thumb */
-  border-radius: 20px;       /* roundness of the scroll thumb */
-  border: 3px solid #fff;  /* creates padding around scroll thumb */
-}
-
 .side-panel{padding:5px 10px; border-bottom:1px solid #ccc; margin: 0 15px;}
 .side-panel h6{margin-bottom:0; font-size:0.9rem; font-family: 'Roboto', sans-serif; font-weight: 600; line-height: normal; float: left;
     margin-right: 5px; background-color: #e5ecf4; border-radius: 15px; padding: 0 7px;}
@@ -791,14 +772,14 @@ a.video-tutorial{color:#333;}
   background-color: rgb(255,255,255,0.6);
 }
 
-.pfbialbarChartDivTitle, .pfbiccbarChartRankingDivTitle {
+.pfbialbarChartDivTitle {
   width:100%;
   display: flex;
   height: 26px;
   flex-direction: row;
 }
 
-.pfbialbarChartDivTitleText, .pfbiccbarChartRankingDivTitleText {
+.pfbialbarChartDivTitleText {
   flex-basis: auto;
   display: flex;
   justify-content: center;
@@ -809,7 +790,7 @@ a.video-tutorial{color:#333;}
   padding-top: 2px;
 }
 
-.pfbialbarChartDiv, .pfbiccbarChartRankingDiv {
+.pfbialbarChartDiv {
   width: 100%;
   height: 100%;
   display: flex;
@@ -826,9 +807,8 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbicccontainerDiv {
-  width: 100%;
-  height: 100%;
   display: flex;
+  flex: 1;
   flex-direction: column;
   overflow-y: hidden;
   position: relative;
@@ -988,15 +968,15 @@ a.video-tutorial{color:#333;}
   stroke-dasharray: 2, 2;
 }
 
-.pfbiccxAxisGroupedGroupCerf line, .pfbiccxAxisGroupedGroupCbpf line {
+.pfbiccxAxisGroupedGroup line {
   stroke: #777;
 }
 
-.pfbiccxAxisGroupedGroupCerf path, .pfbiccxAxisGroupedGroupCbpf path {
+.pfbiccxAxisGroupedGroup path {
   stroke: none;
 }
 
-.pfbiccxAxisGroupedGroupCerf text, .pfbiccxAxisGroupedGroupCbpf text {
+.pfbiccxAxisGroupedGroup text {
   font-family: "Roboto", sans-serif;
   font-size: 7px;
   fill: #888;
@@ -1207,7 +1187,7 @@ a.video-tutorial{color:#333;}
 
 .pfbicdtooltipBarLabel, .pfbicdtooltipBarLabelCerfValue {
   font-family: "Roboto", sans-serif;
-  font-size: 10px;
+  font-size: 9px;
   pointer-events: none;
   dominant-baseline: middle;
   text-anchor: middle;
@@ -1232,6 +1212,35 @@ a.video-tutorial{color:#333;}
   overflow-y: auto;
 }
 
+.pfbiccyearButtonsContainerDiv {
+  overflow: hidden;
+}
+
+.pfbiccyearButtonsContainer {
+  position: relative;
+  flex-wrap: nowrap;
+  display: flex;
+}
+
+.pfbiccyearLeftArrow, .pfbiccyearRightArrow {
+  display: flex;
+  padding: 0 0.8rem 0 0.8rem;
+  font-size: 1.4rem;
+  color: #3289C9;
+}
+
+/*.pfbiccyearButtonsDiv::-webkit-scrollbar {
+  height: 12px;                width of the entire scrollbar 
+}
+.pfbiccyearButtonsDiv::-webkit-scrollbar-track {
+  background: transparent;         color of the tracking area 
+}
+.pfbiccyearButtonsDiv::-webkit-scrollbar-thumb {
+  background-color: #eee;     color of the scroll thumb 
+  border-radius: 20px;        roundness of the scroll thumb 
+  border: 3px solid #fff;   creates padding around scroll thumb 
+}*/
+
 .pfbiccpaidPledgedButtonsDiv {
   flex: 0 30%;
   height: 100%;
@@ -1242,28 +1251,20 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbiccchartAreaDiv {
-  width: 100%;
   display: flex;
+  flex: 1;
   flex-direction: row;
-}
-
-.pfbiccbarChartRankingDivOuter {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .pfbicccerfContainerDiv {
   flex: 0 50%;
   display: flex;
-  height: 100%;
   align-items: center;
 }
 
 .pfbicccbpfContainerDiv {
   flex: 0 50%;
   display: flex;
-  height: 100%;
   align-items: center;
 }
 
@@ -1296,32 +1297,56 @@ a.video-tutorial{color:#333;}
   pointer-events: none;
 }
 
-.pfbiccyAxisGroupCerf text, .pfbiccyAxisGroupCbpf text {
+.pfbiccyAxisGroupCerf text, .pfbiccyAxisGroupCbpf text, .pfbiccyAxisGroupCumulativeCerf text, .pfbiccyAxisGroupCumulativeCbpf text {
   font-family: "Roboto", sans-serif;
   font-size: 10px;
   fill: #999;
   pointer-events: none;
 }
   
-.pfbiccyAxisGroupCerf line, .pfbiccyAxisGroupCbpf line {
+.pfbiccyAxisGroupCerf line, .pfbiccyAxisGroupCbpf line, .pfbiccyAxisGroupCumulativeCerf line, .pfbiccyAxisGroupCumulativeCbpf line {
   stroke: #ddd;
   stroke-dasharray: 2, 2;
+  pointer-events: none;
 }
 
-.pfbiccxAxisGroupCerf path, .pfbiccxAxisGroupCbpf path, .pfbiccyAxisGroupCerf path, .pfbiccyAxisGroupCbpf path {
+.pfbiccxAxisGroupCerf path, .pfbiccxAxisGroupCbpf path, .pfbiccyAxisGroupCerf path, .pfbiccyAxisGroupCbpf path, .pfbiccyAxisGroupCumulativeCerf path, .pfbiccyAxisGroupCumulativeCbpf path {
   stroke: none;
 }
 
-.pfbicclabelsCerf, .pfbicclabelsCbpf {
+.pfbicccumulativeTitle {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  fill: #666;
+  font-weight: 300;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.pfbicccumulativeLabels {
+  font-family: "Roboto", sans-serif;
+  font-size: 9px;
+  fill: #555;
+  text-anchor: middle;
+  pointer-events: none;
+  stroke: white;
+  stroke-width: 2px;
+  paint-order: stroke;
+} 
+
+.pfbicclabels {
   font-family: "Roboto", sans-serif;
   font-size: 10px;
   fill: #666;
   font-weight: bold;
   text-anchor: middle;
   pointer-events: none;
+  stroke: white;
+  stroke-width: 2px;
+  paint-order: stroke;
 } 
 
-.pfbiccchartTitleCerf, .pfbiccchartTitleCbpf {
+.pfbiccchartTitle {
   font-family: "Roboto", sans-serif;
   font-size: 20px;
   fill: #666;
@@ -1330,7 +1355,7 @@ a.video-tutorial{color:#333;}
   pointer-events: none;
 }
 
-.pfbiccchartTitleSpanCerf, .pfbiccchartTitleSpanCbpf {
+.pfbiccchartTitleSpan {
   font-size: 14px;
 } 
 
@@ -1426,21 +1451,30 @@ a.video-tutorial{color:#333;}
 .pfbiccfirstBreadcrumb span{font-weight: 400;}
 .pfbicdfirstBreadcrumb span{font-weight: 400;}
 
-.pfbicclegendGroupCerf text, .pfbicclegendGroupCbpf text, .pfbicclegendPledgedCerf, .pfbicclegendPledgedCbpf {
+.pfbicclegendGroup text, .pfbicclegendPledged {
   font-family: "Roboto", sans-serif;
   font-size: 12px;
   dominant-baseline: central;
   fill: #777;
 }
 
-.pfbicclabelsGroupCerf, .pfbicclabelsGroupCbpf {
+.pfbicccumulativeLegend {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  dominant-baseline: central;
+  fill: #777;
+}
+
+.pfbicclabelsGroup {
   font-family: "Roboto", sans-serif;
   font-size: 8px;
   fill: #666;
   font-weight: bold;
   text-anchor: middle;
   pointer-events: none;
-  letter-spacing: -0.5px;
+  stroke: white;
+  stroke-width: 2px;
+  paint-order: stroke;
 }
 
 .pfbialtwoColorsBorder {
@@ -1588,7 +1622,7 @@ a.video-tutorial{color:#333;}
 }
 
 #pfbicdtooltipDiv > div:nth-child(1){
-	width: 525px !important;
+	width: 645px !important;
     height: 335px !important;
 }
 
@@ -1760,4 +1794,12 @@ a.video-tutorial{color:#333;}
 
 .pfbialcovidDisclaimerDivMain p {
   margin-bottom: 0px !important;
+}
+
+.pfbiccarrowChevron {
+  font-size: 36px;
+  fill:  white;
+  font-weight: bold;
+  dominant-baseline: middle;
+  text-anchor: middle;
 }

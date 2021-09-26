@@ -23,6 +23,7 @@ const generalClassPrefix = "pfbihp",
 	masterPartnerTypesUrl = "https://cbpfgms.github.io/pfbi-data/mst/MstOrganization.json",
 	masterClusterTypesUrl = "https://cbpfgms.github.io/pfbi-data/mst/MstCluster.json",
 	contributionsDataUrl = "https://cbpfgms.github.io/pfbi-data/contributionbycerfcbpf.csv",
+	contributionsDataUrlClosedFunds = "https://cbpfgms.github.io/pfbi-data/contributionbycerfcbpfAll.csv",
 	allocationsDataUrl = "https://cbpfgms.github.io/pfbi-data/allocationSummary.csv",
 	chartTypesAllocations = ["allocationsByCountry", "allocationsBySector", "allocationsByType"],
 	chartTypesContributions = ["contributionsByCerfCbpf", "contributionsByDonor"],
@@ -32,18 +33,20 @@ const generalClassPrefix = "pfbihp",
 	colorsObject = {
 		total: unBlue,
 		cerf: cerfColor,
-		cbpf: cbpfColor
+		cbpf: cbpfColor,
+		cerfAnalogous: ["#E48F07", "#E2A336", "#FBCC23", "#FBE23E"],
+		cbpfAnalogous: ["#B52625", "#CE2E2D", cbpfColor, "#F79C8F"]
 	},
 	queryStringValues = new URLSearchParams(location.search),
 	defaultValues = {
-		chart: "allocationsByCountry",
-		year: currentYear,
-		fund: "total"
+		year: currentYear
 	};
 
 //|constants populated with the data
 const yearsArrayAllocations = [],
 	yearsArrayContributions = [],
+	yearsArrayContributionsCbpf = [],
+	yearsArrayContributionsCerf = [],
 	donorsInSelectedYear = [],
 	fundsInSelectedYear = [],
 	fundNamesList = {},
@@ -187,6 +190,15 @@ import {
 	buttonsObject
 } from "./buttons.js";
 
+import {
+	parameters
+} from "./parameters.js";
+
+//|populate 'default' values
+for (const key in parameters) {
+	defaultValues[key] = parameters[key];
+};
+
 //|load master tables, world map and csv data
 Promise.all([fetchFile("unworldmap", unworldmapUrl, "world map", "json"),
 		fetchFile("masterFunds", masterFundsUrl, "master table for funds", "json"),
@@ -196,7 +208,7 @@ Promise.all([fetchFile("unworldmap", unworldmapUrl, "world map", "json"),
 		fetchFile("masterPartnerTypes", masterPartnerTypesUrl, "master table for partner types", "json"),
 		fetchFile("masterClusterTypes", masterClusterTypesUrl, "master table for cluster types", "json"),
 		fetchFile("allocationsData", allocationsDataUrl, "allocations data", "csv"),
-		fetchFile("contributionsData", contributionsDataUrl, "contributions data", "csv"),
+		fetchFile("contributionsData", (parameters.showClosedFunds ? contributionsDataUrlClosedFunds : contributionsDataUrl), "contributions data", "csv"),
 		fetchFile("lastModified", lastModifiedUrl, "last modified date", "json")
 	])
 	.then(rawData => controlCharts(rawData));
@@ -240,6 +252,8 @@ function controlCharts([worldMap,
 		fundNamesListKeys: fundNamesListKeys,
 		donorNamesListKeys: donorNamesListKeys,
 		yearsArrayContributions: yearsArrayContributions,
+		yearsArrayContributionsCbpf: yearsArrayContributionsCbpf,
+		yearsArrayContributionsCerf: yearsArrayContributionsCerf,
 		cerfPooledFundId: cerfPooledFundId,
 		defaultValues: defaultValues,
 		queryStringValues: queryStringValues
@@ -569,18 +583,37 @@ function mouseoutTopFigures() {
 function preProcessData(rawAllocationsData, rawContributionsData) {
 
 	const yearsSetAllocations = new Set();
-	const yearsSetContributions = new Set();
+	const yearsSetContributionsCbpf = new Set();
+	const yearsSetContributionsCerf = new Set();
 
 	rawAllocationsData.forEach(row => {
 		yearsSetAllocations.add(+row.AllocationYear);
 	});
 
 	rawContributionsData.forEach(row => {
-		yearsSetContributions.add(+row.FiscalYear);
+		if (row.PooledFundId === cerfPooledFundId) {
+			if (defaultValues.cerfFirstYear) {
+				if (+row.FiscalYear >= defaultValues.cerfFirstYear) yearsSetContributionsCerf.add(+row.FiscalYear);
+			} else {
+				yearsSetContributionsCerf.add(+row.FiscalYear);
+			};
+		} else {
+			if (defaultValues.cbpfFirstYear) {
+				if (+row.FiscalYear >= defaultValues.cbpfFirstYear) yearsSetContributionsCbpf.add(+row.FiscalYear);
+			} else {
+				yearsSetContributionsCbpf.add(+row.FiscalYear);
+			};
+		};
 	});
 
 	yearsArrayAllocations.push(...yearsSetAllocations);
 	yearsArrayAllocations.sort((a, b) => a - b);
+	yearsArrayContributionsCbpf.push(...yearsSetContributionsCbpf);
+	yearsArrayContributionsCbpf.sort((a, b) => a - b);
+	yearsArrayContributionsCerf.push(...yearsSetContributionsCerf);
+	yearsArrayContributionsCerf.sort((a, b) => a - b);
+
+	const yearsSetContributions = new Set([...yearsSetContributionsCerf, ...yearsSetContributionsCbpf]);
 	yearsArrayContributions.push(...yearsSetContributions);
 	yearsArrayContributions.sort((a, b) => a - b);
 
