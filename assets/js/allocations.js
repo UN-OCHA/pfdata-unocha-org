@@ -1,7 +1,16 @@
 //|Allocations module
-import { chartState } from "./chartstate.js";
-import { clustersIconsData } from "./clustersiconsdata.js";
-import { createLinks } from "./links.js";
+
+import {
+	chartState
+} from "./chartstate.js";
+
+import {
+	clustersIconsData
+} from "./clustersiconsdata.js";
+
+import {
+	createLinks
+} from "./links.js";
 
 //|constants
 const classPrefix = "pfbial",
@@ -3213,4 +3222,6 @@ function makeOrdinal(value) {
 		"rd" : "th";
 };
 
-export { createAllocations };
+export {
+	createAllocations
+};

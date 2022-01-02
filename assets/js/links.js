@@ -39,4 +39,6 @@ function createLinks(containerSelection) {
 
 };
 
-export { createLinks };
+export {
+	createLinks
+};

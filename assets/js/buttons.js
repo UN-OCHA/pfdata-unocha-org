@@ -1,5 +1,8 @@
 //|Options buttons
-import { chartState } from "./chartstate.js";
+
+import {
+	chartState
+} from "./chartstate.js";
 
 const generalClassPrefix = "pfbihp",
 	allocationsBySectorDataUrl = "https://cbpfgms.github.io/pfbi-data/download/pfmb_allocations.csv",
@@ -407,4 +410,6 @@ function removeProgressWheel() {
 	wheelGroup.remove();
 };
 
-export { buttonsObject };
+export {
+	buttonsObject
+};

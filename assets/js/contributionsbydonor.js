@@ -1,7 +1,16 @@
 //|Contributions By Donors module
-import { chartState } from "./chartstate.js";
-import { donorsFlagsData } from "./donorsflagsdata.js";
-import { createLinks } from "./links.js";
+
+import {
+	chartState
+} from "./chartstate.js";
+
+import {
+	donorsFlagsData
+} from "./donorsflagsdata.js";
+
+import {
+	createLinks
+} from "./links.js";
 
 //|constants
 const classPrefix = "pfbicd",
@@ -1264,4 +1273,6 @@ function exitSelection(selection, transition) {
 		.remove();
 };
 
-export { createContributionsByDonor };
+export {
+	createContributionsByDonor
+};
