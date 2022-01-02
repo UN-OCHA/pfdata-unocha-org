@@ -877,6 +877,9 @@ function validateDefault(values) {
 	chartState.selectedChart = chartTypesAllocations.indexOf(values.chart) > -1 || chartTypesContributions.indexOf(values.chart) > -1 ?
 		values.chart : defaultValues.chart;
 	const yearArray = chartTypesAllocations.indexOf(chartState.selectedChart) > -1 ? yearsArrayAllocations : yearsArrayContributions;
+	if (!yearArray.includes(defaultValues.year)) {
+		defaultValues.year = yearArray[yearArray.length - 1];
+	};
 	if (values.chart === "contributionsByCerfCbpf") {
 		if (values.contributionYear) {
 			chartState.selectedYear = parseInt(values.contributionYear);
