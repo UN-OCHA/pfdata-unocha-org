@@ -9,7 +9,8 @@ const chartState = {
 	showNamesValue: false,
 	currentTooltipValue: null,
 	currentHoveredElementValue: null,
-	isSnapshotTooltipVisibleValue: false
+	isSnapshotTooltipVisibleValue: false,
+	selectedCountryProfile: null
 };
 
 for (const key in chartState) {
@@ -24,6 +25,4 @@ for (const key in chartState) {
 	});
 };
 
-export {
-	chartState
-};
+export { chartState };

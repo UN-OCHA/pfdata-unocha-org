@@ -1,16 +1,7 @@
 //|Contributions By Cerf/Cbpf module
-
-import {
-	chartState
-} from "./chartstate.js";
-
-import {
-	donorsFlagsData
-} from "./donorsflagsdata.js";
-
-import {
-	createLinks
-} from "./links.js";
+import { chartState } from "./chartstate.js";
+import { donorsFlagsData } from "./donorsflagsdata.js";
+import { createLinks } from "./links.js";
 
 //|constants
 const classPrefix = "pfbicc",
@@ -2122,6 +2113,4 @@ function exitSelection(selection, transition) {
 		.remove();
 };
 
-export {
-	createContributionsByCerfCbpf
-};
+export { createContributionsByCerfCbpf };

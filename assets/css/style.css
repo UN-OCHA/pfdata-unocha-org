@@ -68,7 +68,7 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
   z-index: 1039; display:none;
 }
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav {
-  width: 225px;
+  width: 300px;
   height: 100vh;
   z-index: 1038;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
@@ -98,7 +98,7 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
   overflow-y: auto; 
 }
 .sb-nav-fixed #layoutSidenav #layoutSidenav_content {
-  padding-left: 225px;  
+  padding-left: 300px;  
 }
 .nav .nav-link .sb-nav-link-icon,
 .sb-sidenav-menu .nav-link .sb-nav-link-icon {
@@ -149,6 +149,12 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
   padding-bottom: 0.5rem;
   position: relative;
   font-size: 0.85rem;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    background-color: transparent;
+    font-weight: bold;
+    color:#3289c9 !important;
+    border-color: #dee2e6 #dee2e6 #f8f9fa;
 }
 .sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-nav-link-icon {
   font-size: 0.9rem;
@@ -230,7 +236,7 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
 .sb-sidenav-light .sb-sidenav-menu .nav-link.menuactive .sb-sidenav-collapse-arrow {
   color: #fff; transition: all 0.2s linear;
 }
-.sb-sidenav-light .sb-sidenav-menu .nav-link.active .sb-sidenav-collapse-arrow {
+.sb-sidenav-light .sb-sidenav-menu .nav-link.activelink .sb-sidenav-collapse-arrow {
   transform: rotate(180deg); transition: all 0.2s linear;
 }
 .sb-sidenav-light .sb-sidenav-footer {
@@ -255,7 +261,7 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
   width: 0;
   position: fixed;
   z-index: 1040;
-  top: 74px;
+  top: 283px;
   left: 0;
   background-color: #fff;
   overflow-x: hidden;
@@ -300,7 +306,8 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
   font-size: 30px;
   text-align: right;
   float:right;
-	line-height: normal;
+  line-height: normal;
+  color: #ccc;
 }
 
 .side-panel{padding:5px 10px; border-bottom:1px solid #ccc; margin: 0 15px;}
@@ -313,9 +320,9 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
 .ss-content {padding: 0; right: 0;}
 .ss-wrapper{width:100%;}
 .ss-scroll{left:216px; right: -216px;}
-.sidenav-title{background-color: #fff; padding: 5px 10px 5px 8px; overflow: hidden; display: flex; align-items: center; justify-content: space-between; border-top:1px solid #cfe4f5; border-left:5px solid #3189c9;}
-.sidenav-title .sb-nav-link-icon{font-weight: 300; font-size: 1.1rem;}
-.sidenav-title .sb-nav-link-icon i{color:#3289c9; font-size: 1.3em; margin-right: 0.1em;}
+.sidenav-title{background-color: #3289c9; padding: 5px 10px 5px 8px; overflow: hidden; display: flex; align-items: center; justify-content: space-between; border-top:1px solid #cfe4f5; border-left:5px solid #3189c9;}
+.sidenav-title .sb-nav-link-icon{font-weight: 300; font-size: 1.1rem; color: #fff;}
+.sidenav-title .sb-nav-link-icon i{color:#3289c9; font-size: 1.3em; margin-right: 0.1em; color: #fff;}
 .main-high-level-fugure{display:block; padding: 0 1rem 1rem 1rem;}
 .main-high-level-fugure .panel{float:left; background-color: #D2E5F5; padding: 0.5rem; margin: 0.2rem; width: 46%; text-align: center;     border-radius: 15px 0;}
 .main-high-level-fugure .panel h3{font-size:1.2rem; font-weight:400; margin-bottom: 0;} 
@@ -332,7 +339,7 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
 .cbpf-link .icon-chart svg{opacity:0.6;}
 .cbpf-link:hover{color:#333 !important; background-color: #fff; border-radius:3px;}
 .un-icon{font-family: 'humanitarian-icons-v02'; font-style: normal; font-weight: normal; speak: never; display: inline-block;       text-decoration: inherit; width: 1em; margin-right: .2em; text-align: center; font-variant: normal; text-transform: none; line-height: 1em; margin-left: .2em; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
-footer{position: fixed; bottom: 0; width: calc(100% - 225px);}
+footer{position: fixed; bottom: 0; width: calc(100% - 300px);}
 footer a{color:#3289c9;}
 footer a:hover{color:#2270aa;}
 
@@ -459,6 +466,13 @@ a.video-tutorial{color:#333;}
 .timer-countdown span{font-size: 1.2em !important; color: #3289c9; display: block; font-weight: 300 !important; line-height: normal;}
 
 .overflow-x-hide{overflow-x: hidden;}
+
+.pfdata-nav-tabs {margin: 1rem 0 0 0;}
+.pfdata-nav-tabs .nav {flex-direction: row !important; margin: 0 1rem;}
+.pfdata-nav-tabs .nav-tabs .nav-item a {display: flex; align-items: center; padding: 0.4rem 0.7rem; position: relative; font-size: 0.80rem !important;}
+.pfdata-nav-tabs .tab-content .sb-sidenav-menu-heading {padding: 1.75rem 0 0.75rem; font-size: 0.95rem; font-weight: bold; text-transform: uppercase;}
+.pfdata-nav-tabs .tab-content a {display: flex; align-items: center; padding: 0.5rem 1rem; position: relative; font-size: 0.85rem;}
+.pfdata-nav-tabs .tab-content a .sb-sidenav-collapse-arrow {display: inline-block; margin-left: auto; transition: transform 0.15s ease;}
 
 @keyframes rotation {
   from {
@@ -1802,4 +1816,39 @@ a.video-tutorial{color:#333;}
   font-weight: bold;
   dominant-baseline: middle;
   text-anchor: middle;
+}
+.marg-t10 {margin-top: 10px;}
+.country-pro-tabs {   
+    margin: 20px;
+    display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	align-content: stretch;
+}
+.country-pro-tabs ul li a.nav-link {
+    color: #999;
+    font-size: 14px;
+}
+.country-pro-tabs ul li a.nav-link:hover {
+    color: #3289c9 !important;    
+}
+.country-pro-tabs ul li a.nav-link.active {
+    color: #3289c9 !important;
+    font-size: 14px;
+}
+.country-pro-tabs .tab-content {
+   background: #fff; 
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+    position: relative;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-top: none;
+}
+.country-pro-tabs .nav-tabs .nav-item.show .nav-link, .country-pro-tabs .nav-tabs .nav-link.active {
+    border-color: #dee2e6 #dee2e6 #fff;
 }

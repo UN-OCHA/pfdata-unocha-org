@@ -22,6 +22,7 @@ const generalClassPrefix = "pfbihp",
 	masterFundTypesUrl = "https://cbpfgms.github.io/pfbi-data/mst/MstFund.json",
 	masterPartnerTypesUrl = "https://cbpfgms.github.io/pfbi-data/mst/MstOrganization.json",
 	masterClusterTypesUrl = "https://cbpfgms.github.io/pfbi-data/mst/MstCluster.json",
+	masterUnAgenciesUrl = "https://cerfgms-webapi.unocha.org/v1/agency/All.json",
 	contributionsDataUrl = "https://cbpfgms.github.io/pfbi-data/contributionbycerfcbpf.csv",
 	contributionsDataUrlClosedFunds = "https://cbpfgms.github.io/pfbi-data/contributionbycerfcbpfAll.csv",
 	allocationsDataUrl = "https://cbpfgms.github.io/pfbi-data/allocationSummary.csv",
@@ -62,6 +63,8 @@ const yearsArrayAllocations = [],
 	partnersList = {},
 	clustersList = {},
 	allocationTypesList = {},
+	unAgenciesNamesList = {},
+	unAgenciesShortNamesList = {},
 	fundNamesListKeys = [],
 	donorNamesListKeys = [],
 	topValues = {
@@ -170,29 +173,12 @@ const topTooltipDiv = selections.sideNavContainer.append("div")
 	.style("display", "none");
 
 //|import modules
-import {
-	createAllocations
-} from "./allocations.js";
-
-import {
-	createContributionsByCerfCbpf
-} from "./contributionsbycerfcbpf.js";
-
-import {
-	createContributionsByDonor
-} from "./contributionsbydonor.js";
-
-import {
-	chartState
-} from "./chartstate.js";
-
-import {
-	buttonsObject
-} from "./buttons.js";
-
-import {
-	parameters
-} from "./parameters.js";
+import { createAllocations } from "./allocations.js";
+import { createContributionsByCerfCbpf } from "./contributionsbycerfcbpf.js";
+import { createContributionsByDonor } from "./contributionsbydonor.js";
+import { chartState } from "./chartstate.js";
+import { buttonsObject } from "./buttons.js";
+import { parameters } from "./parameters.js";
 
 //|populate 'default' values
 for (const key in parameters) {
@@ -207,6 +193,7 @@ Promise.all([fetchFile("unworldmap", unworldmapUrl, "world map", "json"),
 		fetchFile("masterFundTypes", masterFundTypesUrl, "master table for fund types", "json"),
 		fetchFile("masterPartnerTypes", masterPartnerTypesUrl, "master table for partner types", "json"),
 		fetchFile("masterClusterTypes", masterClusterTypesUrl, "master table for cluster types", "json"),
+		fetchFile("masterUnAgenciesTypes", masterUnAgenciesUrl, "master table for UN agencies", "json"),
 		fetchFile("allocationsData", allocationsDataUrl, "allocations data", "csv"),
 		fetchFile("contributionsData", (parameters.showClosedFunds ? contributionsDataUrlClosedFunds : contributionsDataUrl), "contributions data", "csv"),
 		fetchFile("lastModified", lastModifiedUrl, "last modified date", "json")
@@ -220,6 +207,7 @@ function controlCharts([worldMap,
 	masterFundTypes,
 	masterPartnerTypes,
 	masterClusterTypes,
+	masterUnAgenciesTypes,
 	rawAllocationsData,
 	rawContributionsData,
 	lastModified
@@ -231,6 +219,7 @@ function controlCharts([worldMap,
 	createPartnersList(masterPartnerTypes);
 	createClustersList(masterClusterTypes);
 	createAllocationTypesList(masterAllocationTypes);
+	createUnAgenciesNamesList(masterUnAgenciesTypes);
 
 	//Hardcoded Syria Cross Border ISO 3 code
 	fundIsoCodes3List["108"] = "SCB";
@@ -248,6 +237,8 @@ function controlCharts([worldMap,
 		fundTypesList: fundTypesList,
 		partnersList: partnersList,
 		clustersList: clustersList,
+		unAgenciesNamesList: unAgenciesNamesList,
+		unAgenciesShortNamesList: unAgenciesShortNamesList,
 		allocationTypesList: allocationTypesList,
 		fundNamesListKeys: fundNamesListKeys,
 		donorNamesListKeys: donorNamesListKeys,
@@ -877,6 +868,9 @@ function validateDefault(values) {
 	chartState.selectedChart = chartTypesAllocations.indexOf(values.chart) > -1 || chartTypesContributions.indexOf(values.chart) > -1 ?
 		values.chart : defaultValues.chart;
 	const yearArray = chartTypesAllocations.indexOf(chartState.selectedChart) > -1 ? yearsArrayAllocations : yearsArrayContributions;
+	if (!yearArray.includes(defaultValues.year)) {
+		defaultValues.year = yearArray[yearArray.length - 1];
+	};
 	if (values.chart === "contributionsByCerfCbpf") {
 		if (values.contributionYear) {
 			chartState.selectedYear = parseInt(values.contributionYear);
@@ -913,26 +907,25 @@ function createDonorNamesList(donorsData) {
 };
 
 function createFundTypesList(fundTypesData) {
-	fundTypesData.forEach(row => {
-		fundTypesList[row.id + ""] = row.FundName.toLowerCase();
-	});
+	fundTypesData.forEach(row => fundTypesList[row.id + ""] = row.FundName.toLowerCase());
 };
 
 function createPartnersList(partnersData) {
-	partnersData.forEach(row => {
-		partnersList[row.id + ""] = row.OrganizationTypeName;
-	});
+	partnersData.forEach(row => partnersList[row.id + ""] = row.OrganizationTypeName);
 };
 
 function createClustersList(clustersData) {
-	clustersData.forEach(row => {
-		clustersList[row.id + ""] = row.ClustNm;
-	});
+	clustersData.forEach(row => clustersList[row.id + ""] = row.ClustNm);
 };
 
 function createAllocationTypesList(allocationTypesData) {
-	allocationTypesData.forEach(row => {
-		allocationTypesList[row.id + ""] = row.AllocationName;
+	allocationTypesData.forEach(row => allocationTypesList[row.id + ""] = row.AllocationName);
+};
+
+function createUnAgenciesNamesList(unAgenciesTypesData) {
+	unAgenciesTypesData.forEach(row => {
+		unAgenciesNamesList[row.agencyID + ""] = row.agencyName;
+		unAgenciesShortNamesList[row.agencyID + ""] = row.agencyShortName;
 	});
 };
 
