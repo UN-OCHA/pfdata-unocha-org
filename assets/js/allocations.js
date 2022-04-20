@@ -2266,13 +2266,13 @@ function createAllocations(selections, colors, mapData, lists) {
 				group.call(yAxisColumnByCountry);
 				sel.selectAll(".tick text")
 					.filter(d => d.indexOf(" ") > -1)
-					.text(d => d.split(" ")[0] === "South-Eastern" ? "South-East." : d.split(" ")[0])
+					.text(d => d.split(" ")[0] === "South-Eastern" ? "South-East." : d.split(" ")[0] === "Horn" ? "Horn of" : d.split(" ")[0])
 					.attr("x", -(yAxisColumnByCountry.tickPadding() + yAxisColumnByCountry.tickSize()))
 					.attr("dy", "-0.3em")
 					.append("tspan")
 					.attr("dy", "1.1em")
 					.attr("x", -(yAxisColumnByCountry.tickPadding() + yAxisColumnByCountry.tickSize()))
-					.text(d => d.split(" ")[1]);
+					.text(d => d.split(" ")[1] === "of" ? "Africa" : d.split(" ")[1]);
 				if (sel !== group) group.selectAll(".tick text")
 					.filter(d => d.indexOf(" ") > -1)
 					.attrTween("x", null)
