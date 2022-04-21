@@ -974,7 +974,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			});
 
 		group.selectAll("text")
-			.style("opacity", (_, i) => +(!i || i === selectedYear.length - 1));
+			.style("opacity", (_, i, n) => n.length > 2 ? +(!i || i === selectedYear.length - 1) : 1);
 
 		let tooltipRect = tooltipRectLayer.selectAll("." + classPrefix + "tooltipRect")
 			.data(dataYear, d => d.year);
