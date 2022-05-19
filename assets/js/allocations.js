@@ -57,6 +57,7 @@ const classPrefix = "pfbial",
 	svgColumnChartPaddingByType = [16, 26, 4, 66],
 	svgColumnChartTypeHeight = svgColumnChartPaddingByType[0] + svgColumnChartPaddingByType[2] + maxColumnRectHeight + 4 * maxColumnRectHeight,
 	VenezuelaRegionalRefugeeAbbr = "Venezuela Refugee...",
+	VenezuelaRegionalRefugeeDisclaimer = "*Venezuela RRMC - Venezuela Regional Refugee and Migration Crisis: A regional CERF Underfunded Emergencies allocation supported responses to the Venezuelan Refugee and Migrant Crisis in Brazil, Colombia, Ecuador and Peru.",
 	separator = "##",
 	buttonsList = ["total", "cerf/cbpf", "cerf", "cbpf"],
 	stackKeys = ["total", "cerf", "cbpf"],
@@ -135,6 +136,10 @@ function createAllocations(selections, colors, mapData, lists) {
 	const barChartDivOuter = containerDiv.append("div")
 		.attr("class", classPrefix + "barChartDivOuter")
 		.style("height", formatPercent(barChartPercentage));
+
+	const venezuelaDisclaimerDiv = barChartDivOuter.append("div")
+		.attr("class", classPrefix + "venezuelaDisclaimerDiv")
+		.html(VenezuelaRegionalRefugeeDisclaimer);
 
 	const barChartDivTitle = barChartDivOuter.append("div")
 		.attr("class", classPrefix + "barChartDivTitle");
@@ -543,6 +548,9 @@ function createAllocations(selections, colors, mapData, lists) {
 		createColumnChart(originalData);
 
 		const data = filterData(originalData);
+
+		const hasVenezuelaRRMC = data.find(d => d.isoCode === "0V");
+		venezuelaDisclaimerDiv.style("display", hasVenezuelaRRMC ? "block" : "none");
 
 		drawMap(data, originalData);
 		drawLegend(data);
