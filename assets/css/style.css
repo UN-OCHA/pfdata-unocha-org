@@ -622,12 +622,28 @@ a.video-tutorial{color:#333;}
   z-index: 1500;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
+
+#pfbialtooltipDivMap, #pfbialtooltipDivBarChart {
+  pointer-events: all;
+  cursor: default;
+}
+
 #pfbicctooltipDiv{
 	padding: 8px !important;
 }
 #pfbialinnerTooltipDiv {max-width: 308px !important;}
 #pfbialinnerTooltipDiv > div:nth-child(2){padding:8px !important;}
-#pfbialinnerTooltipDiv > div:nth-child(2) > div:nth-child(3){margin-bottom: 10px !important; border-bottom: 1px dotted #999 !important; padding-bottom: 5px !important;}
+
+.pfbialcerfLink {
+  font-size: 0.8em;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  margin-bottom: 12px !important; 
+  border-bottom: 1px dotted #999 !important; 
+  padding-bottom: 8px !important;
+}
 
 .pfbialtooltipTitleDiv, .pfbicdtooltipTitleDiv {
 	margin-bottom: 3px !important;
@@ -1821,4 +1837,11 @@ a.video-tutorial{color:#333;}
   border-radius: 4px;
   z-index: 50;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.pfbialcloseButton {
+  float: right;
+  margin-left: 6px;
+  cursor: pointer;
+  font-size: 1.4em;
 }
