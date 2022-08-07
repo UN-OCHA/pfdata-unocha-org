@@ -588,6 +588,30 @@ function preProcessData(rawAllocationsData, rawContributionsData) {
 	const yearsSetContributionsCbpf = new Set();
 	const yearsSetContributionsCerf = new Set();
 
+	//Temporary fix for non-numerical IDs in the allocations data
+	let allocIndex = rawAllocationsData.length - 1;
+	while (allocIndex) {
+		if (!+rawAllocationsData[allocIndex].PooledFundId) {
+			console.warn("Non-numeric PooledFundId in allocations data: " + JSON.stringify(rawAllocationsData[allocIndex]));
+			rawAllocationsData.splice(allocIndex, 1)
+		};
+		allocIndex -= 1;
+	};
+
+	//Temporary fix for non-numerical IDs in the contributions data
+	let contrIndex = rawContributionsData.length - 1;
+	while (contrIndex) {
+		if (!+rawContributionsData[contrIndex].PooledFundId) {
+			console.warn("Non-numeric PooledFundId in contributions data: " + JSON.stringify(rawContributionsData[contrIndex]));
+			rawContributionsData.splice(contrIndex, 1)
+		};
+		if (!+rawContributionsData[contrIndex].DonorId) {
+			console.warn("Non-numeric DonorId in contributions data: " + JSON.stringify(rawContributionsData[contrIndex]));
+			rawContributionsData.splice(contrIndex, 1)
+		};
+		contrIndex -= 1;
+	};
+
 	rawAllocationsData.forEach(row => {
 		yearsSetAllocations.add(+row.AllocationYear);
 	});
