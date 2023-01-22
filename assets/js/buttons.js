@@ -1,8 +1,5 @@
 //|Options buttons
-
-import {
-	chartState
-} from "./chartstate.js";
+import { chartState } from "./chartstate.js";
 
 const generalClassPrefix = "pfbihp",
 	allocationsBySectorDataUrl = "https://cbpfgms.github.io/pfbi-data/download/pfmb_allocations.csv",
@@ -15,10 +12,7 @@ const generalClassPrefix = "pfbihp",
 const buttonsObject = {
 	timer: null,
 	playing: false,
-	createButtons(containerSelection, yearsArrayAllocations, yearsArrayContributions, duration, selections) {
-
-		const yearsArray = chartState.selectedChart !== "contributionsByCerfCbpf" ? JSON.parse(JSON.stringify(yearsArrayAllocations)) :
-			JSON.parse(JSON.stringify(yearsArrayContributions));
+	createButtons(containerSelection, yearsArrayAllocations, yearsArrayAllocationsCerf, yearsArrayAllocationsCbpf, yearsArrayContributions, duration, selections, rawAllocationsData, lists) {
 
 		const helpIcon = containerSelection.append("button")
 			.attr("id", generalClassPrefix + "HelpButton");
@@ -117,6 +111,19 @@ const buttonsObject = {
 				window.open(contributionsDataUrl, "_blank");
 			} else if (chartState.selectedChart === "allocationsBySector") {
 				window.open(allocationsBySectorDataUrl, "_blank");
+			} else if (chartState.selectedChart === "countryProfile") {
+				const countryData = rawAllocationsData.filter(e => e.PooledFundId === chartState.selectedCountryProfile);
+				const csv = createCountryCsv(countryData, lists);
+				const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+				const blobUrl = URL.createObjectURL(blob);
+				const link = document.createElement("a");
+				link.setAttribute("href", blobUrl);
+				link.setAttribute("download", lists.fundNamesList[chartState.selectedCountryProfile] + "_CountryProfile");
+				link.style = "visibility:hidden";
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+				URL.revokeObjectURL(blob);
 			} else {
 				window.open(allocationsDataUrl, "_blank");
 			};
@@ -124,6 +131,14 @@ const buttonsObject = {
 
 		playIcon.on("click", (_, d) => {
 			d.clicked = !d.clicked;
+
+			const thisYearArrayAllocations = chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf" ?
+				yearsArrayAllocations : chartState.selectedFund === "cerf" ? yearsArrayAllocationsCerf : yearsArrayAllocationsCbpf;
+
+			const yearsArray = chartState.selectedChart !== "contributionsByCerfCbpf" ?
+				JSON.parse(JSON.stringify(thisYearArrayAllocations)) :
+				JSON.parse(JSON.stringify(yearsArrayContributions));
+
 			playIcon.html(d.clicked ? "PAUSE " : "PLAY  ")
 				.append("span")
 				.attr("class", d.clicked ? "fas fa-pause" : "fas fa-play");
@@ -137,7 +152,7 @@ const buttonsObject = {
 			} else {
 				selections.buttonsOuterContainer.classed("options-btn-panel-fix", false)
 					.classed("options-btn-panel", true);
-				if (chartState.selectedChart !== "contributionsByCerfCbpf") d3.select("#pfbialyearNumberText").text("");
+				d3.select("#pfbihpyearNumberText").text("");
 				this.playing = false;
 				this.timer.stop();
 			};
@@ -148,19 +163,50 @@ const buttonsObject = {
 };
 
 function loopYears(yearsArray, selections) {
-	const index = yearsArray.indexOf(chartState.selectedYear);
-	chartState.selectedYear = yearsArray[(index + 1) % yearsArray.length];
-	if (chartState.selectedChart !== "contributionsByCerfCbpf") {
-		d3.select("#pfbialyearNumberText").text(chartState.selectedYear);
-		selections.yearDropdown.selectAll("option")
-			.property("selected", d => chartState.selectedYear === d);
-		selections.yearDropdown.dispatch("change");
-	} else {
-		const yearButton = d3.select(".pfbiccyearButtonsDiv")
+	if (chartState.selectedChart === "countryProfile") {
+		const yearButtons = d3.select(".pfcpmainyearsButtonsDiv")
 			.selectAll("button")
-			.filter(d => d === chartState.selectedYear);
-		yearButton.dispatch("click");
+			.filter((_, i, n) => +d3.select(n[i]).style("opacity") === 1);
+		const yearsArrayCountryProfile = yearButtons.data();
+		let yearIndex = yearsArrayCountryProfile.indexOf(chartState.selectedYear);
+		chartState.selectedYear = yearsArrayCountryProfile[++yearIndex % yearsArrayCountryProfile.length];
+		d3.select("#pfbihpyearNumberText").text(chartState.selectedYear);
+		const thisYearButton = yearButtons.filter(d => d === chartState.selectedYear);
+		thisYearButton.dispatch("playButtonClick");
+	} else {
+		const index = yearsArray.indexOf(chartState.selectedYear);
+		chartState.selectedYear = yearsArray[(index + 1) % yearsArray.length];
+		d3.select("#pfbihpyearNumberText").text(chartState.selectedYear);
+		if (chartState.selectedChart !== "contributionsByCerfCbpf") {
+			selections.yearDropdown.selectAll("option")
+				.property("selected", d => chartState.selectedYear === d);
+			selections.yearDropdown.dispatch("change");
+		} else {
+			const yearButton = d3.select(".pfbiccyearButtonsDiv")
+				.selectAll("button")
+				.filter(d => d === chartState.selectedYear);
+			yearButton.dispatch("click");
+		};
 	};
+};
+
+function createCountryCsv(countryData, lists) {
+
+	const data = [];
+
+	countryData.forEach(row => {
+		data.push({
+			Year: row.AllocationYear,
+			"Fund": lists.fundTypesList[row.FundId].toUpperCase(),
+			Sector: lists.clustersList[row.ClusterId],
+			"Allocation Source": lists.allocationTypesList[row.AllocationSurceId],
+			"Number of projects": row.NumbofProj,
+			"Partner Type": lists.partnersList[row.OrganizatinonId],
+			Budget: row.ClusterBudget
+		})
+	});
+
+	return d3.csvFormat(data);
 };
 
 function createSnapshot(type, fromContextMenu, selections) {
@@ -201,7 +247,16 @@ function createSnapshot(type, fromContextMenu, selections) {
 	const imageDiv = selections.chartContainerDiv.node();
 
 	selections.chartContainerDiv.selectAll("svg")
-		.each((_, i, n) => setSvgStyles(n[i]));
+		.each((_, i, n) => {
+			const thisSize = n[i].getBoundingClientRect();
+			n[i].setAttribute("width", thisSize.width);
+			n[i].setAttribute("height", thisSize.height);
+			setSvgStyles(n[i]);
+		});
+
+	if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Overview") {
+		d3.select(".pfcpmaindropdownList").style("display", "none");
+	};
 
 	html2canvas(imageDiv).then(function(canvas) {
 
@@ -215,6 +270,10 @@ function createSnapshot(type, fromContextMenu, selections) {
 		};
 
 		if (fromContextMenu && chartState.currentHoveredElement) d3.select(chartState.currentHoveredElement).dispatch("mouseout");
+
+		if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Overview") {
+			d3.select(".pfcpmaindropdownList").style("display", null);
+		};
 
 	});
 
@@ -410,6 +469,4 @@ function removeProgressWheel() {
 	wheelGroup.remove();
 };
 
-export {
-	buttonsObject
-};
+export { buttonsObject };

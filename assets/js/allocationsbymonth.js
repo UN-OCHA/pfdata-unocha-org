@@ -1,6 +1,5 @@
-//|Contributions By Cerf/Cbpf module
+//|Allocations by month module
 import { chartState } from "./chartstate.js";
-import { donorsFlagsData } from "./donorsflagsdata.js";
 import { createLinks } from "./links.js";
 import { createBreadcrumbs } from "./breadcrumbs.js";
 
@@ -14,7 +13,7 @@ const classPrefix = "pfbicc",
 	allYears = "all",
 	svgPaddingsCerf = [38, 42, 20, 50],
 	svgPaddingsCbpf = [38, 42, 20, 50],
-	svgColumnPadding = [16, 26, 8, 80],
+	svgColumnPadding = [16, 26, 4, 56],
 	svgCumulativePaddingsCerf = [26, 42, 50, 50],
 	svgCumulativePaddingsCbpf = [26, 42, 50, 50],
 	arrowPaddingLeft = 22,
@@ -31,10 +30,8 @@ const classPrefix = "pfbicc",
 	cumulativeLegendCircleRadius = 4,
 	cumulativeLegendCirclePadding = 4,
 	cumulativeHighlightCircleRadius = 4,
+	legendPledgedPadding = 158,
 	maxYearNumber = 4,
-	flagSize = 16,
-	flagSizeTooltip = 20,
-	flagPadding = 2,
 	duration = 1000,
 	labelMargin = 22,
 	labelPadding = 8,
@@ -50,7 +47,6 @@ const classPrefix = "pfbicc",
 	lineOpacity = 0.75,
 	fadeOpacity = 0.1,
 	fadeOpacityPartial = 0.5,
-	legendPledgedPadding = 158,
 	cumulativeTitlePadding = 20,
 	cumulativeLegendPadding = 36,
 	cumulativeLegendSize = 60,
@@ -68,36 +64,40 @@ const classPrefix = "pfbicc",
 	monthFormatFull = d3.timeFormat("%B"),
 	monthAbbrvParse = d3.timeParse("%b"),
 	monthParse = d3.timeParse("%m"),
-	pledgeDateParse = d3.timeParse("%m-%Y"),
+	dateParse = d3.timeParse("%m-%Y"),
+	formatTime = d3.timeFormat("%d/%m/%Y"),
 	formatSIaxes = d3.format("~s"),
 	monthsArray = d3.range(1, 13, 1).map(d => monthFormat(monthParse(d))),
 	separator = "##",
-	stackKeys = ["cerf", "cbpf"],
-	valueTypes = ["pledged", "paid", "total"];
+	stackKeys = ["total"],
+	selectedValue = "total";
 
 //|variables
 let selectedYear,
-	selectedValue,
 	yearsArray,
 	yearsArrayCerf,
 	yearsArrayCbpf,
-	previousXValue;
+	previousXValue,
+	cerfId,
+	cbpfId;
 
-function createContributionsByCerfCbpf(selections, colors, lists) {
+function createAllocationsByMonth(selections, colors, lists) {
+
+	cerfId = +Object.keys(lists.fundTypesList).find(e => lists.fundTypesList[e] === "cerf");
+	cbpfId = +Object.keys(lists.fundTypesList).find(e => lists.fundTypesList[e] === "cbpf");
 
 	d3.select("#pfbihpPlayButton")
 		.property("disabled", false);
 
-	selectedYear = lists.queryStringValues.has("contributionYear") ? lists.queryStringValues.get("contributionYear").split("|").map(e => +e) :
+	selectedYear = lists.queryStringValues.has("allocationYear") ? lists.queryStringValues.get("allocationYear").split("|").map(e => +e) :
 		lists.queryStringValues.has("year") ? [+lists.queryStringValues.get("year")] : [allYears];
-	selectedValue = lists.queryStringValues.has("value") ? lists.queryStringValues.get("value") : "total";
 
 	const outerDiv = selections.chartContainerDiv.append("div")
 		.attr("class", classPrefix + "outerDiv");
 
-	const breadcrumb = createBreadcrumbs(outerDiv, "contributions");
+	const breadcrumb = createBreadcrumbs(outerDiv, "allocations");
 
-	breadcrumb.secondBreadcrumbSpan.html("by CERF/CBPF");
+	breadcrumb.secondBreadcrumbSpan.html("by Year/Month");
 
 	const topButtonsDiv = breadcrumb.breadcrumbDiv.append("div")
 		.attr("data-html2canvas-ignore", "true")
@@ -117,9 +117,6 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 	const yearButtonsDiv = topDiv.append("div")
 		.attr("class", classPrefix + "yearButtonsDiv");
-
-	const paidPledgedButtonsDiv = topDiv.append("div")
-		.attr("class", classPrefix + "paidPledgedButtonsDiv");
 
 	const chartAreaDiv = containerDiv.append("div")
 		.attr("class", classPrefix + "chartAreaDiv");
@@ -186,7 +183,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 	const tooltipRectLayerCerf = chartAreaCerf.append("g");
 	const tooltipRectLayerCbpf = chartAreaCbpf.append("g");
 
-	const columnChartContainer = selections.byCerfCbpfChartContainer;
+	const columnChartContainer = selections.byMonthChartContainer;
 
 	columnChartContainer.html(null);
 
@@ -194,9 +191,9 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 		.attr("width", svgColumnChartWidth)
 		.attr("height", svgColumnChartHeight);
 
-	yearsArray = d3.range(lists.yearsArrayContributions[0], currentYear + 1, 1);
-	yearsArrayCerf = d3.range(lists.yearsArrayContributionsCerf[0], currentYear + 1, 1);
-	yearsArrayCbpf = d3.range(lists.yearsArrayContributionsCbpf[0], currentYear + 1, 1);
+	yearsArray = d3.range(lists.yearsArrayAllocations[0], currentYear + 1, 1);
+	yearsArrayCerf = d3.range(lists.yearsArrayAllocationsCerf[0], currentYear + 1, 1);
+	yearsArrayCbpf = d3.range(lists.yearsArrayAllocationsCbpf[0], currentYear + 1, 1);
 
 	const xScaleCerf = d3.scaleBand()
 		.paddingOuter(0.2);
@@ -327,7 +324,6 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 		.tickFormat(d => "$" + formatSIaxes(d).replace("G", "B"));
 
 	const yAxisColumn = d3.axisLeft(yScaleColumn)
-		.tickPadding(flagSize + 2 * flagPadding)
 		.tickSize(3);
 
 	const xAxisGroupColumn = svgColumnChart.append("g")
@@ -390,8 +386,6 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 	createYearButtons(yearButtonsDiv);
 
-	createPaidPledgedButtons(paidPledgedButtonsDiv);
-
 	function draw(originalData) {
 
 		let data = filterData(originalData);
@@ -403,8 +397,6 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 		createColumnChart(columnData);
 
 		const yearButtons = yearButtonsDiv.selectAll("button");
-
-		const valueButtons = paidPledgedButtonsDiv.selectAll("button");
 
 		yearButtons.on("mouseover", mouseoveryearButtons)
 			.on("mouseout", mouseoutyearButtons)
@@ -489,39 +481,18 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 			if (selectedYear[0] !== allYears) {
 				const yearValues = selectedYear.join("|");
-				if (lists.queryStringValues.has("contributionYear")) {
-					lists.queryStringValues.set("contributionYear", yearValues);
+				if (lists.queryStringValues.has("allocationYear")) {
+					lists.queryStringValues.set("allocationYear", yearValues);
 				} else {
-					lists.queryStringValues.append("contributionYear", yearValues);
+					lists.queryStringValues.append("allocationYear", yearValues);
 				};
 			} else {
-				lists.queryStringValues.delete("contributionYear");
+				lists.queryStringValues.delete("allocationYear");
 			};
 			const newURL = window.location.origin + window.location.pathname + "?" + lists.queryStringValues.toString();
 			window.history.replaceState(null, "", newURL);
 
 		};
-
-		valueButtons.on("click", (event, d) => {
-			selectedValue = d;
-			valueButtons.classed("active", e => e === selectedValue);
-			drawChart(data, "cerf");
-			drawChart(data, "cbpf");
-			createColumnTopValues(columnData);
-			createColumnChart(columnData);
-
-			if (selectedValue !== "total") {
-				if (lists.queryStringValues.has("value")) {
-					lists.queryStringValues.set("value", selectedValue);
-				} else {
-					lists.queryStringValues.append("value", selectedValue);
-				};
-			} else {
-				lists.queryStringValues.delete("value");
-			};
-			const newURL = window.location.origin + window.location.pathname + "?" + lists.queryStringValues.toString();
-			window.history.replaceState(null, "", newURL);
-		});
 
 		//end of draw
 	};
@@ -601,17 +572,6 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 		//end of createYearButtons
 	};
 
-	function createPaidPledgedButtons(container) {
-
-		const valuesButtons = container.selectAll(null)
-			.data(valueTypes)
-			.enter()
-			.append("button")
-			.classed("active", d => selectedValue === d)
-			.html(d => capitalize(d));
-
-	};
-
 	function drawChart(data, fundType) {
 
 		const xScale = fundType === "cerf" ? xScaleCerf : xScaleCbpf;
@@ -651,18 +611,14 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 		if (dataMonth.length) {
 			dataMonth.forEach(row => {
 				const monthlyData = row.monthValues.reduce((acc, curr) => {
-					if (fundType === "cerf" ? curr.PooledFundId === lists.cerfPooledFundId : curr.PooledFundId !== lists.cerfPooledFundId) {
-						const foundYear = acc.find(e => e.year === +curr.PledgePaidDate.split("-")[1]);
+					if (fundType === "cerf" ? curr.FundType === cerfId : curr.FundType !== cerfId) {
+						const foundYear = acc.find(e => e.year === +curr.ApprovedDate.split("-")[1]);
 						if (foundYear) {
-							foundYear.total += curr.PaidAmt + curr.PledgeAmt;
-							foundYear.paid += curr.PaidAmt;
-							foundYear.pledged += curr.PledgeAmt;
+							foundYear.total += curr.Budget;
 						} else {
 							acc.push({
-								year: +curr.PledgePaidDate.split("-")[1],
-								total: curr.PaidAmt + curr.PledgeAmt,
-								paid: curr.PaidAmt,
-								pledged: curr.PledgeAmt
+								year: +curr.ApprovedDate.split("-")[1],
+								total: curr.Budget,
 							});
 						};
 					};
@@ -684,8 +640,6 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 								foundMonth.monthlyData.push({
 									year: year,
 									total: 0,
-									paid: 0,
-									pledged: 0
 								});
 							};
 						};
@@ -702,8 +656,6 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 						obj.monthlyData.push({
 							year: year,
 							total: 0,
-							paid: 0,
-							pledged: 0
 						});
 					};
 				});
@@ -778,7 +730,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.attr("class", classPrefix + "chartTitle")
 			.attr("x", svgPaddings[3] + (svgWidth - svgPaddings[1] - svgPaddings[3]) / 2)
 			.attr("y", noValues ? d3.mean(yScale.range()) : svgPaddings[0] - titlePadding)
-			.text(noValues ? "" : fundType.toUpperCase() + " ");
+			.text(noValues ? "" : fundType.toUpperCase() + (fundType === "cbpf" ? "* " : " "));
 
 		chartTitleEnter.append("tspan")
 			.attr("class", classPrefix + "chartTitleSpan")
@@ -789,7 +741,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 		chartTitle.attr("y", noValues ? d3.mean(yScale.range()) : svgPaddings[0] - titlePadding);
 
-		chartTitle.node().childNodes[0].textContent = noValues ? "" : fundType.toUpperCase() + " ";
+		chartTitle.node().childNodes[0].textContent = noValues ? "" : fundType.toUpperCase() + (fundType === "cbpf" ? "* " : " ");
 
 		chartTitle.select("tspan")
 			.text(noValues ? fundType.toUpperCase() + " started operations in " + yearsArray[0] :
@@ -849,22 +801,15 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.append("text")
 			.attr("class", classPrefix + "labels")
 			.attr("x", d => xScale(d.year) + xScale.bandwidth() / 2)
-			.attr("y", d => d[`pledged${separator}${fundType}`] && selectedValue === "total" ? yScale(0) - (2 * labelPadding) : yScale(0) - labelPadding);
+			.attr("y", yScale(0) - labelPadding);
 
 		labels = labelsEnter.merge(labels);
 
 		labels.transition(syncedTransition)
-			.attr("y", d => d[`pledged${separator}${fundType}`] && selectedValue === "total" ? yScale(d[`total${separator}${fundType}`]) - (2 * labelPadding) : yScale(d[`${selectedValue}${separator}${fundType}`]) - labelPadding)
+			.attr("y", d => yScale(d[`${selectedValue}${separator}${fundType}`]) - labelPadding)
 			.tween("text", (d, i, n) => {
 				const interpolator = d3.interpolate(reverseFormat(n[i].textContent) || 0, d[`${selectedValue}${separator}${fundType}`]);
-				return !d[`pledged${separator}${fundType}`] || selectedValue !== "total" ?
-					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B")) :
-					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B"))
-					.append("tspan")
-					.attr("dy", "1.1em")
-					.classed(classPrefix + "pledgedValue", true)
-					.attr("x", xScale(d.year) + xScale.bandwidth() / 2)
-					.text("(" + d3.formatPrefix(".0", d[`pledged${separator}${fundType}`])(d[`pledged${separator}${fundType}`]) + ")");
+				return t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B"));
 			});
 
 		let group = chartLayer.selectAll("." + classPrefix + "group")
@@ -927,7 +872,7 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.append("text")
 			.attr("class", classPrefix + "labelsGroup")
 			.attr("x", d => xScaleInner(d.year) + xScaleInner.bandwidth() / 2)
-			.attr("y", d => d.pledged && selectedValue === "total" ? yScale(0) - (3 * labelPaddingInner) : yScale(0) - labelPaddingInner);
+			.attr("y", yScale(0) - labelPaddingInner);
 
 		labelsGroup = labelsGroupEnter.merge(labelsGroup);
 
@@ -935,17 +880,10 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 		labelsGroup.transition(syncedTransition)
 			.attr("x", d => xScaleInner(d.year) + xScaleInner.bandwidth() / 2)
-			.attr("y", d => d.pledged && selectedValue === "total" ? yScale(d[selectedValue]) - (3 * labelPaddingInner) : yScale(d[selectedValue]) - labelPaddingInner)
+			.attr("y", d => yScale(d[selectedValue]) - labelPaddingInner)
 			.tween("text", (d, i, n) => {
 				const interpolator = d3.interpolate(reverseFormat(n[i].textContent) || 0, d[selectedValue]);
-				return !d.pledged || selectedValue !== "total" ?
-					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B")) :
-					t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B"))
-					.append("tspan")
-					.attr("dy", "1.1em")
-					.classed(classPrefix + "pledgedValue", true)
-					.attr("x", xScaleInner(d.year) + xScaleInner.bandwidth() / 2)
-					.text("(" + d3.formatPrefix(".0", d.pledged)(d.pledged) + ")");
+				return t => d3.select(n[i]).text(d3.formatPrefix(".0", interpolator(t))(interpolator(t)).replace("G", "B"));
 			});
 
 		group.selectAll("text")
@@ -1054,34 +992,26 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 				.style("line-height", 1.4)
 				.style("width", "100%");
 
-			const valuesArray = tooltipType === "yearTooltip" ? d.yearValues : d.parentData.monthValues.filter(e => e.FiscalYear === d.year);
+			const valuesArray = tooltipType === "yearTooltip" ? d.yearValues : d.parentData.monthValues.filter(e => +e.ApprovedDate.split("-")[1] === d.year);
 
 			const totalValues = valuesArray.reduce((acc, curr) => {
-				if (fundType === "cerf" ? curr.PooledFundId === lists.cerfPooledFundId : curr.PooledFundId !== lists.cerfPooledFundId) {
-					acc.total += curr.PaidAmt + curr.PledgeAmt;
-					acc.paid += curr.PaidAmt;
-					acc.pledged += curr.PledgeAmt;
+				if (fundType === "cerf" ? curr.FundType === cerfId : curr.FundType !== cerfId) {
+					acc.total += curr.Budget;
 				};
 				return acc;
 			}, {
-				total: 0,
-				paid: 0,
-				pledged: 0
+				total: 0
 			});
 
 			let tooltipData = valuesArray.reduce((acc, curr) => {
-				if (fundType === "cerf" ? curr.PooledFundId === lists.cerfPooledFundId : curr.PooledFundId !== lists.cerfPooledFundId) {
-					const foundDonor = acc.find(e => e.donorId === curr.DonorId);
-					if (foundDonor) {
-						foundDonor.total += curr.PaidAmt + curr.PledgeAmt;
-						foundDonor.paid += curr.PaidAmt;
-						foundDonor.pledged += curr.PledgeAmt;
+				if (fundType === "cerf" ? curr.FundType === cerfId : curr.FundType !== cerfId) {
+					const foundFund = acc.find(e => e.fundId === curr.PooledFundName);
+					if (foundFund) {
+						foundFund.total += curr.Budget;
 					} else {
 						acc.push({
-							donorId: curr.DonorId,
-							total: curr.PaidAmt + curr.PledgeAmt,
-							paid: curr.PaidAmt,
-							pledged: curr.PledgeAmt
+							fundId: curr.PooledFundName,
+							total: curr.Budget,
 						});
 					};
 				};
@@ -1094,12 +1024,10 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 				if (index < maxTooltipDonorNumber) {
 					acc.push(curr)
 				} else if (index === maxTooltipDonorNumber) {
-					curr.donorId = null;
+					curr.fundId = null;
 					acc.push(curr);
 				} else {
 					acc[maxTooltipDonorNumber].total += curr.total;
-					acc[maxTooltipDonorNumber].paid += curr.paid;
-					acc[maxTooltipDonorNumber].pledged += curr.pledged;
 				};
 				return acc;
 			}, []);
@@ -1127,15 +1055,9 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 					.style("align-items", "center")
 					.style("width", "100%");
 
-				rowDiv.append("img")
-					.attr("width", flagSizeTooltip)
-					.attr("height", flagSizeTooltip)
-					.style("margin-right", "4px")
-					.attr("src", row.donorId ? (donorsFlagsData[lists.donorIsoCodesList[row.donorId].toLowerCase()] || blankImg) : blankImg);
-
 				rowDiv.append("span")
 					.attr("class", classPrefix + "tooltipYears")
-					.html(row.donorId ? lists.donorNamesList[row.donorId].substring(0, maxTooltipNameLength) : "Others");
+					.html(row.fundId ? lists.fundAbbreviatedNamesList[row.fundId].substring(0, maxTooltipNameLength) : "Others");
 
 				rowDiv.append("span")
 					.attr("class", classPrefix + "tooltipLeader");
@@ -1223,29 +1145,17 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.style("opacity", 1);
 
 		let legendPledged = svg.selectAll("." + classPrefix + "legendPledged")
-			.data(dataYear.some(e => e[`pledged${separator}${fundType}`]) || dataMonth.some(e => e[`pledged${separator}${fundType}`]) ? [true] : []);
+			.data(fundType === "cbpf" ? [true] : []);
 
-		const legendPledgedExit = legendPledged.exit()
-			.call(exitSelection, syncedTransition);
-
-		const legendPledgedEnter = legendPledged.enter()
+		legendPledged = legendPledged.enter()
 			.append("text")
 			.attr("class", classPrefix + "legendPledged")
-			.style("opacity", 0)
 			.attr("x", legendGroup.size() ? legendPledgedPadding : svgPaddings[3] + xScale.paddingOuter() * xScale.step())
 			.attr("y", svgHeight - legendPadding + legendRectSize / 2)
-			.classed(classPrefix + "pledgedValue", true)
-			.text("(*)");
-
-		legendPledgedEnter.append("tspan")
-			.style("fill", "#777")
-			.text(": Pledged values");
-
-		legendPledged = legendPledgedEnter.merge(legendPledged);
-
-		legendPledged.transition(syncedTransition)
-			.attr("x", legendGroup.size() ? legendPledgedPadding : svgPaddings[3] + xScale.paddingOuter() * xScale.step())
-			.style("opacity", 1);
+			.text("*: Limited allocation data in GMS prior to 2015")
+			.merge(legendPledged)
+			.transition(syncedTransition)
+			.attr("x", legendGroup.size() ? legendPledgedPadding : svgPaddings[3] + xScale.paddingOuter() * xScale.step());
 
 		let cumulativeTitle = svg.selectAll("." + classPrefix + "cumulativeTitle")
 			.data([true]);
@@ -1422,8 +1332,8 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 				return;
 			};
 
-			const tooltipText = xValue === yearsArray[0] || xValue === monthsArray[0] ? "Contributions in " :
-				"Total contributions up to ";
+			const tooltipText = xValue === yearsArray[0] || xValue === monthsArray[0] ? "Allocations in " :
+				"Total allocations up to ";
 
 			cumulativeVerticalRect.style("opacity", 1)
 				.attr("x", xScale(xValue) - (xScale.step() - xScale.bandwidth()) / 2)
@@ -1641,88 +1551,60 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 	function createColumnTopValues(originalData) {
 
-		let totalContributions = 0,
-			totalPaid = 0,
-			totalPledged = 0;
+		let totalAllocations = 0;
 
-		const numberOfDonors = originalData.length;
+		const numberOfCountries = originalData.length;
 
 		originalData.forEach(row => {
-			totalContributions += row[`total${separator}total`];
-			totalPaid += row[`paid${separator}total`];
-			totalPledged += row[`pledged${separator}total`];
+			totalAllocations += row[`total${separator}total`];
 		});
 
 		const updateTransition = d3.transition()
 			.duration(duration);
 
-		selections.byCerfCbpfContributionsValue.transition(updateTransition)
+		selections.byMonthAllocationsValue.transition(updateTransition)
 			.textTween((_, i, n) => {
-				const interpolator = d3.interpolate(reverseFormat(n[i].textContent.split("$")[1]) || 0, totalContributions);
+				const interpolator = d3.interpolate(reverseFormat(n[i].textContent.split("$")[1]) || 0, totalAllocations);
 				return t => "$" + formatSIFloat(interpolator(t)).replace("G", "B");
 			});
 
-		selections.byCerfCbpfPaidValue.transition(updateTransition)
-			.textTween((_, i, n) => {
-				const interpolator = d3.interpolate(reverseFormat(n[i].textContent.split("$")[1]) || 0, totalPaid);
-				return t => "$" + formatSIFloat(interpolator(t)).replace("G", "B");
-			});
+		selections.byMonthCountriesValue.transition(updateTransition)
+			.textTween((_, i, n) => d3.interpolateRound(n[i].textContent || 0, numberOfCountries));
 
-		selections.byCerfCbpfPledgedValue.transition(updateTransition)
-			.textTween((_, i, n) => {
-				const interpolator = d3.interpolate(reverseFormat(n[i].textContent.split("$")[1]) || 0, totalPledged);
-				return t => "$" + formatSIFloat(interpolator(t)).replace("G", "B");
-			});
-
-		selections.byCerfCbpfDonorsValue.transition(updateTransition)
-			.textTween((_, i, n) => d3.interpolateRound(n[i].textContent || 0, numberOfDonors));
-
-		selections.byCerfCbpfDonorsText.html(numberOfDonors > 1 ? "Donors" : "Donor");
+		selections.byCerfCbpfDonorsText.html(numberOfCountries > 1 ? "Donors" : "Donor");
 
 		//end of createColumnTopValues
 	};
 
 	function createColumnChart(data) {
 
-		data.sort((a, b) => b[`${selectedValue}${separator}total`] - a[`${selectedValue}${separator}total`]);
-
-		const columnData = data.reduce((acc, curr, index) => {
-			if (index < topDonors) {
-				acc.push({
-					donor: curr.donor,
-					isoCode: curr.isoCode.toLowerCase(),
-					cerf: curr[`${selectedValue}${separator}cerf`],
-					cbpf: curr[`${selectedValue}${separator}cbpf`],
-					totalValue: curr[`total${separator}cerf`] + curr[`total${separator}cbpf`]
-				});
-			} else if (index === topDonors) {
-				acc.push({
-					donor: "Others",
-					cerf: curr[`${selectedValue}${separator}cerf`],
-					cbpf: curr[`${selectedValue}${separator}cbpf`],
-					totalValue: curr[`total${separator}cerf`] + curr[`total${separator}cbpf`]
-				});
+		const columnData = data.reduce((acc, curr) => {
+			const foundRegion = acc.find(e => e.region === curr.region);
+			if (foundRegion) {
+				foundRegion.total += curr[`total${separator}total`];
 			} else {
-				acc[topDonors].cerf += curr[`${selectedValue}${separator}cerf`];
-				acc[topDonors].cbpf += curr[`${selectedValue}${separator}cbpf`];
-				acc[topDonors].totalValue += curr[`total${separator}cerf`] + curr[`total${separator}cbpf`];
+				acc.push({
+					region: curr.region,
+					total: curr[`total${separator}total`]
+				});
 			};
 			return acc;
 		}, []);
+		columnData.sort((a, b) => b.total - a.total);
+		columnData.forEach(row => row.clicked = chartState.selectedRegion.indexOf(row.region) > -1);
 
-		yScaleColumn.domain(columnData.map(e => e.donor))
+		const filteredData = columnData.filter(d => d.total);
+
+		yScaleColumn.domain(filteredData.map(e => e.region))
 			.range([svgColumnPadding[0],
-				Math.min(svgColumnChartHeight - svgColumnPadding[2], maxColumnRectHeight * 2 * (columnData.length + 1))
+				Math.min(svgColumnChartHeight - svgColumnPadding[2], maxColumnRectHeight * 2 * (filteredData.length + 1))
 			]);
 
-		const minxScaleValue = d3.max(columnData, d => d.totalValue);
+		svgColumnChart.attr("height", yScaleColumn.range()[1] + svgColumnPadding[2]);
 
-		xScaleColumn.domain([0, d3.max(columnData, e => e.cbpf + e.cerf) || minxScaleValue]);
+		xScaleColumn.domain([0, d3.max(filteredData, e => e.total)]);
 
-		const stackedData = stack(columnData);
-
-		const syncedTransitionColumn = d3.transition()
-			.duration(duration);
+		const stackedData = stack(filteredData);
 
 		let barsGroupsColumn = svgColumnChart.selectAll("." + classPrefix + "barsGroupsColumn")
 			.data(stackedData, d => d.key);
@@ -1737,10 +1619,11 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 		barsGroupsColumn = barsGroupsColumnEnter.merge(barsGroupsColumn);
 
 		let barsColumn = barsGroupsColumn.selectAll("." + classPrefix + "barsColumn")
-			.data(d => d, d => d.data.donor);
+			.data(d => d, d => d.data.region);
 
 		const barsColumnExit = barsColumn.exit()
-			.transition(syncedTransitionColumn)
+			.transition()
+			.duration(duration)
 			.attr("width", 0)
 			.attr("x", svgColumnPadding[3])
 			.style("opacity", 0)
@@ -1753,25 +1636,28 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.attr("width", 0)
 			.style("fill", (d, i, n) => {
 				const thisKey = d3.select(n[i].parentNode).datum().key;
-				return colors[thisKey]
+				return colors[thisKey];
 			})
 			.attr("x", xScaleColumn(0))
-			.attr("y", d => yScaleColumn(d.data.donor))
+			.attr("y", d => yScaleColumn(d.data.region))
 
 		barsColumn = barsColumnEnter.merge(barsColumn);
 
-		barsColumn.transition(syncedTransitionColumn)
+		barsColumn.transition()
+			.duration(duration)
 			.attr("height", yScaleColumn.bandwidth())
-			.attr("y", d => yScaleColumn(d.data.donor))
+			.attr("y", d => yScaleColumn(d.data.region))
 			.attr("x", d => d[0] === d[1] ? xScaleColumn(0) : xScaleColumn(d[0]))
 			.attr("width", d => xScaleColumn(d[1]) - xScaleColumn(d[0]));
 
 		let labelsColumn = svgColumnChart.selectAll("." + classPrefix + "labelsColumn")
-			.data(columnData, d => d.donor);
+			.data(filteredData, d => d.region);
 
 		const labelsColumnExit = labelsColumn.exit()
-			.transition(syncedTransitionColumn)
+			.transition()
+			.duration(duration)
 			.style("opacity", 0)
+			.attr("x", svgColumnPadding[3] + labelsColumnPadding)
 			.remove();
 
 		const labelsColumnEnter = labelsColumn.enter()
@@ -1779,53 +1665,68 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			.attr("class", classPrefix + "labelsColumn")
 			.style("opacity", 0)
 			.attr("x", svgColumnPadding[3] + labelsColumnPadding)
-			.attr("y", d => yScaleColumn(d.donor) + yScaleColumn.bandwidth() / 2);
+			.attr("y", d => yScaleColumn(d.region) + yScaleColumn.bandwidth() / 2);
 
 		labelsColumn = labelsColumnEnter.merge(labelsColumn);
 
-		labelsColumn.transition(syncedTransitionColumn)
+		labelsColumn.transition()
+			.duration(duration)
 			.style("opacity", 1)
-			.attr("x", d => xScaleColumn(d.cerf + d.cbpf) + labelsColumnPadding)
-			.attr("y", d => yScaleColumn(d.donor) + yScaleColumn.bandwidth() / 2)
+			.attr("x", d => xScaleColumn(d.total) + labelsColumnPadding)
+			.attr("y", d => yScaleColumn(d.region) + yScaleColumn.bandwidth() / 2)
 			.textTween((d, i, n) => {
-				const interpolator = d3.interpolate(reverseFormat(n[i].textContent) || 0, d.cerf + d.cbpf);
+				const interpolator = d3.interpolate(reverseFormat(n[i].textContent) || 0, d.total);
 				return t => formatSIFloat(interpolator(t)).replace("G", "B");
 			});
 
-		let flagsColumn = svgColumnChart.selectAll("." + classPrefix + "flagsColumn")
-			.data(columnData.slice(0, topDonors), d => d.donor);
+		let barsColumnTooltipRectangles = svgColumnChart.selectAll("." + classPrefix + "barsColumnTooltipRectangles")
+			.data(filteredData, d => d.region);
 
-		const flagsColumnExit = flagsColumn.exit()
-			.transition(syncedTransitionColumn)
+		const barsColumnTooltipRectanglesExit = barsColumnTooltipRectangles.exit().remove();
+
+		const barsColumnTooltipRectanglesEnter = barsColumnTooltipRectangles.enter()
+			.append("rect")
+			.attr("class", classPrefix + "barsColumnTooltipRectangles")
+			.attr("pointer-events", "all")
+			.style("cursor", "pointer")
 			.style("opacity", 0)
-			.remove();
+			.attr("x", 0)
+			.attr("width", svgColumnChartWidth)
+			.attr("height", yScaleColumn.step())
+			.attr("y", d => yScaleColumn(d.region) - yScaleColumn.bandwidth() / 2);
 
-		const flagsColumnEnter = flagsColumn.enter()
-			.append("image")
-			.attr("class", classPrefix + "flagsColumn")
-			.style("opacity", 0)
-			.attr("x", svgColumnPadding[3] - flagPadding - flagSize - yAxisColumn.tickSize())
-			.attr("y", d => yScaleColumn(d.donor))
-			.attr("width", flagSize)
-			.attr("height", flagSize)
-			.attr("href", d => donorsFlagsData[d.isoCode]);
+		barsColumnTooltipRectangles = barsColumnTooltipRectanglesEnter.merge(barsColumnTooltipRectangles);
 
-		flagsColumn = flagsColumnEnter.merge(flagsColumn);
+		barsColumnTooltipRectangles.transition()
+			.duration(duration)
+			.attr("y", d => yScaleColumn(d.region) - yScaleColumn.bandwidth() / 2);
 
-		flagsColumn.transition(syncedTransitionColumn)
-			.style("opacity", 1)
-			.attr("y", d => yScaleColumn(d.donor));
+		// barsColumnTooltipRectangles.on("mouseover", mouseoverBarsColumnTooltipRectangles)
+		// 	.on("mouseout", mouseoutBarsColumnTooltipRectangles)
+		// 	.on("click", clickBarsColumnTooltipRectangles);
+
+		function highlightBars() {
+			barsColumn.style("fill", (e, i, n) => {
+				const thisKey = d3.select(n[i].parentNode).datum().key;
+				return chartState.selectedRegion.indexOf(e.data.region) > -1 ? d3.color(colors[thisKey]).darker(0.5) : colors[thisKey];
+			});
+
+			yAxisGroupColumn.selectAll(".tick text")
+				.classed(classPrefix + "darkTick", e => chartState.selectedRegion.indexOf(e) > -1);
+		};
 
 		xAxisColumn.tickSizeInner(-(yScaleColumn.range()[1] - yScaleColumn.range()[0]));
 
-		xAxisGroupColumn.transition(syncedTransitionColumn)
+		xAxisGroupColumn.transition()
+			.duration(duration)
 			.call(xAxisColumn);
 
 		xAxisGroupColumn.selectAll(".tick")
 			.filter(d => d === 0)
 			.remove();
 
-		yAxisGroupColumn.transition(syncedTransitionColumn)
+		yAxisGroupColumn.transition()
+			.duration(duration)
 			.call(customAxis);
 
 		function customAxis(group) {
@@ -1833,80 +1734,66 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 			group.call(yAxisColumn);
 			sel.selectAll(".tick text")
 				.filter(d => d.indexOf(" ") > -1)
-				.text(d => d.split(" ")[0])
+				.text(d => d.split(" ")[0] === "South-Eastern" ? "South-East." : d.split(" ")[0] === "Horn" ? "Horn of" : d.split(" ")[0])
 				.attr("x", -(yAxisColumn.tickPadding() + yAxisColumn.tickSize()))
 				.attr("dy", "-0.3em")
 				.append("tspan")
 				.attr("dy", "1.1em")
 				.attr("x", -(yAxisColumn.tickPadding() + yAxisColumn.tickSize()))
-				.text(d => d.split(" ")[1]);
-			sel.selectAll(".tick text")
-				.filter(d => d === "Others")
-				.attr("dx", flagSize + flagPadding);
+				.text(d => d.split(" ")[1] === "of" ? "Africa" : d.split(" ")[1]);
 			if (sel !== group) group.selectAll(".tick text")
 				.filter(d => d.indexOf(" ") > -1)
 				.attrTween("x", null)
 				.tween("text", null);
 		};
 
-
 		//end of createColumnChart
 	};
 
 	function filterData(originalData) {
 
+		//data columns: ['ApprovedDate', 'PooledFundName', 'FundType', 'Budget']
+
 		const data = [];
 
 		originalData.forEach(row => {
 
-			if (selectedYear.indexOf(allYears) > -1 && row.FiscalYear <= currentYear) {
+			if (selectedYear.indexOf(allYears) > -1 && (+row.ApprovedDate.split("-")[1]) <= currentYear) {
 
-				const foundYear = data.find(e => e.year === row.FiscalYear);
+				const foundYear = data.find(e => e.year === (+row.ApprovedDate.split("-")[1]));
 
 				if (foundYear) {
-					pushCbpfOrCerfContribution(foundYear, row);
+					pushCbpfOrCerfAllocation(foundYear, row);
 					foundYear.yearValues.push(row);
 				} else {
 					const yearObject = {
-						year: row.FiscalYear,
+						year: (+row.ApprovedDate.split("-")[1]),
 						[`total${separator}total`]: 0,
 						[`total${separator}cerf`]: 0,
 						[`total${separator}cbpf`]: 0,
-						[`paid${separator}total`]: 0,
-						[`paid${separator}cerf`]: 0,
-						[`paid${separator}cbpf`]: 0,
-						[`pledged${separator}total`]: 0,
-						[`pledged${separator}cerf`]: 0,
-						[`pledged${separator}cbpf`]: 0,
 						yearValues: [row]
 					};
-					pushCbpfOrCerfContribution(yearObject, row);
+					pushCbpfOrCerfAllocation(yearObject, row);
 					data.push(yearObject);
 				};
 
 			} else {
-				if (selectedYear.indexOf(+row.PledgePaidDate.split("-")[1]) > -1) {
+				if (selectedYear.indexOf(+row.ApprovedDate.split("-")[1]) > -1) {
 
-					const foundMonth = data.find(e => e.month === monthFormat(pledgeDateParse(row.PledgePaidDate)));
+					const foundMonth = data.find(e => e.month === monthFormat(dateParse(row.ApprovedDate)));
 
 					if (foundMonth) {
-						pushCbpfOrCerfContribution(foundMonth, row);
+						pushCbpfOrCerfAllocation(foundMonth, row);
 						foundMonth.monthValues.push(row);
 					} else {
 						const monthObject = {
-							month: monthFormat(pledgeDateParse(row.PledgePaidDate)),
+							month: monthFormat(dateParse(row.ApprovedDate)),
 							[`total${separator}total`]: 0,
 							[`total${separator}cerf`]: 0,
 							[`total${separator}cbpf`]: 0,
-							[`paid${separator}total`]: 0,
-							[`paid${separator}cerf`]: 0,
-							[`paid${separator}cbpf`]: 0,
-							[`pledged${separator}total`]: 0,
-							[`pledged${separator}cerf`]: 0,
-							[`pledged${separator}cbpf`]: 0,
 							monthValues: []
 						};
-						pushCbpfOrCerfContribution(monthObject, row);
+						pushCbpfOrCerfAllocation(monthObject, row);
 						monthObject.monthValues.push(row);
 						data.push(monthObject);
 					};
@@ -1928,54 +1815,42 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 		const data = [];
 
 		originalData.forEach(row => {
-			if (selectedYear.indexOf(allYears) > -1 && row.FiscalYear <= currentYear) {
+			if (selectedYear.indexOf(allYears) > -1 && (+row.ApprovedDate.split("-")[1]) <= currentYear) {
 
-				const foundDonor = data.find(e => e.donorId === row.DonorId);
+				const foundFund = data.find(e => e.fundId === row.PooledFundName);
 
-				if (foundDonor) {
-					pushCbpfOrCerfContribution(foundDonor, row);
+				if (foundFund) {
+					pushCbpfOrCerfAllocation(foundFund, row);
 				} else {
-					const donorObject = {
-						donor: lists.donorNamesList[row.DonorId],
-						donorId: row.DonorId,
-						isoCode: lists.donorIsoCodesList[row.DonorId],
+					const fundObject = {
+						fund: lists.fundNamesList[row.PooledFundName],
+						fundId: row.PooledFundName,
+						region: lists.fundRegionsList[row.PooledFundName],
 						[`total${separator}total`]: 0,
 						[`total${separator}cerf`]: 0,
 						[`total${separator}cbpf`]: 0,
-						[`paid${separator}total`]: 0,
-						[`paid${separator}cerf`]: 0,
-						[`paid${separator}cbpf`]: 0,
-						[`pledged${separator}total`]: 0,
-						[`pledged${separator}cerf`]: 0,
-						[`pledged${separator}cbpf`]: 0
 					};
-					pushCbpfOrCerfContribution(donorObject, row);
-					data.push(donorObject);
+					pushCbpfOrCerfAllocation(fundObject, row);
+					data.push(fundObject);
 				};
 			} else {
-				if (selectedYear.indexOf(row.FiscalYear) > -1) {
+				if (selectedYear.indexOf((+row.ApprovedDate.split("-")[1])) > -1) {
 
-					const foundDonor = data.find(e => e.donorId === row.DonorId);
+					const foundFund = data.find(e => e.fundId === row.PooledFundName);
 
-					if (foundDonor) {
-						pushCbpfOrCerfContribution(foundDonor, row);
+					if (foundFund) {
+						pushCbpfOrCerfAllocation(foundFund, row);
 					} else {
-						const donorObject = {
-							donor: lists.donorNamesList[row.DonorId],
-							donorId: row.DonorId,
-							isoCode: lists.donorIsoCodesList[row.DonorId],
+						const fundObject = {
+							fund: lists.fundNamesList[row.PooledFundName],
+							fundId: row.PooledFundName,
+							region: lists.fundRegionsList[row.PooledFundName],
 							[`total${separator}total`]: 0,
 							[`total${separator}cerf`]: 0,
 							[`total${separator}cbpf`]: 0,
-							[`paid${separator}total`]: 0,
-							[`paid${separator}cerf`]: 0,
-							[`paid${separator}cbpf`]: 0,
-							[`pledged${separator}total`]: 0,
-							[`pledged${separator}cerf`]: 0,
-							[`pledged${separator}cbpf`]: 0
 						};
-						pushCbpfOrCerfContribution(donorObject, row);
-						data.push(donorObject);
+						pushCbpfOrCerfAllocation(fundObject, row);
+						data.push(fundObject);
 					};
 				};
 
@@ -1986,30 +1861,30 @@ function createContributionsByCerfCbpf(selections, colors, lists) {
 
 	};
 
-	function pushCbpfOrCerfContribution(obj, row) {
-		if (row.PooledFundId === lists.cerfPooledFundId) {
-			obj[`total${separator}cerf`] += row.PaidAmt + row.PledgeAmt;
-			obj[`paid${separator}cerf`] += row.PaidAmt;
-			obj[`pledged${separator}cerf`] += row.PledgeAmt;
+	function pushCbpfOrCerfAllocation(obj, row) {
+		if (row.FundType === cerfId) {
+			obj[`total${separator}cerf`] += row.Budget;
 		} else {
-			obj[`total${separator}cbpf`] += row.PaidAmt + row.PledgeAmt;
-			obj[`paid${separator}cbpf`] += row.PaidAmt;
-			obj[`pledged${separator}cbpf`] += row.PledgeAmt;
+			obj[`total${separator}cbpf`] += row.Budget;
 		};
-		obj[`total${separator}total`] += row.PaidAmt + row.PledgeAmt;
-		obj[`paid${separator}total`] += row.PaidAmt;
-		obj[`pledged${separator}total`] += row.PledgeAmt;
+		obj[`total${separator}total`] += row.Budget;
 	};
 
 	return draw;
 
-	//end of createContributionsByCerfCbpf
+	//end of createAllocationsByMonth
 };
 
 function formatSIFloat(value) {
 	const length = (~~Math.log10(value) + 1) % 3;
 	const digits = length === 1 ? 2 : length === 2 ? 1 : 0;
-	return d3.formatPrefix("." + digits, value)(value);
+	const result = d3.formatPrefix("." + digits + "~", value)(value);
+	if (parseInt(result) === 1000) {
+		const lastDigit = result[result.length - 1];
+		const units = { k: "M", M: "B" };
+		return 1 + (isNaN(lastDigit) ? units[lastDigit] : "");
+	};
+	return result;
 };
 
 function formatSIFloat1Digit(value) {
@@ -2097,4 +1972,4 @@ function exitSelection(selection, transition) {
 		.remove();
 };
 
-export { createContributionsByCerfCbpf };
+export { createAllocationsByMonth };

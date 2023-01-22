@@ -1,16 +1,8 @@
 //|Allocations module
-
-import {
-	chartState
-} from "./chartstate.js";
-
-import {
-	clustersIconsData
-} from "./clustersiconsdata.js";
-
-import {
-	createLinks
-} from "./links.js";
+import { chartState } from "./chartstate.js";
+import { clustersIconsData } from "./clustersiconsdata.js";
+import { createLinks } from "./links.js";
+import { createBreadcrumbs } from "./breadcrumbs.js";
 
 //|constants
 const classPrefix = "pfbial",
@@ -98,27 +90,9 @@ function createAllocations(selections, colors, mapData, lists) {
 	const outerDiv = selections.chartContainerDiv.append("div")
 		.attr("class", classPrefix + "outerDiv");
 
-	const breadcrumbDiv = outerDiv.append("div")
-		.attr("class", classPrefix + "breadcrumbDiv");
+	const breadcrumb = createBreadcrumbs(outerDiv, "allocations");
 
-	const breadcrumbDivInner = breadcrumbDiv.append("div")
-		.attr("class", classPrefix + "breadcrumbDivInner");
-
-	const firstBreadcrumb = breadcrumbDivInner.append("div")
-		.attr("class", classPrefix + "firstBreadcrumb");
-
-	firstBreadcrumb.append("span")
-		.html("allocations");
-
-	const middleBreadcrumb = breadcrumbDivInner.append("div")
-		.attr("class", classPrefix + "middleBreadcrumb");
-
-	const secondBreadcrumb = breadcrumbDivInner.append("div")
-		.attr("class", classPrefix + "secondBreadcrumb");
-
-	const secondBreadcrumbSpan = secondBreadcrumb.append("span");
-
-	const topButtonsDiv = breadcrumbDiv.append("div")
+	const topButtonsDiv = breadcrumb.breadcrumbDiv.append("div")
 		.attr("data-html2canvas-ignore", "true")
 		.attr("class", classPrefix + "topButtonsDiv");
 
@@ -286,7 +260,7 @@ function createAllocations(selections, colors, mapData, lists) {
 			.attr("transform", "translate(" + svgBarChartPadding[3] + "," + svgBarChartPadding[0] + ")"),
 		width: svgBarChartWidth - svgBarChartPadding[3] - svgBarChartPadding[1],
 		height: svgBarChartHeight - svgBarChartPadding[2] - svgBarChartPadding[0],
-		padding: [14, 0, 58, 32],
+		padding: [14, 0, 62, 32],
 		labelsPadding: 3
 	};
 
@@ -296,12 +270,6 @@ function createAllocations(selections, colors, mapData, lists) {
 	const zoomRectangle = zoomLayer.append("rect")
 		.attr("width", svgMapWidth)
 		.attr("height", svgMapHeight);
-
-	const yearNumberText = mapPanel.main.append("g")
-		.attr("class", classPrefix + "yearNumberContainer")
-		.append("text")
-		.attr("transform", "translate(" + (svgMapWidth / 2) + "," + (svgMapHeight / 2) + ")")
-		.attr("id", classPrefix + "yearNumberText");
 
 	const piesContainer = mapPanel.main.append("g")
 		.attr("class", classPrefix + "piesContainer");
@@ -540,7 +508,7 @@ function createAllocations(selections, colors, mapData, lists) {
 
 	function draw(originalData) {
 
-		secondBreadcrumbSpan.html(breadcrumbScale(chartState.selectedChart));
+		breadcrumb.secondBreadcrumbSpan.html(breadcrumbScale(chartState.selectedChart));
 
 		verifyCentroids(originalData);
 
@@ -936,15 +904,22 @@ function createAllocations(selections, colors, mapData, lists) {
 		const groupName = pieGroupTextsEnter.append("text")
 			.attr("class", classPrefix + "groupName")
 			.attr("x", d => radiusScale(chartState.selectedFund === "total" ? d.total : d.cbpf + d.cerf) + groupNamePadding)
-			.attr("y", d => d.labelText.length > 1 ? groupNamePadding * 2 - 5 : groupNamePadding * 2)
+			.attr("y", d => {
+				const thisLabel = chooseLabel(d);
+				return thisLabel.length > 1 ? groupNamePadding * 2 - 5 : groupNamePadding * 2
+			})
 			.style("opacity", 0)
-			.text(d => d.labelText.length > 2 ? d.labelText[0] + " " + d.labelText[1] : d.labelText[0])
+			.text(d => {
+				const thisLabel = chooseLabel(d);
+				return thisLabel.length > 2 ? thisLabel[0] + " " + thisLabel[1] : thisLabel[0]
+			})
 			.each((d, i, n) => {
-				if (d.labelText.length > 1) {
+				const thisLabel = chooseLabel(d);
+				if (thisLabel.length > 1) {
 					d3.select(n[i]).append("tspan")
 						.attr("x", radiusScale(chartState.selectedFund === "total" ? d.total : d.cbpf + d.cerf) + groupNamePadding)
 						.attr("dy", 12)
-						.text(d.labelText.length > 2 ? d.labelText.filter((_, i) => i > 1).join(" ") : d.labelText[1]);
+						.text(thisLabel.length > 2 ? thisLabel.filter((_, i) => i > 1).join(" ") : thisLabel[1]);
 				};
 			});
 
@@ -959,16 +934,35 @@ function createAllocations(selections, colors, mapData, lists) {
 		const allTexts = pieGroupTexts.selectAll("text");
 
 		pieGroupTexts.select("text." + classPrefix + "groupName tspan")
+			.text(d => {
+				const thisLabel = chooseLabel(d);
+				return thisLabel.length > 2 ? thisLabel.filter((_, i) => i > 1).join(" ") : thisLabel[1]
+			})
 			.transition()
 			.duration(duration)
 			.style("opacity", 1)
 			.attr("x", d => radiusScale(chartState.selectedFund === "total" ? d.total : d.cbpf + d.cerf) + groupNamePadding);
 
 		pieGroupTexts.select("text." + classPrefix + "groupName")
+			.each((d, i, n) => {
+				const thisLabel = chooseLabel(d);
+				Array.from(n[i].childNodes).find(e => e.nodeType === Node.TEXT_NODE)
+					.textContent = thisLabel.length > 2 ? thisLabel[0] + " " + thisLabel[1] : thisLabel[0];
+				if (thisLabel.length > 1 && !d3.select(n[i]).select("tspan").size()) {
+					d3.select(n[i]).append("tspan")
+						.attr("x", radiusScale(chartState.selectedFund === "total" ? d.total : d.cbpf + d.cerf) + groupNamePadding)
+						.attr("dy", 12)
+						.text(thisLabel.length > 2 ? thisLabel.filter((_, i) => i > 1).join(" ") : thisLabel[1]);
+				};
+			})
 			.transition()
 			.duration(duration)
 			.style("opacity", 1)
 			.attr("x", d => radiusScale(chartState.selectedFund === "total" ? d.total : d.cbpf + d.cerf) + groupNamePadding)
+			.attr("y", d => {
+				const thisLabel = chooseLabel(d);
+				return thisLabel.length > 1 ? groupNamePadding * 2 - 5 : groupNamePadding * 2
+			})
 			.end()
 			.then(() => {
 				clickableButtons = true;
@@ -976,6 +970,14 @@ function createAllocations(selections, colors, mapData, lists) {
 				allTexts.each((_, i, n) => d3.select(n[i]).style("display", null)).call(displayLabels);
 			})
 			.catch(error => console.warn("Moved too fast"));
+
+		function chooseLabel(d) {
+			if ((!d.cerf && d.cbpf) || chartState.selectedFund === "cbpf") {
+				return d.labelTextCbpf;
+			} else {
+				return d.labelText;
+			};
+		};
 
 		///
 
@@ -1155,6 +1157,18 @@ function createAllocations(selections, colors, mapData, lists) {
 
 		const sizeCirclesData = maxDataValue ? [0, maxDataValue / 4, maxDataValue / 2, maxDataValue] : [];
 
+		let backgroundRectangle = legendPanel.main.selectAll("." + classPrefix + "backgroundRectangle")
+			.data([true]);
+
+		backgroundRectangle = backgroundRectangle.enter()
+			.append("rect")
+			.attr("class", classPrefix + "backgroundRectangle")
+			.merge(backgroundRectangle)
+			.style("fill", "#fff")
+			.style("opacity", 0.6)
+			.attr("width", legendPanel.width)
+			.attr("height", legendPanel.height);
+
 		let legendSizeGroups = legendPanel.main.selectAll("." + classPrefix + "legendSizeGroups")
 			.data([true]);
 
@@ -1288,6 +1302,16 @@ function createAllocations(selections, colors, mapData, lists) {
 			.domain(data.map(d => d.country));
 
 		yScale.domain([0, d3.max(data, d => chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])]);
+
+		xAxis.tickFormat(d => {
+			if (lists.fundAbbreviatedNamesList[d] === "Venezuela Regional Refugee and Migration Crisis") return VenezuelaRegionalRefugeeAbbr;
+			const thisDatum = data.find(e => e.country === d);
+			if ((!thisDatum.cerf && thisDatum.cbpf) || chartState.selectedFund === "cbpf") {
+				return (lists.cbpfStatusList[d] === "Closed" ? "(Closed) " : "") + lists.fundAbbreviatedNamesList[d];
+			} else {
+				return lists.fundAbbreviatedNamesList[d]
+			};
+		});
 
 		let barTitleSpanText;
 
@@ -1600,7 +1624,7 @@ function createAllocations(selections, colors, mapData, lists) {
 
 		titleDiv.append("strong")
 			.style("font-size", "16px")
-			.html(datum.countryName);
+			.html((!tooltipCerf && tooltipCbpf) || chartState.selectedFund === "cbpf" ? datum.countryNameCbpf : datum.countryName);
 
 		titleDiv.append("span")
 			.attr("class", classPrefix + "tooltipRank")
@@ -1692,6 +1716,8 @@ function createAllocations(selections, colors, mapData, lists) {
 		};
 
 		if (!showCerfOnly) {
+			const closedText = lists.cbpfStatusList[datum.country] === "Closed" ? " (closed)" : "";
+
 			const rowDivCbpf = innerDiv.append("div")
 				.attr("class", classPrefix + "tooltipCbpfValue")
 				.classed(classPrefix + "tooltipZeroValueCbpf", !tooltipCbpf)
@@ -1703,7 +1729,7 @@ function createAllocations(selections, colors, mapData, lists) {
 			rowDivCbpf.append("span")
 				.style("font-weight", 500)
 				.attr("class", classPrefix + "tooltipKeys")
-				.html("CBPF:");
+				.html(`CBPF${closedText}:`);
 
 			rowDivCbpf.append("span")
 				.attr("class", classPrefix + "tooltipLeader");
@@ -1991,7 +2017,7 @@ function createAllocations(selections, colors, mapData, lists) {
 						(chartState.selectedChart === "allocationsBySector" && chartState.selectedCluster.indexOf(allocation.ClusterId + "") > -1) ||
 						(chartState.selectedChart === "allocationsByType" && chartState.selectedType.indexOf(allocation.AllocationSurceId + "") > -1)) {
 						allocation.ProjList.toString().split(separator).forEach(e => numberOfProjects.add(e));
-						allocation.OrgList.toString().split(separator).forEach(e => numberOfPartners.add(e));
+						numberOfPartners.add(allocation.PartnerCode);
 					};
 				};
 			});
@@ -3280,6 +3306,4 @@ function makeOrdinal(value) {
 		"rd" : "th";
 };
 
-export {
-	createAllocations
-};
+export { createAllocations };

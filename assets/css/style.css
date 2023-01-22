@@ -141,6 +141,17 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
   font-size: 0.95rem;
   font-weight: bold;
   text-transform: uppercase;
+  position:relative;
+}
+.sb-sidenav .sb-sidenav-menu .nav .sb-sidenav-menu-heading .badge-txt{
+  background: #ea4c3a;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    color: #fff;
+    position: absolute;
+    left: 153px;
+    top: 22px;
 }
 .sb-sidenav .sb-sidenav-menu .nav .nav-link {
   display: flex;
@@ -200,7 +211,7 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
 }
 
 .sb-sidenav-light {
-  background-color: #f8f9fa;
+  background-color: #f5f5f5;
   color: #212529;
 }
 .sb-sidenav-light .sb-sidenav-menu .sb-sidenav-menu-heading {
@@ -222,15 +233,15 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
   color: #3289C9;
 }
 .sb-sidenav-light .sb-sidenav-menu .nav-link.menuactive {
-  color: #fff; font-weight: 500; background-color: #3289C9; transition: all 0.2s linear;
+  color: #3289C9; font-weight: 600; background-color: #fff; transition: all 0.2s linear;
 }
 .sb-sidenav-light .sb-sidenav-menu .nav-link.menuactive .sb-nav-link-icon {
-  color: #fff; transition: all 0.2s linear;
+  color: #3289C9; transition: all 0.2s linear;
 }
 .sb-sidenav-light .sb-sidenav-menu .nav-link.menuactive .sb-sidenav-collapse-arrow {
-  color: #fff; transition: all 0.2s linear;
+  color: #3289C9; transition: all 0.2s linear;
 }
-.sb-sidenav-light .sb-sidenav-menu .nav-link.active .sb-sidenav-collapse-arrow {
+.sb-sidenav-light .sb-sidenav-menu .nav-link.activelink .sb-sidenav-collapse-arrow {
   transform: rotate(180deg); transition: all 0.2s linear;
 }
 .sb-sidenav-light .sb-sidenav-footer {
@@ -256,14 +267,17 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
   position: fixed;
   z-index: 1040;
   top: 74px;
-  left: 0;
-  background-color: #fff;
+  left: 225px;
+  background: rgba(255, 255, 255, 0.95);
   overflow-x: hidden;
   transition: 0.3s;
   padding-top: 0;
   white-space: nowrap;
-	margin-top: 70px;
-	transition-timing-function: cubic-bezier(0.0,0.0,0.2,1);
+  margin-top: 70px;
+  transition-timing-function: cubic-bezier(0.0,0.0,0.2,1);
+  box-shadow: 7px 7px 15px 0px rgba(0,0,0,0.10);
+-webkit-box-shadow: 7px 7px 15px 0px rgba(0,0,0,0.10);
+-moz-box-shadow: 7px 7px 15px 0px rgba(0,0,0,0.10);
 }
 
 .link-sidenav {
@@ -300,7 +314,8 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
   font-size: 30px;
   text-align: right;
   float:right;
-	line-height: normal;
+  line-height: normal;
+  color: #000;
 }
 
 .side-panel{padding:5px 10px; border-bottom:1px solid #ccc; margin: 0 15px;}
@@ -317,7 +332,7 @@ body{font-family: 'Roboto', sans-serif; color:#333; background: #fff; padding: 0
 .sidenav-title .sb-nav-link-icon{font-weight: 300; font-size: 1.1rem;}
 .sidenav-title .sb-nav-link-icon i{color:#3289c9; font-size: 1.3em; margin-right: 0.1em;}
 .main-high-level-fugure{display:block; padding: 0 1rem 1rem 1rem;}
-.main-high-level-fugure .panel{float:left; background-color: #D2E5F5; padding: 0.5rem; margin: 0.2rem; width: 46%; text-align: center;     border-radius: 15px 0;}
+.main-high-level-fugure .panel{float:left; background-color: #d3e6f5; padding: 0.5rem; margin: 0.2rem; width: 46%; text-align: center;     border-radius: 15px 0;}
 .main-high-level-fugure .panel h3{font-size:1.2rem; font-weight:400; margin-bottom: 0;} 
 .main-high-level-fugure .panel p{font-size:0.8rem; font-weight:300; margin-bottom: 0;}
 .brdr-btm{border-bottom: 1px solid #ddd; padding: 0 1rem; display: block; margin-left: 1rem; margin-right: 1rem;}
@@ -410,7 +425,7 @@ footer a:hover{color:#2270aa;}
 .browser-notification-panel .content ul li {	
 	font-size: 0.9rem;	
 	font-weight: 600;	
-    padding: 0 10px;
+  padding: 0 10px;
 	text-align: center;
 	line-height: 20px;
 	display: inline-block;
@@ -475,18 +490,18 @@ a.video-tutorial{color:#333;}
 	.pfbialtopButtonsDiv .cbpf-link .icon-chart, .pfbicctopButtonsDiv .cbpf-link .icon-chart{display: none !important;}
 	.pfbialtopButtonsDiv .cerf-link, .pfbicctopButtonsDiv .cerf-link {padding: 3px 7px !important; font-size: 0.7em; line-height: normal; text-align: center;}
 	.pfbialtopButtonsDiv .cerf-link .icon-chart, .pfbicctopButtonsDiv .cerf-link .icon-chart{display: none !important;}	
-	.link-sidenav{left: 0;}
-	.pfbialtopButtonsDiv svg, .pfbicctopButtonsDiv svg, .pfbicdtopButtonsDiv svg{display:none;}
-	.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv{padding: 0 15px 0 60px !important;}
+	.link-sidenav{left: 225px;}
+	.pfbialtopButtonsDiv svg, .pfbicctopButtonsDiv svg, .pfbicdtopButtonsDiv svg, .pfcpmaintopButtonsDiv svg{display:none;}
+	.pfbihpbreadcrumbDiv{padding: 0 15px 0 60px !important;}
 	footer{width: 100% !important;}
 	.mobile-menu{margin-top:7px !important;}	
 }
 @media (min-width: 576px) { 
-	.link-sidenav{left: 0;}	
+	.link-sidenav{left: 225px;}  
 }
 @media (max-width: 767.98px) { 
 	#sidebarToggle{display:block !important;}
-	.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;} 
+	.pfbihpbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;} 
 	footer{width: 100% !important;}
 	.mobile-menu{margin-top:7px !important;}
 	
@@ -494,7 +509,7 @@ a.video-tutorial{color:#333;}
 @media (max-width: 991.98px) {
 	#sidebarToggle{display:block !important;}
 	.link-sidenav{z-index: 1050; }
-	.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;}
+	.pfbihpbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;}
 	footer{width: 100% !important;}
 	.mobile-menu{margin-top:7px !important;}
 }
@@ -605,7 +620,7 @@ a.video-tutorial{color:#333;}
 
 /*tooltip styles*/
 
-#pfbialtooltipDivMap, #pfbialtooltipDivBarChart, #pfbicctooltipDiv, #pfbicdtooltipDiv, #pfbihptopTooltipDiv {    
+#pfbialtooltipDivMap, #pfbialtooltipDivBarChart, #pfbicctooltipDiv, #pfbicdtooltipDiv, #pfbihptopTooltipDiv, #pfcpmaintooltipDiv {    
   position: absolute;
   text-align: left;
   color: darkslategray;
@@ -628,11 +643,32 @@ a.video-tutorial{color:#333;}
   cursor: default;
 }
 
+#pfbicpoverviewinnerTooltipDiv > div:nth-child(2) {
+  padding: 8px;
+}
+
+#pfbicpbypartnerinnerTooltipDiv > div:not(:first-child) {
+  padding: 8px;
+}
+
+#pfbicpbysectorinnerTooltipDiv > div:not(:first-child) {
+  padding: 8px;
+}
+
+#pfbicppsinnerTooltipDiv > div:not(:first-child) {
+  padding: 8px;
+}
+
+#pfbicpcontrinnerTooltipDiv > div:not(:first-child) {
+  padding: 8px;
+}
+
 #pfbicctooltipDiv{
 	padding: 8px !important;
 }
 #pfbialinnerTooltipDiv {max-width: 308px !important;}
 #pfbialinnerTooltipDiv > div:nth-child(2){padding:8px !important;}
+
 
 .pfbialcerfLink {
   font-size: 0.8em;
@@ -645,12 +681,17 @@ a.video-tutorial{color:#333;}
   padding-bottom: 8px !important;
 }
 
-.pfbialtooltipTitleDiv, .pfbicdtooltipTitleDiv {
+.pfbialtooltipTitleDiv, .pfbicdtooltipTitleDiv, .pfbicpoverviewtooltipTitleDiv, .pfbicpbypartnertooltipTitleDiv, .pfbicpbysectortooltipTitleDiv, .pfbicppstooltipTitleDiv, .pfbicpcontrtooltipTitleDiv {
 	margin-bottom: 3px !important;
     background-color: #3189c9;
     padding: 8px 8px;
     color: #fff;
     border-radius: 5px 5px 0 0;
+}
+
+.pfbicpbypartnerclickText {
+  font-style: italic;
+  font-size: 1em;
 }
 
 .pfbialtooltipTitleDiv strong, .pfbicdtooltipTitleDiv strong{
@@ -716,7 +757,7 @@ a.video-tutorial{color:#333;}
 	font-weight: 600;
 }
 
-.pfbialtooltipValues, .pfbialtooltipKeys, .pfbicctooltipValues, .pfbicctooltipYears {
+.pfbialtooltipValues, .pfbialtooltipKeys, .pfbicctooltipValues, .pfbicctooltipYears, .pfbicpbypartnertooltipKeys, .pfbicpbypartnertooltipValues, .pfbicppstooltipKeys, .pfbicppstooltipValues {
   flex: 1 0 auto;
 }
 
@@ -724,13 +765,13 @@ a.video-tutorial{color:#333;}
 	font-weight: 600;
 }
 
-.pfbialtooltipLeader, .pfbicctooltipLeader {
+.pfbialtooltipLeader, .pfbicctooltipLeader, .pfbicpbypartnertooltipLeader, .pfbicppstooltipLeader {
   flex: 0 1 auto;
   overflow: hidden;
   color: #ccc;
 }
 
-.pfbialtooltipLeader::before, .pfbicctooltipLeader::before {
+.pfbialtooltipLeader::before, .pfbicctooltipLeader::before, .pfbicpbypartnertooltipLeader:before, .pfbicppstooltipLeader:before {
    display: block;
    overflow: hidden;
    text-overflow: clip;
@@ -906,11 +947,11 @@ a.video-tutorial{color:#333;}
   fill: #666;
 }
 
-.pfbialxAxisGroup line, .pfbiccxAxisGroupBarChart line, .pfbicdxAxisGroupTooltip line, .pfbicdcurrentYearTick, .pfbicdyAxisGroupColumn line, .pfbiccyAxisGroupColumn line, .pfbialyAxisGroupColumnByCountry line, .pfbialyAxisGroupColumnBySector line, .pfbialyAxisGroupColumnByTypeCerf line, .pfbialyAxisGroupColumnByTypeCbpf line {
+.pfbialxAxisGroup line, .pfbiccxAxisGroupBarChart line, .pfbicdxAxisGroupTooltip line, .pfbicdcurrentYearTick, .pfbicdyAxisGroupColumn line, .pfbiccyAxisGroupColumn line, .pfbialyAxisGroupColumnByCountry line, .pfbialyAxisGroupColumnBySector line, .pfbialyAxisGroupColumnByTypeCerf line, .pfbialyAxisGroupColumnByTypeCbpf line, .pfbicpbysectoryAxisGroup line {
   stroke: darkslategray;
 }
 
-.pfbialxAxisGroup path, .pfbiccxAxisGroupBarChart path, .pfbicdyAxisGroupTooltip path, .pfbicdxAxisGroupTooltip path, .pfbicdxAxisGroupColumn path, .pfbiccxAxisGroupColumn path, .pfbialxAxisGroupColumnByCountry path, .pfbialxAxisGroupColumnBySector path, .pfbialxAxisGroupColumnByType path, .pfbialyAxisGroup path, .pfbiccyAxisGroupBarChart path, .pfbicdyAxisGroupColumn path, .pfbiccyAxisGroupColumn path, .pfbialyAxisGroupColumnByCountry path, .pfbialyAxisGroupColumnBySector path, .pfbialyAxisGroupColumnByTypeCerf path, .pfbialyAxisGroupColumnByTypeCbpf path {
+.pfbialxAxisGroup path, .pfbiccxAxisGroupBarChart path, .pfbicdyAxisGroupTooltip path, .pfbicdxAxisGroupTooltip path, .pfbicdxAxisGroupColumn path, .pfbiccxAxisGroupColumn path, .pfbialxAxisGroupColumnByCountry path, .pfbialxAxisGroupColumnBySector path, .pfbialxAxisGroupColumnByType path, .pfbialyAxisGroup path, .pfbiccyAxisGroupBarChart path, .pfbicdyAxisGroupColumn path, .pfbiccyAxisGroupColumn path, .pfbialyAxisGroupColumnByCountry path, .pfbialyAxisGroupColumnBySector path, .pfbialyAxisGroupColumnByTypeCerf path, .pfbialyAxisGroupColumnByTypeCbpf path, .pfbicpbysectoryAxisGroup path {
   stroke: none;
 }
 
@@ -961,6 +1002,13 @@ a.video-tutorial{color:#333;}
   pointer-events: none;
 }
 
+.pfbicpbysectoryAxisGroup text {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  fill: #444;
+  pointer-events: none;
+}
+
 .pfbicdyAxisGroupColumn text, .pfbiccyAxisGroupColumn text, .pfbialyAxisGroupColumnByCountry text, .pfbialyAxisGroupColumnBySector text, .pfbialyAxisGroupColumnByTypeCerf text, .pfbialyAxisGroupColumnByTypeCbpf text {
   font-family: "Roboto", sans-serif;
   font-size: 10px;
@@ -974,7 +1022,7 @@ a.video-tutorial{color:#333;}
   font-weight: 500;
 }
   
-.pfbicdxAxisGroupColumn line, .pfbicdyAxisGroupTooltip line, .pfbiccxAxisGroupColumn line, .pfbialxAxisGroupColumnByCountry line, .pfbialxAxisGroupColumnBySector line, .pfbialxAxisGroupColumnByType line {
+.pfbicdxAxisGroupColumn line, .pfbicdyAxisGroupTooltip line, .pfbiccxAxisGroupColumn line, .pfbialxAxisGroupColumnByCountry line, .pfbialxAxisGroupColumnBySector line, .pfbialxAxisGroupColumnByType line, .pfbicpbysectorxAxisGroup line {
   stroke: #ddd;
   stroke-dasharray: 2, 2;
 }
@@ -988,7 +1036,7 @@ a.video-tutorial{color:#333;}
   stroke: #777;
 }
 
-.pfbiccxAxisGroupedGroup path {
+.pfbiccxAxisGroupedGroup path, .pfbicpbysectorxAxisGroup path {
   stroke: none;
 }
 
@@ -1201,6 +1249,14 @@ a.video-tutorial{color:#333;}
   letter-spacing: -0.25px;
 }
 
+.pfbicpbysectorlabelsBySector {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #444;
+  pointer-events: none;
+  dominant-baseline: middle;
+}
+
 .pfbicdtooltipBarLabel, .pfbicdtooltipBarLabelCerfValue {
   font-family: "Roboto", sans-serif;
   font-size: 9px;
@@ -1339,6 +1395,15 @@ a.video-tutorial{color:#333;}
   pointer-events: none;
 }
 
+.pfbicpbysectortitle {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  fill: #666;
+  font-weight: 300;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
 .pfbicccumulativeLabels {
   font-family: "Roboto", sans-serif;
   font-size: 9px;
@@ -1375,14 +1440,209 @@ a.video-tutorial{color:#333;}
   font-size: 14px;
 } 
 
-.pfbialouterDiv, .pfbiccouterDiv, .pfbicdouterDiv {
+.pfbialouterDiv, .pfbiccouterDiv, .pfbicdouterDiv, .pfcpmainouterDiv {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
+}
+
+.pfcpmaindropdownAndButtonsDiv {
+  width: 100%;
+  height: 5vh;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.pfcpmaindropdownDiv {
+  height: 100%;
+}
+
+.pfcpmainyearsButtonsDiv {
+  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  overflow-y: auto;
+  justify-content: center;
+}
+
+.pfcpmainyearsButtonsDiv button {
+  margin: 0px 0px 0px 8px;
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  font-size: 0.8rem;
+  padding: 2px 10px 2px 10px;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfcpmainyearsButtonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfcpmainyearsButtonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfcpmainyearButtonsContainerDiv {
+  overflow: hidden;
+}
+
+.pfcpmainyearButtonsContainer {
+  position: relative;
+  flex-wrap: nowrap;
+  display: flex;
+}
+
+.pfcpmainyearLeftArrow, .pfcpmainyearRightArrow {
+  display: flex;
+  padding: 0 0.8rem 0 0.8rem;
+  font-size: 1.4rem;
+  color: #3289C9;
+}
+
+.pfcpmainfundsButtonsDiv {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/*dropdown*/
+
+.pfcpmaindropdownContainer {
+  height: 100%;
+  width:  100%;
+  position: relative;
+  margin-right: 0.8rem;
+}
+
+.pfcpmaindropdownTitleDiv {
+  display: flex;
+  align-items: center;
+  height: 50%;
+  top: 25%;
+  width: fit-content;
+  background: #f2f4f4; 
+  border: 1px solid #ccc; 
+  border-radius: 4px;
+  padding: 2px 12px 2px 16px;
+  cursor: pointer;
+  position: relative;
+}
+
+.pfcpmaindropdownTitle {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.pfcpmaindropdownArrow {
+  margin-left: 0.4rem;
+  font-weight: bold;
+  transition: transform 0.25s ease-in-out;
+}
+
+.pfcpmaindropdownList {
+  position: relative;
+  top: 32%;
+  padding: 8px 16px 8px 16px;
+  background: #f2f4f4; 
+  border: 1px solid #ccc; 
+  border-radius: 4px;
+  min-height: 70vh;
+  width: auto;
+  font-family: "Roboto", sans-serif;
+  transform-origin: 50% 0;
+  transform: scale(1, 0);
+  transition: transform 0.25s ease-in-out;
+  z-index: 1000;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  align-content: flex-start;
+}
+
+.pfcpmaindropdownList span {
+  writing-mode: horizontal-tb;
+  white-space: nowrap;
+}
+
+.pfcpmaindropdownContainer.active .pfcpmaindropdownList {
+  transform: scale(1, 1);
+}
+
+.pfcpmaindropdownContainer.active .pfcpmaindropdownArrow {
+  transform: rotate(180deg);
+}
+
+.pfcpmaindropdownList span.region {
+    font-size: 14px;
+    font-weight: 500;
+    color: #222;    
+    margin-bottom: 8px;
+    margin-top: 12px;
+}
+
+.pfcpmaindropdownList span.backmenu {
+    font-size: 14px;
+    font-weight: 500;
+    color: #222;    
+    margin-bottom: 0px;
+    margin-top: 8px;
+}
+
+.pfcpmaindropdownList span.fund {
+    padding-left: 10px;
+    font-size: 12px;
+    color:#333;
+    line-height: normal;
+    margin-bottom: 5px;
+}
+
+.pfcpmaindropdownList span.fund, .pfcpmaindropdownList span.backmenu {
+  cursor: pointer;
+}
+
+.pfcpmaindropdownList span.fund:hover, .pfcpmaindropdownList span.backmenu:hover {
+    color:#3289c9;
+}
+
+/*dropdown*/
+
+.pfcpmaintabsOuterDiv {
+  width: 100%;
 }  
 
-.pfbialbreadcrumbDiv, .pfbiccbreadcrumbDiv, .pfbicdbreadcrumbDiv {
+.pfcpmaintabsDiv {
+  padding: 5px 15px 0px 15px;
+  width: 100%;
+  min-height: 5vh;
+  font-size: 0.8rem;
+}
+
+.pfcpmaintabsDiv .nav-link {
+  color:  #777;
+}
+
+.pfcpmaintabsDiv .nav-link.active {
+  border-color: #dee2e6 #dee2e6 #fff;
+}
+
+.pfcpmainchartDiv {
+  flex: 1;
+  display: flex;
+  position: relative;
+}
+
+.pfbihpbreadcrumbDiv {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -1393,20 +1653,20 @@ a.video-tutorial{color:#333;}
   padding: 0 15px;
 }
 
-.pfbialbreadcrumbDivInner, .pfbiccbreadcrumbDivInner, .pfbicdbreadcrumbDivInner {
+.pfbihpbreadcrumbDivInner {
   display: flex;
   flex:0 50%;
   align-items: center;
 }
 
-.pfbialtopButtonsDiv, .pfbicctopButtonsDiv, .pfbicdtopButtonsDiv {
+.pfbialtopButtonsDiv, .pfbicctopButtonsDiv, .pfbicdtopButtonsDiv, .pfcpmaintopButtonsDiv {
   display: flex;
   flex:0 50%;
   justify-content: flex-start;
   flex-direction: row-reverse;
 }
 
-.pfbialtopButtonsDiv button, .pfbicdtopButtonsDiv button, .pfbicctopButtonsDiv button{
+.pfbialtopButtonsDiv button, .pfbicdtopButtonsDiv button, .pfbicctopButtonsDiv button, .pfcpmaintopButtonsDiv button{
 	border: 1px solid #3289c9;
   border-radius: 3px;
   font-size: 0.7em;
@@ -1419,8 +1679,8 @@ a.video-tutorial{color:#333;}
 	vertical-align: top;
 }
 
-.pfbialtopButtonsDiv .pfbihpSnapshotDiv, .pfbicctopButtonsDiv .pfbihpSnapshotDiv, .pfbicdtopButtonsDiv .pfbihpSnapshotDiv {line-height: normal;}
-.pfbialtopButtonsDiv button:hover, .pfbicctopButtonsDiv button:hover, .pfbicdtopButtonsDiv button:hover {background-color: #3289c9; color:#fff;}
+.pfbialtopButtonsDiv .pfbihpSnapshotDiv, .pfbicctopButtonsDiv .pfbihpSnapshotDiv, .pfbicdtopButtonsDiv .pfbihpSnapshotDiv, .pfcpmaintopButtonsDiv .pfbihpSnapshotDiv {line-height: normal;}
+.pfbialtopButtonsDiv button:hover, .pfbicctopButtonsDiv button:hover, .pfbicdtopButtonsDiv button:hover, .pfcpmaintopButtonsDiv button:hover {background-color: #3289c9; color:#fff;}
 
 .pfbihpSnapshotContent {
   position: absolute;
@@ -1456,16 +1716,14 @@ a.video-tutorial{color:#333;}
   color: white;
 }
 
-.pfbialfirstBreadcrumb, .pfbialsecondBreadcrumb, .pfbiccfirstBreadcrumb, .pfbiccsecondBreadcrumb, .pfbicdfirstBreadcrumb, .pfbicdsecondBreadcrumb {
+.pfbihpfirstBreadcrumb, .pfbihpsecondBreadcrumb {
   margin-left: 0; text-transform: capitalize; font-size: 0.8em;
 } 
 
-.pfbialmiddleBreadcrumb, .pfbiccmiddleBreadcrumb, .pfbicdmiddleBreadcrumb {
+.pfbihpmiddleBreadcrumb {
   background-image: url("../img/breadcrumb-arrow-icon.png"); background-position: center center; width: 6px; height: 10px; margin: auto 7px auto 7px;
 }
-.pfbialfirstBreadcrumb span{font-weight: 400;}
-.pfbiccfirstBreadcrumb span{font-weight: 400;}
-.pfbicdfirstBreadcrumb span{font-weight: 400;}
+.pfbihpfirstBreadcrumb span{font-weight: 400;}
 
 .pfbicclegendGroup text, .pfbicclegendPledged {
   font-family: "Roboto", sans-serif;
@@ -1697,8 +1955,16 @@ a.video-tutorial{color:#333;}
   right: initial;
 }
 
-#pfbialyearNumberText {
-  fill: #dadcdf;
+.pfbihpyearNumberContainer {
+  padding-left: 300px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+#pfbihpyearNumberText {
+  color: rgba(198, 200, 203, 0.3);
   font-size: 20em;
   font-weight: 500;
   font-family: "Roboto", sans-serif;
@@ -1819,6 +2085,1369 @@ a.video-tutorial{color:#333;}
   dominant-baseline: middle;
   text-anchor: middle;
 }
+.marg-t10 {
+    margin-top: 10px;
+}
+.country-pro-main {
+  display: flex;  
+  flex-direction: column;
+  padding: 20px 10%;
+  width: 100%;
+}
+.country-pro-main h1 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #3289c9;
+    text-align: center;
+    border-bottom: 1px solid #cfe1ee;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+.country-pro-main p {
+    font-size: 12px;
+    font-weight: 400;
+    color: #646464;    
+    line-height: 18px;
+    margin-bottom: 0;
+}
+.country-pro-main .country-list {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;    
+}
+.country-pro-main .country-list h2 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;    
+    margin-right: 12px;
+}
+.pfcpmainlistContainer ul {
+    padding-left: 16px;
+    padding-top: 6px;
+}
+.pfcpmainlistContainer ul li {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 13px;
+    color:#333;
+    line-height: normal;
+    margin-bottom: 7px;
+    margin-top: 7px;
+    transition: all 0.2s linear;
+}
+.pfcpmainlistContainer ul li:hover {
+    margin-right: 5px;    
+    color:#3289c9;
+    margin-left: 5px;
+}
+
+.pfcpmainregionsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.pfcpmaintable {
+  font-size: 0.8em;
+  width: 100%;
+  margin-top: 15px;
+  border-collapse: collapse;
+}
+
+.pfcpmainmapHeader {
+  font-family: "Arial", sans-serif;
+  font-style: italic;
+  font-size: 0.9em;
+  color: darkslategray;
+}
+
+.pfcpmaintable tr:nth-child(1) td:nth-child(1) {
+  background-color: #fbd45c !important;
+  font-size: 1em;
+  font-weight: 500;
+  text-align: center;
+}
+.pfcpmaintable tr:nth-child(2) td:nth-child(1) {
+  background-color: #f37261 !important;
+  font-size: 1em;
+  font-weight: 500;
+  text-align: center;
+  color:#fff !important;
+}
+
+.pfcpmaintable td {
+  border-bottom: 1px solid #ddd;
+  padding: 2px;
+}
+
+.pfcpmaintable td:nth-last-child(-n+2){
+  text-align: right;
+}
+
+.pfcpmainsmallMultiplesContainer {
+  margin-left: 10px;
+}
+
+.pfcpmainxAxis line, .pfcpmainxAxis path {
+  stroke: #ccc;
+}
+
+.pfcpmainxAxis text {
+  font-size: 9px;
+  fill: #444;
+}
+
+.country-pro-main .country-list ul li a {
+    color:#333;
+}
+.country-pro-main .country-list ul li a:hover {
+    color:#3289c9;
+    text-decoration: none;
+}
+.country-pro-tabs {   
+    margin: 20px;
+    display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	align-content: stretch;
+}
+.country-pro-tabs ul li a.nav-link {
+    color: #999;
+    font-size: 14px;
+}
+.country-pro-tabs ul li a.nav-link:hover {
+    color: #3289c9 !important;    
+}
+.country-pro-tabs ul li a.nav-link.active {
+    color: #3289c9 !important;
+    font-size: 14px;
+}
+.country-pro-tabs .tab-content {
+   background: #fff; 
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+    position: relative;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-top: none;
+}
+.country-pro-tabs .nav-tabs .nav-item.show .nav-link, .country-pro-tabs .nav-tabs .nav-link.active {
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+
+/*country profile style*/
+
+.pfcpmainfundsButtonsDiv button {
+  margin: 0px 0px 0px 8px;
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  font-size: 0.8rem;
+  padding: 0 10px 0 0;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfcpmainfundsButtonsDiv button .icon-circle {
+  background-color: #fff;
+  padding: 5px;
+  display: inline-flex;
+  margin-right: 5px;
+  border-radius: 3px 0 0 3px;
+}
+
+.pfcpmainfundsButtonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfcpmainfundsButtonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfcpmainalphabetDiv {
+  width: 100%;
+}
+
+.pfcpmaininnerContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  height: 83vh;
+  padding: 0 10%;
+}
+
+.pfcpmaincountryNames {
+  margin-left: 4px;
+  font-size: 1em;
+  font-family: "Roboto", sans-serif;
+  color: darkslategray;
+}
+
+.pfcpmainalphabetContainer {
+  width: 100%;
+  height: 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pfcpmaindisclaimerContainer {
+  width: 100%;
+  height: 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
+  color: darkslategray;
+  font-style: italic;
+  font-size: 0.8em;
+}
+
+.pfcpmainalphabetButtons {
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  padding-left: 0.8vw;
+  padding-right: 0.8vw;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  font-family: "Roboto", sans-serif;
+  font-size: min(0.8em, 0.7vw);
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfcpmainalphabetButtons.active{
+  background-color: #3289C9; 
+  color:#fff; 
+  border-color:#3289C9;
+}
+
+.pfcpmainlistAndMapContainer {
+  width: 100%;
+  height: 84%;
+  display: flex;
+  flex-direction: row;
+}
+
+.pfcpmainlistContainer {
+  flex: 0 25%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+/*  box-shadow: inset 0 0 10px 3px rgba(20, 20, 20, 0.2);
+  clip-path: inset(12px 0px 12px 0px);*/
+}
+
+.pfcpmainmapContainer {
+  flex: 0 73%;
+  margin-left: 2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.pfcpmaininnerMapContainer {
+  width: 100%;
+  height: 80%;
+}
+
+.pfcpmainlegendCirclesText {
+  font-size: 0.7em;
+  font-family: "Roboto", sans-serif;
+  fill: #444;
+}
+
+.pfcpmainregionNames {
+  font-size: 0.8em;
+  font-family: "Roboto", sans-serif;
+  fill: #222;
+  text-anchor: middle;
+  dominant-baseline: hanging;
+  text-transform: uppercase;
+}
+
+.pfcpmaintableContainer {
+  width: 50%;
+}
+
+.pfcpmaintableContainer span {
+  font-family: "Arial", sans-serif;
+  font-size: 0.9em;
+  color: darkslategray;
+}
+
+.pfcpmainregionValues {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.7em;
+  text-anchor: middle;
+  dominant-baseline: ideographic;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.pfcpmainregionValuesSpan {
+  fill: darkslategray;
+}
+
+/*Overview tab, code:pfbicpoverview*/
+.pfbicpoverviewouterDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  --unColor:  #65A8DC;
+}
+
+.pfbicpoverviewcbpfMapLink {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.7em;
+  fill: #444;
+}
+
+.pfbicpoverviewcbpfMapLink a {
+  fill: var(--unColor);
+  text-decoration: underline;
+}
+
+.pfbicpoverviewtitleDiv {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.4em;
+  color: darkslategray;
+  font-weight: 500;
+}
+
+.pfbicpoverviewbuttonsOuterDiv {
+  width: 50%;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 1rem;
+}
+
+.pfbicpoverviewbuttonsDiv button {
+  margin: 0px 0px 0px 8px;
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  font-size: 0.8rem;
+  padding: 0 10px 0 0;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfbicpoverviewbuttonsDiv button .icon-circle {
+  background-color: #fff;
+  padding: 5px;
+  display: inline-flex;
+  margin-right: 5px;
+  border-radius: 3px 0 0 3px;
+}
+
+.pfbicpoverviewbuttonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfbicpoverviewbuttonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfbicpoverviewtitleDiv p {
+  margin: 0.2em 0 0.2em 0.8em;
+}
+
+.pfbicpoverviewchartsDiv {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pfbicpoverviewtopRowDiv {
+  display: flex;
+  flex-direction: row;
+}
+
+.pfbicpoverviewdonutsRowDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pfbicpoverviewdonutsTitle {
+  border-top: 2px solid var(--unColor);
+  width: 98%;
+}
+
+.pfbicpoverviewdonutsTitle span {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.1em;
+  font-weight: 500;
+  color:  white;
+  padding: 0.2em 2em;
+  display: inline-block;
+  background-color: var(--unColor);
+}
+
+.pfbicpoverviewdonutsDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.pfbicpoverviewmainDonutsDiv {
+  height: 100%;
+  width: 50%;
+}
+
+.pfbicpoverviewcerfDonutsDiv {
+  height: 100%;
+  width: 25%;
+}
+
+.pfbicpoverviewcbpfDonutsDiv {
+  height: 100%;
+  width: 25%;
+}
+
+.pfbicpoverviewmapDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.pfbicpoverviewmiddleDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.pfbicpoverviewpartnerFiguresDiv {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0.5em;
+  justify-content: center;
+}
+
+.pfbicpbypartnerpartnerFiguresDiv {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0.5em;
+  justify-content: center;
+}
+
+.pfbicppspartnerFiguresDiv {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0.5em;
+  justify-content: center;
+}
+
+.pfbicpoverviewpartnerDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.pfbicpbypartnerpartnerFigures {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.pfbicppspartnerFigures {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.pfbicpoverviewpartnerName {
+  font-weight: bold;
+  font-size: 1em;
+  color: #222;
+}
+
+.pfbicpoverviewpartnerValue {
+  padding-left: 0.2em;
+  font-size: 1.2em;
+}
+
+.pfbicpoverviewpartnerUnit {
+  font-size: 1em;
+  padding-left: 0.2em;
+  color: dimgray;
+}
+
+.pfbicpoverviewpartnerSymbol {
+  font-size: 1.2em;
+  padding-left: 0.2em;
+}
+
+.pfbicppspartnerName {
+  font-weight: bold;
+  font-size: 1em;
+  color: #222;
+}
+
+.pfbicppspartnerValue {
+  padding-left: 0.2em;
+  font-size: 1.2em;
+}
+
+.pfbicppspartnerUnit {
+  font-size: 1em;
+  padding-left: 0.2em;
+  color: dimgray;
+}
+
+.pfbicppspartnerSymbol {
+  font-size: 1.2em;
+  padding-left: 0.2em;
+}
+
+.pfbicpbypartnerpartnerName {
+  font-weight: bold;
+  font-size: 1em;
+  color: #222;
+}
+
+.pfbicpbypartnerpartnerValue {
+  padding-left: 0.2em;
+  font-size: 1.2em;
+}
+
+.pfbicpbypartnerpartnerUnit {
+  font-size: 1em;
+  padding-left: 0.2em;
+  color: dimgray;
+}
+
+.pfbicpbypartnerpartnerSymbol {
+  font-size: 1.2em;
+  padding-left: 0.2em;
+}
+
+.pfbicpoverviewtopFiguresDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  justify-content: space-around;
+}
+
+.pfbicpoverviewallocationsDiv, .pfbicpoverviewdescriptionDiv, .pfbicpoverviewprojectsDiv, .pfbicpoverviewpartnersDiv, .pfbicpoverviewsectorsDiv, .pfbicpoverviewtitleDiv {
+  padding-left: 1%;
+}
+
+.pfbicpoverviewallocationsDiv {
+  display: flex;
+  flex-direction: row;
+}
+
+.pfbicpoverviewallocationsValue {
+  font-size: 3.2em;
+}
+
+.pfbicpoverviewallocationsUnitContainer {
+  font-size: 1.2em;
+  color: dimgray;
+  padding-left: 0.4em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pfbicpoverviewallocationsUnit {
+  margin-bottom: -0.2em;
+}
+
+.pfbicpoverviewallocationsUnitValue {
+  margin-top: -0.2em;
+}
+
+.pfbicpoverviewdescriptionDiv {
+  color: dimgray;
+  font-size: 1.2em;
+  padding-bottom: 1em;
+}
+
+.pfbicpoverviewprojectsValue, .pfbicpoverviewpartnersValue, .pfbicpoverviewsectorsValue {
+  font-size: 1.5em;
+}
+
+.pfbicpoverviewprojectsText, .pfbicpoverviewpartnersText, .pfbicpoverviewsectorsText {
+  font-size: 1.2em;
+  color: dimgray;
+  padding-left: 0.4em;
+}
+
+.pfbicpbypartnerprojectsValue, .pfbicpbypartnerpartnersValue {
+  font-size: 1.8em;
+}
+
+.pfbicpbypartnerprojectsText, .pfbicpbypartnerpartnersText {
+  font-size: 1.2em;
+  color: dimgray;
+  padding-left: 0.4em;
+}
+
+.pfbicpbysectorprojectsValue, .pfbicpbysectorpartnersValue {
+  font-size: 1.8em;
+}
+
+.pfbicpbysectorprojectsText, .pfbicpbysectorpartnersText {
+  font-size: 1.2em;
+  color: dimgray;
+  padding-left: 0.4em;
+}
+
+.pfbicppsprojectsValue, .pfbicppspartnersValue {
+  font-size: 1.8em;
+}
+
+.pfbicppsprojectsText, .pfbicppspartnersText {
+  font-size: 1.2em;
+  color: dimgray;
+  padding-left: 0.4em;
+}
+
+.pfbicpbysectorsectorsValue {
+  font-size: 2em;
+}
+
+.pfbicpbysectorsectorsText {
+  font-size: 1.4em;
+  color: dimgray;
+  padding-left: 0.4em;
+}
+
+.pfbicppssectorsDivTitle {
+  font-size: 1em;
+  color: dimgray;
+}
+
+.pfbicppssectorsValue {
+  font-size: 2em;
+}
+
+.pfbicppssectorsText {
+  font-size: 1.4em;
+  color: dimgray;
+  padding-left: 0.4em;
+}
+
+.pfbicpoverviewbarChartDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.pfbicpoverviewxAxisGroup line {
+  stroke: darkslategray;
+}
+
+.pfbicpoverviewxAxisGroup path, .pfbicpoverviewyAxisGroup path {
+  stroke: none;
+}
+
+.pfbicpoverviewxAxisGroup text {
+  font-family: "Roboto", sans-serif;
+  font-size: 9px;
+  letter-spacing: -0.3px;
+}
+
+.pfbicpoverviewyAxisGroup text {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #999;
+  pointer-events: none;
+}
+
+.pfbicpoverviewyAxisGroup line {
+  stroke: #ddd;
+  stroke-dasharray: 2, 2;
+}
+
+.pfbicpoverviewbarChartLegend {
+  font-family: "Roboto", sans-serif;
+  font-size: 11px;
+  fill: #666;
+  pointer-events: none;
+  text-anchor: middle;
+}
+
+.pfbicpoverviewbarsLabels {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  fill: #666;
+  pointer-events: none;
+  text-anchor: middle;
+  letter-spacing: -0.3px;
+}
+
+.pfbicpoverviewnoData {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  fill: #666;
+  pointer-events: none;
+  text-anchor: middle;
+}
+
+.pfbicpoverviewmainDonutText {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.7em;
+  fill: white;
+  font-weight: 800;
+  pointer-events: none;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  stroke: #777;
+  stroke-width: 2px;
+  paint-order: stroke;
+}
+
+.pfbicpoverviewcerfDonutText, .pfbicpoverviewcbpfDonutText {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.7em;
+  fill: white;
+  font-weight: 800;
+  pointer-events: none;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  stroke: #777;
+  stroke-width: 2px;
+  paint-order: stroke;
+}
+
+.pfbicpoverviewmainDonutValues {
+  font-family: "Roboto", sans-serif;
+  font-size: 3em;
+  fill: #444;
+  pointer-events: none;
+}
+
+.pfbicpoverviewcerfDonutValues, .pfbicpoverviewcbpfDonutValues {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.1em;
+  fill: #444;
+  pointer-events: none;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.pfbicpoverviewmainDonutUnits {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.3em;
+  fill: #444;
+  pointer-events: none;
+  dominant-baseline: hanging;
+}
+
+.pfbicpoverviewmainDonutDescription {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.1em;
+  fill: #777;
+  pointer-events: none;
+  dominant-baseline: hanging;
+}
+
+.pfbicpoverviewcerfDonutDescription, .pfbicpoverviewcbpfDonutDescription {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8em;
+  fill: #666;
+  pointer-events: none;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.pfbicpoverviewbubbleLegendText {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.7em;
+  fill: #666;
+  dominant-baseline: central;
+}
+
+.pfbicpoverviewbubbleLegendValue {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.7em;
+  fill: #555;
+  font-weight: bold;
+  dominant-baseline: central;
+}
+
+.pfbicpoverviewallocationsDisclaimer {
+  position: absolute;
+  top:  84%;
+  left: 90%;
+  font-size: 1.2em;
+  color: #555;
+  z-index: 50;
+}
+
+/*By partners tab, code:pfbicpbypartner*/
+.pfbicpbypartnerouterDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  --unColor:  #65A8DC;
+}
+
+.pfbicpbypartnertopDiv {
+  width: 100%;
+  display: flex;
+  height:  5vh;
+}
+
+.pfbicpbypartnertitleDiv {
+  width: 50%;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.4em;
+  color: darkslategray;
+  font-weight: 500;
+}
+
+.pfbicpbypartnerbuttonsOuterDiv {
+  width: 50%;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 1rem;
+}
+
+.pfbicpbypartnerbuttonsDiv button {
+  margin: 0px 0px 0px 8px;
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  font-size: 0.8rem;
+  padding: 0 10px 0 0;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfbicpbypartnerbuttonsDiv button .icon-circle {
+  background-color: #fff;
+  padding: 5px;
+  display: inline-flex;
+  margin-right: 5px;
+  border-radius: 3px 0 0 3px;
+}
+
+.pfbicpbypartnerbuttonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfbicpbypartnerbuttonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfbicpbypartnertitleDiv p {
+  margin: 0.2em 0 0.2em 0.8em;
+}
+
+.pfbicpbypartnerchartsDiv {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pfbicpbypartnertopRowDiv {
+  display: flex;
+  flex-direction: row;
+  min-height: 10vh;
+  justify-content: space-around;
+}
+
+.pfbicpbypartnerbarChartsDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.pfbicpbypartneryearsButtonsDiv {
+  width: 100%;
+}
+
+.pfbicpbypartnerbarChartsDivCerf, .pfbicpbypartnerbarChartsDivCbpf {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+  align-items: center;
+}
+
+.pfbicpbypartnerheaderRowDivCerf, .pfbicpbypartnerheaderRowDivCbpf {
+  width: 92%;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 2px solid black;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8em;
+  font-weight: 500;
+  color: #222;
+  margin-top: 0.2em;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pfbicpbypartnerheaderName, .pfbicpbypartnerheaderType, .pfbicpbypartnerheaderValue {
+  position: relative;
+}
+
+.pfbicpbypartnericonDiv, .pfbicpcontriconDiv {
+  position: absolute;
+  right: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 1.2em;
+}
+
+.pfbicpbypartnerselectionChartDivCbpf {
+  width: 96%;
+  margin-bottom: 1em;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.pfbicpbypartnerselectionChartDivTitle {
+  font-size: 0.8em;
+  padding-left: 5px;
+  margin-bottom: 6px;
+}
+
+.pfbicpbypartnerselectionChartDivContent {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.pfbicpbypartnerpartnersCard {
+  display: flex;
+  flex-direction: column;
+  margin-right: 5px;
+  margin-left: 5px;
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  justify-content: space-between;
+  flex: 1 1 0px;
+  cursor: pointer;
+}
+
+.pfbicpbypartnerpartnersCardNameDiv {
+  font-family: "Arial", sans-serif;
+  font-size: 0.9em;
+  color: #444;
+  padding-left: 6px;
+} 
+
+.pfbicpbypartnerpartnersCardValueDiv {
+  font-family: "Arial", sans-serif;
+  font-size: 0.7em;
+  color: #444;
+  font-weight: 700;
+  padding-left: 6px;
+} 
+
+.pfbicpbypartnerpartnersCardBarDiv {
+  background-color: #ddd;
+  height: 8px;
+  width:  100%;
+} 
+
+.pfbicpbypartnerpartnersCardBar {
+  height: 8px;
+  border-radius: 0px 0px 0px 2px;
+} 
+
+.pfbicpbypartnerrowDivCerf, .pfbicpbypartnerrowDivCbpf {
+  width: 92%;
+  display: flex;
+  flex-direction: row;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #444;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  align-items: center;
+}
+
+.pfbicpbypartnerpartnerNameDiv {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  max-height: inherit;
+  text-overflow: ellipsis;
+}
+
+.pfbicpbypartnerbarDivContainer {
+  position: relative;
+}
+
+.pfbicpbypartnerbarDiv {
+  height: 1.4em;
+}
+
+.pfbicpbypartnerbarLabel {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8em;
+  font-weight: 500;
+  color: #222;
+  padding-right: 0.5em;
+  position: absolute;
+  top: 0%;
+}
+
+.pfbicpbypartnerpartnersDivCerf, .pfbicpbypartnerpartnersDivCbpf {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: scroll;
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.pfbicpbypartnertitleDivCerf, .pfbicpbypartnertitleDivCbpf {
+  width: 100%;
+  font-size: 1.2em;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  text-align: center;
+  color: #444;
+  margin-top: 1em;
+}
+
+.pfbicpbypartnerpartnersTitleDivCerf, .pfbicpbypartnerpartnersTitleDivCbpf {
+  width: 100%;
+  font-size: 1em;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  color: #444;
+}
+
+.pfbicpbypartnerallocationsValue {
+  font-size: 3.2em;
+}
+
+.pfbicpbypartnerallocationsUnit {
+  font-size: 1.8em;
+  color: dimgray;
+  padding-left: 0.2em;
+  padding-right: 0.8em;
+}
+
+.pfbicpbypartnerdescriptionDiv {
+  color: dimgray;
+  font-size: 1.2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.pfbicpbypartnerprojectsAndPartnersDivWrapper, .pfbicpbypartnerpartnerFiguresDivWrapper {
+  flex: 0 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pfbicpbypartnerallocationsDivWrapper {
+  flex: 0 40%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/*@media (min-width: 1240px) {
+  .pfbicpbypartnerprojectsAndPartnersDivWrapper, .pfbicpbypartnerpartnerFiguresDivWrapper, .pfbicpbypartnerallocationsDivWrapper {
+    flex: 0 33.3%;
+  }
+}*/
+
+.pfbicpbysectorprojectsAndPartnersDivWrapper, .pfbicpbysectorsectorsDivWrapper {
+  flex: 0 27.5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pfbicpbysectorallocationsDivWrapper {
+  flex: 0 45%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.pfbicppsprojectsAndPartnersDivWrapper, .pfbicppssectorsDivWrapper {
+  flex: 0 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pfbicppsallocationsDivWrapper {
+  flex: 0 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pfbicppspartnersFiguresDivWrapper {
+  flex: 0 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.pfbicpbypartnerallocationsDiv {
+  padding-left: 1.6em;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.pfbicpbypartnerprojectsAndPartnersDiv, .pfbicpbysectorprojectsAndPartnersDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pfbicpbypartnerprojectsDiv {
+  margin-bottom: -0.2em;
+}
+
+.pfbicpbypartnerpartnersDiv {
+  margin-top: -0.2em;
+}
+
+.pfbicpbysectorprojectsDiv {
+  margin-bottom: -0.2em;
+}
+
+.pfbicpbysectorpartnersDiv {
+  margin-top: -0.2em;
+}
+
+.pfbicppsprojectsDiv {
+  margin-bottom: -0.2em;
+}
+
+.pfbicppspartnersDiv {
+  margin-top: -0.2em;
+}
+
+.pfbicpbypartnerpartnerFigures > div {
+  margin-bottom: -0.2em;
+  margin-top: -0.2em;
+}
+
+@media (min-width: 1240px) {
+  .pfbicpbypartnerpartnerFigures > div {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+}
+
+.pfbicpbypartnervaluePlusUnit {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-end;
+}
+
+.pfbicpbypartnerbuttonsText {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.pfbicpbypartnerchartTitle {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  fill: #444;
+  font-weight: 300;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.pfbicpbypartnerlabels {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  fill: #333;
+  text-anchor: middle;
+  dominant-baseline: hanging;
+  cursor: pointer;
+}
+
+/*By sectors tab, code:pfbicpbysector*/
+.pfbicpbysectorouterDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  --unColor:  #65A8DC;
+}
+
+.pfbicpbysectortopDiv {
+  width: 100%;
+  display: flex;
+  height:  5vh;
+}
+
+.pfbicpbysectortitleDiv {
+  width: 50%;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.4em;
+  color: darkslategray;
+  font-weight: 500;
+}
+
+.pfbicpbysectorbuttonsOuterDiv {
+  width: 50%;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 1rem;
+}
+
+.pfbicpbysectorbuttonsDiv button {
+  margin: 0px 0px 0px 8px;
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  font-size: 0.8rem;
+  padding: 0 10px 0 0;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfbicpbysectorbuttonsDiv button .icon-circle {
+  background-color: #fff;
+  padding: 5px;
+  display: inline-flex;
+  margin-right: 5px;
+  border-radius: 3px 0 0 3px;
+}
+
+.pfbicpbysectorbuttonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfbicpbysectorbuttonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfbicpbysectortitleDiv p {
+  margin: 0.2em 0 0.2em 0.8em;
+}
+
+.pfbicpbysectorchartsDiv {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pfbicpbysectortopRowDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  min-height: 10vh;
+}
+
+/*.pfbicpbysectorchartDiv {
+  flex-grow: 1;
+}*/
+
+.pfbicpbysectoryearsButtonsDiv {
+  width: 100%;
+}
+
+.pfbicpbysectorallocationsValue {
+  font-size: 3.2em;
+}
+
+.pfbicpbysectorallocationsUnit {
+  font-size: 1.8em;
+  color: dimgray;
+  padding-left: 0.2em;
+  padding-right: 0.8em;
+}
+
+.pfbicpbysectordescriptionDiv {
+  color: dimgray;
+  font-size: 1.2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+  max-width: 50%;
+}
+
+.pfbicpbysectorallocationsDiv {
+  padding-left: 1.6em;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.pfbicpbysectorvaluePlusUnit {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.pfbicpbysectorbuttonsText {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.pfbicpbysectorchartTitle {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  fill: #444;
+  font-weight: 300;
+  text-anchor: middle;
+  pointer-events: none;
+}
 
 .pfbialvenezuelaDisclaimerDiv {
   position: absolute;
@@ -1844,4 +3473,621 @@ a.video-tutorial{color:#333;}
   margin-left: 6px;
   cursor: pointer;
   font-size: 1.4em;
+}
+
+/*By partners and sectors tab, code:pfbicpps*/
+.pfbicppsouterDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  --unColor:  #65A8DC;
+}
+
+.pfbicppstopDiv {
+  width: 100%;
+  display: flex;
+  height:  5vh;
+}
+
+.pfbicppstitleDiv {
+  width: 50%;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.4em;
+  color: darkslategray;
+  font-weight: 500;
+}
+
+.pfbicppsbuttonsOuterDiv {
+  width: 50%;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 1rem;
+}
+
+.pfbicppsbuttonsDiv button {
+  margin: 0px 0px 0px 8px;
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  font-size: 0.8rem;
+  padding: 0 10px 0 0;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfbicppsbuttonsDiv button .icon-circle {
+  background-color: #fff;
+  padding: 5px;
+  display: inline-flex;
+  margin-right: 5px;
+  border-radius: 3px 0 0 3px;
+}
+
+.pfbicppsbuttonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfbicppsbuttonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfbicppstitleDiv p {
+  margin: 0.2em 0 0.2em 0.8em;
+}
+
+.pfbicppschartsDiv {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pfbicppstopRowDiv {
+  display: flex;
+  flex-direction: row;
+  min-height: 10vh;
+  justify-content: space-around;
+}
+
+.pfbicppsbarChartsDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.pfbicppsyearsButtonsDiv {
+  width: 100%;
+}
+
+.pfbicppsbarChartsDivCerf, .pfbicppsbarChartsDivCbpf {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+  align-items: center;
+}
+
+.pfbicppsheaderRowDivCerf, .pfbicppsheaderRowDivCbpf {
+  width: 92%;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 2px solid black;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8em;
+  font-weight: 500;
+  color: #222;
+  margin-top: 0.2em;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pfbicppsheaderName, .pfbicppsheaderType, .pfbicppsheaderValue {
+  position: relative;
+}
+
+.pfbicppsiconDiv {
+  position: absolute;
+  right: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 1.2em;
+}
+
+.pfbicppsselectionChartDiv {
+  width: 96%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.pfbicppsselectionChartDivTitle {
+  font-size: 0.8em;
+  padding-left: 5px;
+  margin-bottom: 6px;
+}
+
+.pfbicppsselectionChartDivContent {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.pfbicppspartnersCard {
+  display: flex;
+  flex-direction: column;
+  margin-right: 5px;
+  margin-left: 5px;
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  justify-content: space-between;
+  flex: 1 1 0px;
+  cursor: pointer;
+}
+
+.pfbicppspartnersCardIconDiv {
+  padding-left: 6px;
+} 
+
+.pfbicppspartnersCardNameDiv {
+  font-family: "Arial", sans-serif;
+  font-size: 0.8em;
+  color: #444;
+  padding-left: 6px;
+} 
+
+.pfbicppspartnersCardValueDiv {
+  font-family: "Arial", sans-serif;
+  font-size: 0.7em;
+  color: #444;
+  font-weight: 700;
+  padding-left: 6px;
+} 
+
+.pfbicppspartnersCardBarDiv {
+  background-color: #ddd;
+  height: 8px;
+  width:  100%;
+} 
+
+.pfbicppspartnersCardBar {
+  height: 8px;
+  border-radius: 0px 0px 0px 2px;
+} 
+
+.pfbicppsrowDivCerf, .pfbicppsrowDivCbpf {
+  width: 92%;
+  display: flex;
+  flex-direction: row;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #444;
+  align-items: center;
+}
+
+.pfbicppspartnerNameDiv {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  max-height: inherit;
+  text-overflow: ellipsis;
+}
+
+.pfbicppsbarDivContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pfbicppsbarDiv {
+  height: 1.4em;
+}
+
+.pfbicppsbarLabel {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8em;
+  font-weight: 500;
+  color: #222;
+  padding-right: 0.5em;
+  position: absolute;
+}
+
+.pfbicppspartnersDivCerf, .pfbicppspartnersDivCbpf {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: scroll;
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.pfbicppstitleDivCerf, .pfbicppstitleDivCbpf {
+  width: 100%;
+  font-size: 1.2em;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  text-align: center;
+  color: #444;
+  margin-top: 0.2em;
+}
+
+.pfbicppspartnersTitleDivCerf, .pfbicppspartnersTitleDivCbpf {
+  width: 100%;
+  font-size: 1em;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  color: #444;
+}
+
+.pfbicppsallocationsValue {
+  font-size: 3.2em;
+}
+
+.pfbicppsallocationsUnit {
+  font-size: 1.8em;
+  color: dimgray;
+  padding-left: 0.2em;
+  padding-right: 0.8em;
+}
+
+.pfbicppsdescriptionDiv {
+  color: dimgray;
+  font-size: 1.2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+  max-width: 50%;
+}
+
+.pfbicppsallocationsDiv {
+  padding-left: 1.6em;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.pfbicppsvaluePlusUnit {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.pfbicppsbuttonsText {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.pfbicppschartTitle {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  fill: #444;
+  font-weight: 300;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.pfbicppslabels {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  fill: #333;
+  text-anchor: middle;
+  dominant-baseline: hanging;
+  cursor: pointer;
+}
+
+/*Contributions tab, code:pfbicpcontr*/
+.pfbicpcontrouterDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  --unColor:  #65A8DC;
+}
+
+.pfbicpcontrtopDiv {
+  width: 100%;
+  display: flex;
+  height:  5vh;
+}
+
+.pfbicpcontrtitleDiv {
+  width: 50%;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.4em;
+  color: darkslategray;
+  font-weight: 500;
+}
+
+.pfbicpcontrbuttonsOuterDiv {
+  width: 50%;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 1rem;
+}
+
+.pfbicpcontrbuttonsDiv button {
+  margin: 0px 0px 0px 8px;
+  display: inline-flex;
+  align-items: center; 
+  white-space: pre;
+  z-index: 1000;
+  border: 1px solid #BCBEC0;
+  font-size: 0.8rem;
+  padding: 0 10px 0 0;
+  border-radius: 3px;
+  background-color: #eee;
+  line-height: normal;
+  transition: all 0.2s linear;
+  outline: 0;
+}
+
+.pfbicpcontrbuttonsDiv button .icon-circle {
+  background-color: #fff;
+  padding: 5px;
+  display: inline-flex;
+  margin-right: 5px;
+  border-radius: 3px 0 0 3px;
+}
+
+.pfbicpcontrbuttonsDiv button:hover{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+.pfbicpcontrbuttonsDiv button.active{background-color: #3289C9; color:#fff; border-color:#3289C9;}
+
+.pfbicpcontrtitleDiv p {
+  margin: 0.2em 0 0.2em 0.8em;
+}
+
+.pfbicpcontrchartsDiv {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pfbicpcontrtopRowDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 30%;
+}
+
+.pfbicpcontrchartsContainerDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.pfbicpcontryearsButtonsDiv {
+  width: 92%;
+  align-self: center;
+}
+
+.pfbicpcontrchartDivCerf, .pfbicpcontrchartDivCbpf {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+}
+
+.pfbicpcontrchartDivCerf {
+  width: 30%;
+}
+
+.pfbicpcontrchartDivCbpf {
+  width: 70%;
+}
+
+.pfbicpcontrcontributionsValue {
+  font-size: 3.2em;
+  text-align: right;
+}
+
+.pfbicpcontrcontributionsUnit {
+  font-size: 1.8em;
+  color: dimgray;
+  padding-left: 0.2em;
+  padding-right: 0.8em;
+}
+
+.pfbicpcontrdescriptionDiv {
+  color: dimgray;
+  font-size: 1.2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.pfbicpcontrdescriptionDiv span {
+  padding-right: 0.8em;
+}
+
+.pfbicpcontrcontributionsDiv {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.pfbicpcontrvaluePlusUnit {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.pfbicpcontrbuttonsText, .pfbicpcontrbuttonsContributionsText {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.pfbicpcontrchartTitle {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  fill: #444;
+  font-weight: 300;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.pfbicpcontrlabels {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  fill: #333;
+  text-anchor: middle;
+  dominant-baseline: hanging;
+  cursor: pointer;
+}
+
+.pfbicpcontrpaidAndPledgeDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: dimgray;
+}
+
+.pfbicpcontrpaidDiv, .pfbicpcontrpledgeDiv {
+  width: 100%;
+  font-size: 1em;
+  display: flex;
+  flex-direction: row;
+}
+
+.pfbicpcontrpaidDiv {
+  margin-bottom: 0.3em;
+}
+
+.pfbicpcontrpaidValueDiv, .pfbicpcontrpledgeValueDiv {
+  text-align: right;
+  font-weight: 500;
+}
+
+.pfbicpcontrpaidUnitDiv, .pfbicpcontrpledgeUnitDiv {
+  padding-right: 0.2em;
+  text-align: right;
+}
+
+.pfbicpcontrpaidTextDiv, .pfbicpcontrpledgeTextDiv {
+  padding-left: 0.2em;
+  text-align: left;
+}
+
+.pfbicpcontrdonorsDiv {
+  display: flex;
+  flex-direction: row;
+  color: dimgray;
+  align-items: baseline;
+  margin-right: 4%;
+}
+
+.pfbicpcontrdonorsValueDiv {
+  padding-right: 0.2em;
+  text-align: right;
+  font-size: 3.2em;
+}
+
+.pfbicpcontrdonorsTextDiv {
+  padding-left: 0.2em;
+  text-align: left;
+  font-size: 1.2em;
+}
+
+.pfbicpcontrchartTitleCerf, .pfbicpcontrchartTitleCbpf {
+  width: 100%;
+  font-size: 1.2em;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  text-align: center;
+  color: #444;
+  margin-top: 1em;
+  margin-bottom: 0.8em;
+}
+
+.pfbicpcontrheaderRowDivCbpf {
+  width: 96%;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 2px solid black;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8em;
+  font-weight: 500;
+  color: #222;
+  margin-top: 0.2em;
+  margin-bottom: 0.6em;
+  align-self: flex-start;
+  cursor: pointer;
+}
+
+.pfbicpcontrheaderName, .pfbicpcontrheaderFlag, .pfbicpcontrheaderValue {
+  position: relative;
+}
+
+.pfbicpcontrchartContentCbpf {
+  position: relative;
+  width: 100%;
+  overflow-y: scroll;
+  flex-grow: 1;
+  flex-basis: 0;
+  display: flex;
+  align-items: center;
+}
+
+.pfbicpcontrrowDiv {
+  width: 96%;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.pfbicpcontrrowDivFlag {
+  text-align: center;
+}
+
+.pfbicpcontrrowDivName {
+  font-family: "Roboto", sans-serif;
+  font-size: 1em;
+  color: dimgray;
+  text-align: right;
+  line-height: 1.2;
+}
+
+.pfbicpcontrbarLabel {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8em;
+  font-weight: 500;
+  color: #222;
+  padding-right: 0.5em;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.pfbicpcontrchartContentCerf {
+  font-family: "Roboto", sans-serif;
+  font-size: 1em;
+  font-weight: 300;
+  color: #444;
+  padding-top: 2em;
+  padding-left: 4em;
+  padding-right: 4em;
+}
+
+.pfbicpcontrchartContentCerf img {
+  width: max(50%, 160px);
+}
+
+/*Country profile tooltips*/
+.pfbicpoverviewmapAllocationsValue, .pfbicpoverviewtopFiguresAllocationsValue, .pfbicpcontrtopFiguresContributionsValue, .pfbicpoverviewpartnerFiguresAllocationsValue, .pfbicpbypartnertopFiguresAllocationsValue, .pfbicpbysectortopFiguresAllocationsValue, .pfbicppstopFiguresAllocationsValue, .pfbicpbypartnerpartnerFiguresAllocationsValue, .pfbicppspartnerFiguresAllocationsValue {
+  font-weight: bold;
 }
