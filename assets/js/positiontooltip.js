@@ -18,7 +18,7 @@ function positionTooltip(tooltip, container, event, position) {
 		elementSize.right - containerSize.left + tooltipHorizontalPadding + "px";
 
 	const top = position === "top" ? verticalTop() : position === "bottom" ? verticalBottom() : verticalCenter();
-	const left = position === "left" ? horizontalLeft() : position === "right" ? horizontalRight() : horizontalCenter;
+	const left = position === "left" ? horizontalLeft() : position === "right" ? horizontalRight() : horizontalCenter();
 
 	tooltip.style("top", top)
 		.style("left", left);
