@@ -244,7 +244,9 @@ function createSnapshot(type, fromContextMenu, selections) {
 		"dominant-baseline"
 	];
 
-	const imageDiv = selections.chartContainerDiv.node();
+	//const imageDiv = selections.chartContainerDiv.node();
+
+	let imageDiv;
 
 	selections.chartContainerDiv.selectAll("svg")
 		.each((_, i, n) => {
@@ -254,8 +256,26 @@ function createSnapshot(type, fromContextMenu, selections) {
 			setSvgStyles(n[i]);
 		});
 
-	if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Overview") {
+	//removing the CP dropdown list
+	if (chartState.selectedChart === "countryProfile") {
 		d3.select(".pfcpmaindropdownList").style("display", "none");
+	};
+
+	//change styles of long lists
+	if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Allocations by Partner") {
+		d3.select(".pfbicpbypartnerpartnersDivCerf").style("overflow-y", "visible");
+		d3.select(".pfbicpbypartnerpartnersDivCbpf").style("overflow-y", "visible");
+		imageDiv = selections.chartContainerDiv.select(".pfcpmainchartDiv").node();
+	} else if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Allocations by Partner/Sector") {
+		d3.select(".pfbicppspartnersDivCerf").style("overflow-y", "visible");
+		d3.select(".pfbicppspartnersDivCbpf").style("overflow-y", "visible");
+		imageDiv = selections.chartContainerDiv.select(".pfcpmainchartDiv").node();
+	} else if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Contributions by Donor") {
+		d3.select(".pfbicpcontrchartContentCerf").select("img").style("display", "none");
+		d3.select(".pfbicpcontrchartContentCbpf").style("overflow-y", "visible");
+		imageDiv = selections.chartContainerDiv.select(".pfcpmainchartDiv").node();
+	} else {
+		imageDiv = selections.chartContainerDiv.node();
 	};
 
 	html2canvas(imageDiv).then(function(canvas) {
@@ -271,8 +291,24 @@ function createSnapshot(type, fromContextMenu, selections) {
 
 		if (fromContextMenu && chartState.currentHoveredElement) d3.select(chartState.currentHoveredElement).dispatch("mouseout");
 
-		if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Overview") {
+		//restore original styles
+		if (chartState.selectedChart === "countryProfile") {
 			d3.select(".pfcpmaindropdownList").style("display", null);
+		};
+
+		if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Allocations by Partner") {
+			d3.select(".pfbicpbypartnerpartnersDivCerf").style("overflow-y", null);
+			d3.select(".pfbicpbypartnerpartnersDivCbpf").style("overflow-y", null);
+		};
+
+		if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Allocations by Partner/Sector") {
+			d3.select(".pfbicppspartnersDivCerf").style("overflow-y", null);
+			d3.select(".pfbicppspartnersDivCbpf").style("overflow-y", null);
+		};
+
+		if (chartState.selectedChart === "countryProfile" && chartState.selectedCountryProfileTab === "Contributions by Donor") {
+			d3.select(".pfbicpcontrchartContentCerf").select("img").style("display", null);
+			d3.select(".pfbicpcontrchartContentCbpf").style("overflow-y", null);
 		};
 
 	});
