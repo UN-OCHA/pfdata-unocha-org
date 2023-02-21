@@ -605,7 +605,7 @@ function processData(originalData, lists) {
 	};
 
 	originalData.forEach(row => {
-		if (chartState.selectedYear === row.year) {
+		if (chartState.selectedYear === row.year && +row.sector === +row.sector) {
 			if (chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf") {
 				data.topFigures.total += row.total;
 			} else {
