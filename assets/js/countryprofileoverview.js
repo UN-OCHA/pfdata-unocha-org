@@ -78,6 +78,7 @@ const topRowPercentage = 0.45,
 	fillOpacityValue = 0.5,
 	bubbleLegendPadding = 6,
 	bubbleLegendVertPadding = 14,
+	doubleClickTime = 500,
 	xAxisTextSize = 12;
 
 //Fake ISO codes for non-country funds, used to modify the map
@@ -228,14 +229,6 @@ function createCountryProfileOverview(container, lists, colors, mapData, tooltip
 		.attr("offset", "50%")
 		.attr("stop-color", colors.cbpf);
 
-	const yearRect = svgBarChart.append("rect")
-		.attr("rx", 1)
-		.attr("ry", 1)
-		.attr("width", 24)
-		.attr("height", 2)
-		.attr("y", barChartHeight - barChartPadding[2] + xAxis.tickSizeInner() + xAxisTextSize)
-		.style("opacity", 0);
-
 	const xAxisGroup = svgBarChart.append("g")
 		.attr("class", classPrefix + "xAxisGroup")
 		.attr("transform", "translate(0," + (barChartHeight - barChartPadding[2]) + ")");
@@ -283,11 +276,11 @@ function createCountryProfileOverview(container, lists, colors, mapData, tooltip
 	function draw(originalData, originalAdminLevel1Data, resetYear, drawMap) {
 
 		const thisFund = chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf" ? "total" : chartState.selectedFund,
-			thisYear = originalData.find(e => e.year === chartState.selectedYear);
+			thisYear = originalData.find(e => chartState.selectedYearCountryProfile.includes(e.year));
 
 		if (resetYear || (!thisYear || !thisYear[thisFund])) setDefaultYear(originalData, yearsButtons);
 
-		yearsButtons.classed("active", d => chartState.selectedYear === d);
+		yearsButtons.classed("active", d => chartState.selectedYearCountryProfile.includes(d));
 
 		if (drawMap) createMap(mapData, mapLayer, mapDivSize, lists, mapDiv);
 
@@ -295,8 +288,8 @@ function createCountryProfileOverview(container, lists, colors, mapData, tooltip
 		disableYears(originalData, yearsButtons);
 
 		const data = processData(originalData, lists);
-		const adminLevel1Object = originalAdminLevel1Data.find(e => e.year === chartState.selectedYear);
-		const adminLevel1Data = adminLevel1Object ? adminLevel1Object.adminLevel1List : [];
+		const adminLevel1Object = originalAdminLevel1Data.filter(e => chartState.selectedYearCountryProfile.includes(e.year));
+		const adminLevel1Data = adminLevel1Object.length ? adminLevel1Object.flatMap(e => e.adminLevel1List) : [];
 
 		const syncedTransition = d3.transition()
 			.duration(duration);
@@ -314,9 +307,45 @@ function createCountryProfileOverview(container, lists, colors, mapData, tooltip
 		});
 
 		yearsButtons.on("click", (event, d) => {
-			if (chartState.selectedYear === d) return;
-			chartState.selectedYear = d;
-			draw(originalData, originalAdminLevel1Data, false, false);
+			tooltipDiv.style("display", "none");
+			const button = event.currentTarget;
+			if (event.altKey) {
+				setSelectedYears(d, false);
+				return;
+			};
+			if (localVariable.get(button) !== "clicked") {
+				localVariable.set(button, "clicked");
+				setTimeout(() => {
+					if (localVariable.get(button) === "clicked") {
+						setSelectedYears(d, true);
+					};
+					localVariable.set(button, null);
+				}, doubleClickTime);
+			} else {
+				setSelectedYears(d, false);
+				localVariable.set(button, null);
+			};
+
+			function setSelectedYears(d, singleSelection) {
+				if (singleSelection) {
+					chartState.selectedYearCountryProfile = [d];
+				} else {
+					const index = chartState.selectedYearCountryProfile.indexOf(d);
+					if (index > -1) {
+						if (chartState.selectedYearCountryProfile.length === 1) {
+							return;
+						} else {
+							chartState.selectedYearCountryProfile.splice(index, 1);
+						};
+					} else {
+						chartState.selectedYearCountryProfile.push(d);
+					};
+				};
+
+				//change everything to chartState.selectedYearCountryProfile, then uncomment this part here:
+				draw(originalData, originalAdminLevel1Data, false, false);
+			};
+
 		});
 
 		yearsButtons.on("playButtonClick", () => {
@@ -340,6 +369,8 @@ function createCountryProfileOverview(container, lists, colors, mapData, tooltip
 			d.AdminLocation1Latitude !== null && d.AdminLocation1Longitude !== null) : [];
 		const adminLevel1DataCbpf = chartState.selectedFund !== "cerf" ? adminLevel1Data.filter(d => d.FundType === cbpfId &&
 			d.AdminLocation1Latitude !== null && d.AdminLocation1Longitude !== null) : [];
+
+		if (adminLevel1DataCbpf.length) adminLevel1DataCbpf.sort((a, b) => b.AdminLocation1Budget - a.AdminLocation1Budget);
 
 		radiusScale.domain([0, d3.max(adminLevel1DataCbpf, d => d.AdminLocation1Budget) || 0]);
 
@@ -447,8 +478,26 @@ function createCountryProfileOverview(container, lists, colors, mapData, tooltip
 			.range([barChartPadding[3] + (availableSpace - barChartAreaWidth) / 2, barChartWidth - barChartPadding[1] - (availableSpace - barChartAreaWidth) / 2]);
 		yScale.domain([0, d3.max(data, d => chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]) || 0]);
 
+		let yearRect = svgBarChart.selectAll(`.${classPrefix}yearRect`)
+			.data(chartState.selectedYearCountryProfile, d => d);
+
+		yearRect.exit().remove();
+
+		const yearRectEnter = yearRect.enter()
+			.append("rect")
+			.attr("class", classPrefix + "yearRect")
+			.attr("rx", 1)
+			.attr("ry", 1)
+			.attr("width", 24)
+			.attr("height", 2)
+			.attr("y", barChartHeight - barChartPadding[2] + xAxis.tickSizeInner() + xAxisTextSize)
+			.attr("x", d => xScale(d) - 12 + xScale.bandwidth() / 2)
+			.style("opacity", 0);
+
+		yearRect = yearRectEnter.merge(yearRect);
+
 		yearRect.style("opacity", data.length ? 1 : 0)
-			.attr("x", xScale(chartState.selectedYear) - 12 + xScale.bandwidth() / 2)
+			.attr("x", d => xScale(d) - 12 + xScale.bandwidth() / 2)
 			.style("fill", chartState.selectedFund === "cerf/cbpf" ? "url(#yearRectGradient)" : colors[chartState.selectedFund]);
 
 		let noData = svgBarChart.selectAll(`.${classPrefix}noData`)
@@ -569,11 +618,12 @@ function createCountryProfileOverview(container, lists, colors, mapData, tooltip
 			.filter(d => !d)
 			.remove();
 
+		//CHANGED
 		xAxisGroup.selectAll(".tick text")
 			.style("font-weight", null)
-			.style("opacity", d => d % 2 === chartState.selectedYear % 2 || d === currentYear ? 1 : 0)
-			.filter(d => d === chartState.selectedYear)
+			.filter(d => chartState.selectedYearCountryProfile.includes(d))
 			.style("font-weight", "700");
+		//END OF CHANGED
 
 		yAxisGroup.selectAll(".tick")
 			.filter(d => d === 0)
@@ -1003,8 +1053,11 @@ function createCountryProfileOverview(container, lists, colors, mapData, tooltip
 
 	function drawTopFigures(data, syncedTransition) {
 
+		//CHANGED
 		topFiguresDiv.select(`.${classPrefix}titleDiv`)
-			.html(`${lists.fundNamesList[chartState.selectedCountryProfile]}, ${chartState.selectedYear}`);
+			.html(`${lists.fundNamesList[chartState.selectedCountryProfile]}, ${chartState.selectedYearCountryProfile.length === 1 ? 
+				chartState.selectedYearCountryProfile : createYearsList()}`);
+		//END OF CHANGE
 
 		topFiguresDiv.select(`.${classPrefix}allocationsValue`)
 			.transition(syncedTransition)
@@ -1308,11 +1361,11 @@ function processData(originalData, lists) {
 			copiedRow.total = 0;
 		};
 		data.stackedBarData.push(copiedRow);
-		if (row.year === chartState.selectedYear) {
+		if (chartState.selectedYearCountryProfile.includes(row.year)) {
 			for (const key in row) {
 				if (key.includes("type") && !key.includes("total")) {
 					const properties = key.split(separator);
-					data.donutChartData[`${properties[2]}${separator}${properties[1]}`] = row[key];
+					data.donutChartData[`${properties[2]}${separator}${properties[1]}`] = (data.donutChartData[`${properties[2]}${separator}${properties[1]}`] || 0) + row[key];
 				};
 			};
 			data.topFigures.total += row[rowFund];
@@ -1350,11 +1403,11 @@ function setDefaultYear(originalData, yearsButtons) {
 	while (--index >= 0) {
 		const thisFund = chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf" ? "total" : chartState.selectedFund;
 		if (originalData[index][thisFund]) {
-			chartState.selectedYear = years[index];
+			chartState.selectedYearCountryProfile = [years[index]];
 			break;
 		};
 	};
-	yearsButtons.filter(d => +d === chartState.selectedYear).dispatch("click");
+	yearsButtons.filter(d => chartState.selectedYearCountryProfile.includes(+d)).dispatch("click");
 };
 
 function mouseoverMarkers(event, datum, tooltip, container, adminLevel1DataCerf, colors, cerfTotal) {
@@ -1629,7 +1682,7 @@ function setChartStateTooltip(event, tooltip) {
 
 function disableFunds(data, fundButtons) {
 	["cerf", "cbpf"].forEach(fund => {
-		const filteredData = data.filter(e => e.year === chartState.selectedYear);
+		const filteredData = data.filter(e => chartState.selectedYearCountryProfile.includes(e.year));
 		const fundInData = filteredData.some(d => d[fund]);
 		if (fund === chartState.selectedFund && !fundInData) {
 			chartState.selectedFund = "total";
@@ -1655,6 +1708,15 @@ function disableYears(data, yearsButtons) {
 			.style("pointer-events", "all")
 			.style("filter", null);
 	};
+};
+
+function createYearsList() {
+	const yearsList = chartState.selectedYearCountryProfile.sort(function(a, b) {
+		return a - b;
+	}).reduce(function(acc, curr, index) {
+		return acc + (index >= chartState.selectedYearCountryProfile.length - 2 ? index > chartState.selectedYearCountryProfile.length - 2 ? curr : curr + " and " : curr + ", ");
+	}, "");
+	return chartState.selectedYearCountryProfile.length > 4 ? "several years selected" : yearsList;
 };
 
 function mouseOut(tooltip) {

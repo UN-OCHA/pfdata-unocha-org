@@ -27,6 +27,7 @@ const padding = [40, 60, 20, 196],
 	fadeOpacityFundButton = 0.4,
 	labelsPadding = 2,
 	titlePadding = 10,
+	doubleClickTime = 500,
 	stackKeys = ["total", "cerf", "cbpf"],
 	allocationTypes = {
 		cbpf: ["1", "2"],
@@ -98,7 +99,7 @@ function createCountryProfileBySector(container, lists, colors, tooltipDiv, fund
 
 		if (resetYear) setDefaultYear(originalData, yearsArrayCerf, yearsArrayCbpf);
 
-		yearsButtons.classed("active", d => chartState.selectedYear === d);
+		yearsButtons.classed("active", d => chartState.selectedYearCountryProfile.includes(d));
 
 		disableFunds(originalData, fundButtons);
 		disableYears(originalData, yearsButtons);
@@ -138,8 +139,44 @@ function createCountryProfileBySector(container, lists, colors, tooltipDiv, fund
 		yearsButtons.on("click", (event, d) => {
 			if (activeTransition) return;
 			tooltipDiv.style("display", "none");
-			chartState.selectedYear = d;
-			draw(originalData, false, false);
+
+			const button = event.currentTarget;
+			if (event.altKey) {
+				setSelectedYears(d, false);
+				return;
+			};
+			if (localVariable.get(button) !== "clicked") {
+				localVariable.set(button, "clicked");
+				setTimeout(() => {
+					if (localVariable.get(button) === "clicked") {
+						setSelectedYears(d, true);
+					};
+					localVariable.set(button, null);
+				}, doubleClickTime);
+			} else {
+				setSelectedYears(d, false);
+				localVariable.set(button, null);
+			};
+
+			function setSelectedYears(d, singleSelection) {
+				if (singleSelection) {
+					chartState.selectedYearCountryProfile = [d];
+				} else {
+					const index = chartState.selectedYearCountryProfile.indexOf(d);
+					if (index > -1) {
+						if (chartState.selectedYearCountryProfile.length === 1) {
+							return;
+						} else {
+							chartState.selectedYearCountryProfile.splice(index, 1);
+						};
+					} else {
+						chartState.selectedYearCountryProfile.push(d);
+					};
+				};
+
+				//change everything to chartState.selectedYearCountryProfile, then uncomment this part here:
+				draw(originalData, false, false);
+			};
 		});
 
 		yearsButtons.on("playButtonClick", () => {
@@ -160,7 +197,7 @@ function createCountryProfileBySector(container, lists, colors, tooltipDiv, fund
 function drawTopFigures(data, container, colors, syncedTransition, tooltipDiv) {
 
 	container.select(`.${classPrefix}spanYearValue`)
-		.html(`in ${chartState.selectedYear}`);
+		.html(`in ${chartState.selectedYearCountryProfile.length === 1 ? chartState.selectedYearCountryProfile : createYearsList()}`);
 
 	container.select(`.${classPrefix}allocationsValue`)
 		.transition(syncedTransition)
@@ -440,7 +477,7 @@ function createTopFiguresDiv(container, colors, lists) {
 		.html(`Allocated in ${lists.fundNamesList[chartState.selectedCountryProfile]}`)
 	descriptionDiv.append("span")
 		.attr("class", classPrefix + "spanYearValue")
-		.html(`in ${chartState.selectedYear}`);
+		.html(`in ${chartState.selectedYearCountryProfile.length === 1 ? chartState.selectedYearCountryProfile : createYearsList()}`);
 
 	const allocationsValuePlusUnit = allocationsDiv.append("div")
 		.attr("class", classPrefix + "valuePlusUnit");
@@ -605,7 +642,7 @@ function processData(originalData, lists) {
 	};
 
 	originalData.forEach(row => {
-		if (chartState.selectedYear === row.year && +row.sector === +row.sector) {
+		if (chartState.selectedYearCountryProfile.includes(row.year) && +row.sector === +row.sector) {
 			if (chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf") {
 				data.topFigures.total += row.total;
 			} else {
@@ -626,7 +663,18 @@ function processData(originalData, lists) {
 			copiedRow.total = chartState.selectedFund === "total" ? copiedRow.total : 0;
 			copiedRow.cerf = chartState.selectedFund === "cerf" || chartState.selectedFund === "cerf/cbpf" ? copiedRow.cerf : 0;
 			copiedRow.cbpf = chartState.selectedFund === "cbpf" || chartState.selectedFund === "cerf/cbpf" ? copiedRow.cbpf : 0;
-			data.stack.push(copiedRow);
+			if (chartState.selectedYearCountryProfile.length === 1) {
+				data.stack.push(copiedRow);
+			} else {
+				const foundSector = data.stack.find(e => e.sector === copiedRow.sector);
+				if (foundSector) {
+					foundSector.total += copiedRow.total;
+					foundSector.cerf += copiedRow.cerf;
+					foundSector.cbpf += copiedRow.cbpf;
+				} else {
+					data.stack.push(copiedRow);
+				};
+			};
 		};
 	});
 
@@ -650,13 +698,13 @@ function setDefaultYear(originalData, yearsArrayCerf, yearsArrayCbpf) {
 		const cbpfValue = dataCbpf.find(e => e.year === years[index]);
 		if (chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf") {
 			if (cerfValue || cbpfValue) {
-				chartState.selectedYear = years[index];
+				chartState.selectedYearCountryProfile = [years[index]];
 				break;
 			};
 		} else {
 			const thisFundValue = chartState.selectedFund === "cerf" ? cerfValue : cbpfValue;
 			if (thisFundValue) {
-				chartState.selectedYear = years[index];
+				chartState.selectedYearCountryProfile = [years[index]];
 				break;
 			};
 		};
@@ -665,7 +713,7 @@ function setDefaultYear(originalData, yearsArrayCerf, yearsArrayCbpf) {
 
 function disableFunds(data, fundButtons) {
 	["cerf", "cbpf"].forEach(fund => {
-		const filteredData = data.filter(e=>e.year === chartState.selectedYear);
+		const filteredData = data.filter(e => chartState.selectedYearCountryProfile.includes(e.year));
 		const fundInData = filteredData.some(d => d[fund]);
 		if (fund === chartState.selectedFund && !fundInData) {
 			chartState.selectedFund = "total";
@@ -739,6 +787,15 @@ function createYearsArray(originalData, fund) {
 	}, []);
 	years.sort((a, b) => a - b);
 	return years;
+};
+
+function createYearsList() {
+	const yearsList = chartState.selectedYearCountryProfile.sort(function(a, b) {
+		return a - b;
+	}).reduce(function(acc, curr, index) {
+		return acc + (index >= chartState.selectedYearCountryProfile.length - 2 ? index > chartState.selectedYearCountryProfile.length - 2 ? curr : curr + " and " : curr + ", ");
+	}, "");
+	return chartState.selectedYearCountryProfile.length > 4 ? "several years selected" : yearsList;
 };
 
 function applyColors(selection, colors) {

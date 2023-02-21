@@ -168,10 +168,10 @@ function loopYears(yearsArray, selections) {
 			.selectAll("button")
 			.filter((_, i, n) => +d3.select(n[i]).style("opacity") === 1);
 		const yearsArrayCountryProfile = yearButtons.data();
-		let yearIndex = yearsArrayCountryProfile.indexOf(chartState.selectedYear);
-		chartState.selectedYear = yearsArrayCountryProfile[++yearIndex % yearsArrayCountryProfile.length];
-		d3.select("#pfbihpyearNumberText").text(chartState.selectedYear);
-		const thisYearButton = yearButtons.filter(d => d === chartState.selectedYear);
+		let yearIndex = yearsArrayCountryProfile.indexOf(chartState.selectedYearCountryProfile[0]);
+		chartState.selectedYearCountryProfile = [yearsArrayCountryProfile[++yearIndex % yearsArrayCountryProfile.length]];
+		d3.select("#pfbihpyearNumberText").text(chartState.selectedYearCountryProfile[0]);
+		const thisYearButton = yearButtons.filter(d => d === chartState.selectedYearCountryProfile[0]);
 		thisYearButton.dispatch("playButtonClick");
 	} else {
 		const index = yearsArray.indexOf(chartState.selectedYear);

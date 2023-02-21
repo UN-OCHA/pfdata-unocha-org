@@ -1,6 +1,7 @@
 //|Chart state
 const chartState = {
 	selectedYearValue: null,
+	selectedYearCountryProfileValue: [],
 	selectedChartValue: null,
 	selectedFundValue: null,
 	selectedRegionValue: [],

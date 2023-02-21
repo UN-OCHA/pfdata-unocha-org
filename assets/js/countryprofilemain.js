@@ -8,6 +8,7 @@ import { createCountryProfileBySector } from "./countryprofilebysector.js";
 import { createCountryProfileByPartnerAndSector } from "./countryprofilebypartnerandsector.js";
 import { createCountryProfileContributions } from "./countryprofilecontributions.js";
 import { buttonsObject } from "./buttons.js";
+import { positionTooltip } from "./positiontooltip.js";
 
 //|constants
 const classPrefix = "pfcpmain",
@@ -44,6 +45,7 @@ const classPrefix = "pfcpmain",
 	negativeMarginWidth = 0.12,
 	negativeMarginHeight = 0,
 	negativeLeftMargin = 0.15,
+	innerTooltipDivWidth = 220,
 	formatMoney0Decimals = d3.format(",.0f"),
 	radiusScale = d3.scaleSqrt().range([minPieSize, maxPieSize]),
 	arcGenerator = d3.arc().outerRadius(piesSize / 2).innerRadius(0),
@@ -651,9 +653,13 @@ function drawCountryProfile(worldMap, rawAllocationsData, pooledFundsInData, raw
 		.attr("id", classPrefix + "tooltipDiv")
 		.style("display", "none");
 
+	const tooltipDivYears = outerDiv.append("div")
+		.attr("id", classPrefix + "tooltipDivYears")
+		.style("display", "none");
+
 	const dropdown = createDropdown(dropdownDiv, pooledFundsInData, lists);
 
-	yearsButtons = createYearsButtons(yearsButtonsDiv, chartState.selectedCountryProfileTab === tabsData[tabsData.length - 1] ? yearsSetContributions : yearsSetAllocations);
+	yearsButtons = createYearsButtons(yearsButtonsDiv, chartState.selectedCountryProfileTab === tabsData[tabsData.length - 1] ? yearsSetContributions : yearsSetAllocations, outerDiv, tooltipDivYears);
 
 	yearsButtons.on("click.main", (_, d) => setQueryString("year", d, lists));
 
@@ -692,7 +698,7 @@ function drawCountryProfile(worldMap, rawAllocationsData, pooledFundsInData, raw
 		createDisabledOption(selections.yearDropdown, mergedYears);
 		updateTopValues(topValues, selections);
 		chartDiv.selectChildren("div:not(#" + classPrefix + "tooltipDiv)").remove();
-		yearsButtons = createYearsButtons(yearsButtonsDiv, d === tabsData[tabsData.length - 1] ? yearsSetContributions : yearsSetAllocations);
+		yearsButtons = createYearsButtons(yearsButtonsDiv, d === tabsData[tabsData.length - 1] ? yearsSetContributions : yearsSetAllocations, outerDiv, tooltipDivYears);
 		yearsButtons.on("click.main", (_, d) => setQueryString("year", d, lists));
 		setCallFunctions();
 		callDrawingFunction();
@@ -702,7 +708,7 @@ function drawCountryProfile(worldMap, rawAllocationsData, pooledFundsInData, raw
 		if (chartState.selectedCountryProfileTab === d) return;
 		if (buttonsObject.playing) stopTimer();
 		if (d.includes("Contributions") || chartState.selectedCountryProfileTab.includes("Contributions")) {
-			yearsButtons = createYearsButtons(yearsButtonsDiv, d === tabsData[tabsData.length - 1] ? yearsSetContributions : yearsSetAllocations);
+			yearsButtons = createYearsButtons(yearsButtonsDiv, d === tabsData[tabsData.length - 1] ? yearsSetContributions : yearsSetAllocations, outerDiv, tooltipDivYears);
 			yearsButtons.on("click.main", (_, d) => setQueryString("year", d, lists));
 		};
 		chartState.selectedCountryProfileTab = d;
@@ -816,7 +822,7 @@ function createFundsButtons(container, colors) {
 	return buttons;
 };
 
-function createYearsButtons(container, yearsDataSet) {
+function createYearsButtons(container, yearsDataSet, outerDiv, tooltipDivYears) {
 
 	container.selectChildren().remove();
 
@@ -894,6 +900,9 @@ function createYearsButtons(container, yearsDataSet) {
 				};
 			});
 	});
+
+	yearsButtons.on("mouseover", (event, d) => mouseoverYears(event, d, tooltipDivYears, outerDiv))
+		.on("mouseout", () => mouseOut(tooltipDivYears));
 
 	return yearsButtons;
 };
@@ -1372,6 +1381,35 @@ function updateTopValues(topValues, selections) {
 			return d3.interpolateRound(+n[i].textContent || 0, topValues.projects.size)
 		});
 
+};
+
+function mouseoverYears(event, datum, tooltip, container) {
+
+	setChartStateTooltip(event, tooltip);
+
+	tooltip.style("display", "block")
+		.html(null);
+
+	const innerTooltipDiv = tooltip.append("div")
+		.style("max-width", innerTooltipDivWidth + "px")
+		.attr("id", classPrefix + "innerTooltipDiv");
+
+	const innerDiv = innerTooltipDiv.append("div");
+
+	innerDiv.append("span")
+		.html("Click for selecting a single year. Double-click or ALT + click for selecting multiple years.");
+
+	positionTooltip(tooltip, container, event, "bottom");
+};
+
+function mouseOut(tooltip) {
+	tooltip.html(null)
+		.style("display", "none");
+};
+
+function setChartStateTooltip(event, tooltip) {
+	chartState.currentHoveredElement = event.currentTarget;
+	chartState.currentTooltip = tooltip;
 };
 
 function capitalize(str) {

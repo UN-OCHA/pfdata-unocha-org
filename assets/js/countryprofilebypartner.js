@@ -49,6 +49,7 @@ const padding = [4, 8, 4, 8],
 		3: "UN",
 		4: "Other"
 	},
+	doubleClickTime = 500,
 	barHeight = 40;
 
 let yearsArrayCerf,
@@ -125,7 +126,7 @@ function createCountryProfileByPartner(container, lists, colors, tooltipDiv, fun
 
 		if (resetYear) setDefaultYear(originalData, yearsArrayCerf, yearsArrayCbpf);
 
-		yearsButtons.classed("active", d => chartState.selectedYear === d);
+		yearsButtons.classed("active", d => chartState.selectedYearCountryProfile.includes(d));
 
 		disableFunds(originalData, fundButtons);
 		disableYears(originalData, yearsButtons);
@@ -155,8 +156,44 @@ function createCountryProfileByPartner(container, lists, colors, tooltipDiv, fun
 		yearsButtons.on("click", (event, d) => {
 			if (activeTransition) return;
 			tooltipDiv.style("display", "none");
-			chartState.selectedYear = d;
-			draw(originalData, false, false);
+
+			const button = event.currentTarget;
+			if (event.altKey) {
+				setSelectedYears(d, false);
+				return;
+			};
+			if (localVariable.get(button) !== "clicked") {
+				localVariable.set(button, "clicked");
+				setTimeout(() => {
+					if (localVariable.get(button) === "clicked") {
+						setSelectedYears(d, true);
+					};
+					localVariable.set(button, null);
+				}, doubleClickTime);
+			} else {
+				setSelectedYears(d, false);
+				localVariable.set(button, null);
+			};
+
+			function setSelectedYears(d, singleSelection) {
+				if (singleSelection) {
+					chartState.selectedYearCountryProfile = [d];
+				} else {
+					const index = chartState.selectedYearCountryProfile.indexOf(d);
+					if (index > -1) {
+						if (chartState.selectedYearCountryProfile.length === 1) {
+							return;
+						} else {
+							chartState.selectedYearCountryProfile.splice(index, 1);
+						};
+					} else {
+						chartState.selectedYearCountryProfile.push(d);
+					};
+				};
+
+				//change everything to chartState.selectedYearCountryProfile, then uncomment this part here:
+				draw(originalData, false, false);
+			};
 		});
 
 		yearsButtons.on("playButtonClick", () => {
@@ -212,7 +249,7 @@ function createCountryProfileByPartner(container, lists, colors, tooltipDiv, fun
 function drawTopFigures(data, container, colors, syncedTransition, lists, tooltipDiv) {
 
 	container.select(`.${classPrefix}spanYearValue`)
-		.html(`in ${chartState.selectedYear}`);
+		.html(`in ${chartState.selectedYearCountryProfile.length === 1 ? chartState.selectedYearCountryProfile : createYearsList()}`);
 
 	container.select(`.${classPrefix}allocationsValue`)
 		.transition(syncedTransition)
@@ -335,7 +372,7 @@ function createTopFiguresDiv(container, colors, lists) {
 		.html(`Allocated in ${lists.fundNamesList[chartState.selectedCountryProfile]}`)
 	descriptionDiv.append("span")
 		.attr("class", classPrefix + "spanYearValue")
-		.html(`in ${chartState.selectedYear}`);
+		.html(`in ${chartState.selectedYearCountryProfile.length === 1 ? chartState.selectedYearCountryProfile : createYearsList()}`);
 
 	const allocationsValuePlusUnit = allocationsDiv.append("div")
 		.attr("class", classPrefix + "valuePlusUnit");
@@ -775,14 +812,14 @@ function processData(originalData, lists, cerfId, cbpfId) {
 
 	if (chartState.selectedFund !== "cbpf") originalData.cerf.forEach(row => processRow(row, data.cerfData, true, true, cerfId));
 	if (chartState.selectedFund !== "cerf") {
-		originalData.cbpfAggregated.forEach(row => processRow(row, data.cbpfDataAggregated, true, false));
+		originalData.cbpfAggregated.forEach(row => processRow(row, data.cbpfDataAggregated, true, false, null));
 		originalData.cbpf.forEach(row => processRow(row, data.cbpfData, false, true, cbpfId))
 	};
 
 	function processRow(row, target, addTotal, countProjectsAndPartners, fundType) {
-		if (chartState.selectedYear === row.year) {
+		if (chartState.selectedYearCountryProfile.includes(row.year)) {
 			row.values.forEach(innerRow => {
-				target.push(innerRow);
+				target.push(JSON.parse(JSON.stringify(innerRow)));
 				if (addTotal) data.topFigures.total += innerRow.value;
 				if (countProjectsAndPartners) {
 					data.topFigures.partners.add(innerRow.partner);
@@ -805,6 +842,18 @@ function processData(originalData, lists, cerfId, cbpfId) {
 		};
 	};
 
+	if (chartState.selectedYearCountryProfile.length > 1) {
+		data.cbpfDataAggregated = data.cbpfDataAggregated.reduce((acc, curr) => {
+			const foundPartner = acc.find(e => e.partnerType === curr.partnerType);
+			if (foundPartner) {
+				foundPartner.value += curr.value;
+			} else {
+				acc.push(curr);
+			};
+			return acc;
+		}, []);
+	};
+
 	data.cerfData.sort((a, b) => b.value - a.value);
 	data.cbpfData.sort((a, b) => b.value - a.value);
 	data.cbpfDataAggregated.sort((a, b) => b.value - a.value);
@@ -823,13 +872,13 @@ function setDefaultYear(originalData, yearsArrayCerf, yearsArrayCbpf) {
 		const cbpfValue = originalData.cbpf.find(e => e.year === years[index]);
 		if (chartState.selectedFund === "total" || chartState.selectedFund === "cerf/cbpf") {
 			if (cerfValue || cbpfValue) {
-				chartState.selectedYear = years[index];
+				chartState.selectedYearCountryProfile = [years[index]];
 				break;
 			};
 		} else {
 			const thisFundValue = chartState.selectedFund === "cerf" ? cerfValue : cbpfValue;
 			if (thisFundValue) {
-				chartState.selectedYear = years[index];
+				chartState.selectedYearCountryProfile = [years[index]];
 				break;
 			};
 		};
@@ -839,7 +888,7 @@ function setDefaultYear(originalData, yearsArrayCerf, yearsArrayCbpf) {
 function disableFunds(data, fundButtons) {
 	["cerf", "cbpf"].forEach(fund => {
 		const thisYearArray = data[fund].map(e => e.year);
-		const fundInData = thisYearArray.includes(chartState.selectedYear);
+		const fundInData = thisYearArray.some(year => chartState.selectedYearCountryProfile.includes(year));
 		if (fund === chartState.selectedFund && !fundInData) {
 			chartState.selectedFund = "total";
 		};
@@ -861,6 +910,15 @@ function disableYears(data, yearsButtons) {
 			.style("pointer-events", "all")
 			.style("filter", null);
 	};
+};
+
+function createYearsList() {
+	const yearsList = chartState.selectedYearCountryProfile.sort(function(a, b) {
+		return a - b;
+	}).reduce(function(acc, curr, index) {
+		return acc + (index >= chartState.selectedYearCountryProfile.length - 2 ? index > chartState.selectedYearCountryProfile.length - 2 ? curr : curr + " and " : curr + ", ");
+	}, "");
+	return chartState.selectedYearCountryProfile.length > 4 ? "several years selected" : yearsList;
 };
 
 function recalculateDivWidth(data, barChartsDivCerf, barChartsDivCbpf) {

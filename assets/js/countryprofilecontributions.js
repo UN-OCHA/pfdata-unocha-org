@@ -28,6 +28,7 @@ const padding = [40, 60, 20, 196],
 	textMinPadding = 8,
 	valueTypes = ["total", "paid", "pledge"],
 	duration = 1000,
+	doubleClickTime = 500,
 	cerfText1 = "CERF receives broad support from United Nations Member States, observers, regional governments and international organizations, and the private sector, including corporations, non-governmental organizations and individuals.",
 	cerfText2 = "All contributions made by donors to the Central Emergency Response Fund (CERF) can be found by clicking on the link below.",
 	cerfLink = "Visit <a target='_blank' href='https://cerf.un.org/our-donors/contributions'>cerf.un.org/our-donors/contributions</a>",
@@ -92,11 +93,11 @@ function createCountryProfileContributions(container, lists, colors, tooltipDiv,
 			yearsArrayCbpf = createYearsArray(originalData);
 		};
 
-		const thisYear = originalData.find(e => e.year === chartState.selectedYear);
+		const thisYear = originalData.find(e => chartState.selectedYearCountryProfile.includes(e.year));
 
 		if (resetYear || !thisYear) setDefaultYear(originalData, yearsArrayCbpf);
 
-		yearsButtons.classed("active", d => chartState.selectedYear === d);
+		yearsButtons.classed("active", d => chartState.selectedYearCountryProfile.includes(d));
 
 		const data = processData(originalData, lists);
 
@@ -108,8 +109,44 @@ function createCountryProfileContributions(container, lists, colors, tooltipDiv,
 		yearsButtons.on("click", (event, d) => {
 			if (activeTransition) return;
 			tooltipDiv.style("display", "none");
-			chartState.selectedYear = d;
-			draw(originalData, false, false);
+
+			const button = event.currentTarget;
+			if (event.altKey) {
+				setSelectedYears(d, false);
+				return;
+			};
+			if (localVariable.get(button) !== "clicked") {
+				localVariable.set(button, "clicked");
+				setTimeout(() => {
+					if (localVariable.get(button) === "clicked") {
+						setSelectedYears(d, true);
+					};
+					localVariable.set(button, null);
+				}, doubleClickTime);
+			} else {
+				setSelectedYears(d, false);
+				localVariable.set(button, null);
+			};
+
+			function setSelectedYears(d, singleSelection) {
+				if (singleSelection) {
+					chartState.selectedYearCountryProfile = [d];
+				} else {
+					const index = chartState.selectedYearCountryProfile.indexOf(d);
+					if (index > -1) {
+						if (chartState.selectedYearCountryProfile.length === 1) {
+							return;
+						} else {
+							chartState.selectedYearCountryProfile.splice(index, 1);
+						};
+					} else {
+						chartState.selectedYearCountryProfile.push(d);
+					};
+				};
+
+				//change everything to chartState.selectedYearCountryProfile, then uncomment this part here:
+				draw(originalData, false, false);
+			};
 		});
 
 		yearsButtons.on("playButtonClick", () => {
@@ -162,7 +199,7 @@ function createHeaderRow(container) {
 function drawTopFigures(data, container, colors, syncedTransition, tooltipDiv) {
 
 	container.select(`.${classPrefix}spanYearValue`)
-		.html(`in ${chartState.selectedYear}`);
+		.html(`in ${chartState.selectedYearCountryProfile.length === 1 ? chartState.selectedYearCountryProfile : createYearsList()}`);
 
 	container.select(`.${classPrefix}contributionsValue`)
 		.transition(syncedTransition)
@@ -255,7 +292,7 @@ function createTopFiguresDiv(container, colors, lists) {
 		.html(`Contributions for ${lists.fundNamesList[chartState.selectedCountryProfile]}`)
 	descriptionDiv.append("span")
 		.attr("class", classPrefix + "spanYearValue")
-		.html(`in ${chartState.selectedYear}`);
+		.html(`in ${chartState.selectedYearCountryProfile.length === 1 ? chartState.selectedYearCountryProfile : createYearsList()}`);
 
 	const contributionsValuePlusUnit = contributionsDiv.append("div")
 		.attr("class", classPrefix + "valuePlusUnit");
@@ -602,9 +639,20 @@ function processData(originalData, lists) {
 	};
 
 	originalData.forEach(row => {
-		if (chartState.selectedYear === row.year) {
+		if (chartState.selectedYearCountryProfile.includes(row.year)) {
 			row.values.forEach(innerRow => {
-				data.cbpfData.push(innerRow);
+				if (chartState.selectedYearCountryProfile.length === 1) {
+					data.cbpfData.push(JSON.parse(JSON.stringify(innerRow)));
+				} else {
+					const foundDonor = data.cbpfData.find(e => e.donor === innerRow.donor);
+					if (foundDonor) {
+						foundDonor.total += innerRow.total;
+						foundDonor.paid += innerRow.paid;
+						foundDonor.pledge += innerRow.pledge;
+					} else {
+						data.cbpfData.push(JSON.parse(JSON.stringify(innerRow)));
+					};
+				};
 				data.topFigures.total += innerRow.total;
 				data.topFigures.paid += innerRow.paid;
 				data.topFigures.pledge += innerRow.pledge;
@@ -627,10 +675,19 @@ function setDefaultYear(originalData, years) {
 	while (--index >= 0) {
 		const cbpfValue = originalData.find(e => e.year === filteredYears[index]);
 		if (cbpfValue) {
-			chartState.selectedYear = filteredYears[index];
+			chartState.selectedYearCountryProfile = [filteredYears[index]];
 			break;
 		};
 	};
+};
+
+function createYearsList() {
+	const yearsList = chartState.selectedYearCountryProfile.sort(function(a, b) {
+		return a - b;
+	}).reduce(function(acc, curr, index) {
+		return acc + (index >= chartState.selectedYearCountryProfile.length - 2 ? index > chartState.selectedYearCountryProfile.length - 2 ? curr : curr + " and " : curr + ", ");
+	}, "");
+	return chartState.selectedYearCountryProfile.length > 4 ? "several years selected" : yearsList;
 };
 
 function wrapTextTwoLines(text, width) {
