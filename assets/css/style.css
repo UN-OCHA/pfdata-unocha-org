@@ -379,28 +379,28 @@ footer a:hover{color:#2270aa;}
 /*DS: End*/
 
 .browser-notification{
-	background: #f5f5f5 url(../img/browser-compatibility-bg-pf-data-hub.jpg) 0 0 no-repeat;
-	background-size: cover;
-	width: 100%;
+  background: #f5f5f5 url(../img/browser-compatibility-bg-pf-data-hub.jpg) 0 0 no-repeat;
+  background-size: cover;
+  width: 100%;
     height: 100%;
     position: absolute;
 }
-.browser-notification .container{	
-  	width: 39%;
-  	height: 60%;  
-  	margin: auto;
-  	position: absolute;
-  	top: 0; left: 0; bottom: 0; right: 0;
+.browser-notification .container{ 
+    width: 39%;
+    height: 60%;  
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
 }
-.browser-notification-panel{	
-	background-color: #fff;
-	border:1px solid #3289c9;
-	border-radius: 4px;
-	max-width: 500px;
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+.browser-notification-panel{  
+  background-color: #fff;
+  border:1px solid #3289c9;
+  border-radius: 4px;
+  max-width: 500px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 .browser-notification-panel .title{
-	font-size: 1.5rem;
+  font-size: 1.5rem;
     color: #fff;
     padding: 18px;
     line-height: normal;
@@ -408,43 +408,43 @@ footer a:hover{color:#2270aa;}
     display: block;
     width: 100%;
     border-bottom: 1px solid #dee2e6;
-	background-color: #3289c9;
+  background-color: #3289c9;
 }
 .browser-notification-panel .content{
-	padding: 18px;
-	font-size: 0.9rem;
-	color:#555;
+  padding: 18px;
+  font-size: 0.9rem;
+  color:#555;
 }
 .browser-notification-panel .content ul{
-	list-style-type: none;
-	color:#555;	
-	margin-bottom: 0;	
-	padding: 0 15px;
-	text-align: center;
+  list-style-type: none;
+  color:#555; 
+  margin-bottom: 0; 
+  padding: 0 15px;
+  text-align: center;
 }
-.browser-notification-panel .content ul li {	
-	font-size: 0.9rem;	
-	font-weight: 600;	
+.browser-notification-panel .content ul li {  
+  font-size: 0.9rem;  
+  font-weight: 600; 
   padding: 0 10px;
-	text-align: center;
-	line-height: 20px;
-	display: inline-block;
+  text-align: center;
+  line-height: 20px;
+  display: inline-block;
 }
 .browser-notification-panel .content ul li img{
-	vertical-align: middle;
-	display: block;
+  vertical-align: middle;
+  display: block;
     text-align: center;
     margin: 0 auto;
 }
-.browser-notification-panel .content ul li span{	
-	font-size: 0.8rem;	
-	font-weight: 300;
-	display: block;
+.browser-notification-panel .content ul li span{  
+  font-size: 0.8rem;  
+  font-weight: 300;
+  display: block;
 }
 .browser-notification-panel .content ul li a{
-	font-size: 0.8rem;
-	font-weight: 300;
-	display: block;
+  font-size: 0.8rem;
+  font-weight: 300;
+  display: block;
 }
 
 .url-notofication .modal-header .close{color:#aaa !important;}
@@ -485,33 +485,33 @@ a.video-tutorial{color:#333;}
 }
 
 @media (max-width: 575.98px) { 
-	#sidebarToggle{display:block !important;}
-	.pfbialtopButtonsDiv .cbpf-link, .pfbicctopButtonsDiv .cbpf-link {padding: 3px 7px !important; font-size: 0.7em; line-height: normal; text-align: center;}
-	.pfbialtopButtonsDiv .cbpf-link .icon-chart, .pfbicctopButtonsDiv .cbpf-link .icon-chart{display: none !important;}
-	.pfbialtopButtonsDiv .cerf-link, .pfbicctopButtonsDiv .cerf-link {padding: 3px 7px !important; font-size: 0.7em; line-height: normal; text-align: center;}
-	.pfbialtopButtonsDiv .cerf-link .icon-chart, .pfbicctopButtonsDiv .cerf-link .icon-chart{display: none !important;}	
-	.link-sidenav{left: 225px;}
-	.pfbialtopButtonsDiv svg, .pfbicctopButtonsDiv svg, .pfbicdtopButtonsDiv svg, .pfcpmaintopButtonsDiv svg{display:none;}
-	.pfbihpbreadcrumbDiv{padding: 0 15px 0 60px !important;}
-	footer{width: 100% !important;}
-	.mobile-menu{margin-top:7px !important;}	
+  #sidebarToggle{display:block !important;}
+  .pfbialtopButtonsDiv .cbpf-link, .pfbicctopButtonsDiv .cbpf-link {padding: 3px 7px !important; font-size: 0.7em; line-height: normal; text-align: center;}
+  .pfbialtopButtonsDiv .cbpf-link .icon-chart, .pfbicctopButtonsDiv .cbpf-link .icon-chart{display: none !important;}
+  .pfbialtopButtonsDiv .cerf-link, .pfbicctopButtonsDiv .cerf-link {padding: 3px 7px !important; font-size: 0.7em; line-height: normal; text-align: center;}
+  .pfbialtopButtonsDiv .cerf-link .icon-chart, .pfbicctopButtonsDiv .cerf-link .icon-chart{display: none !important;} 
+  .link-sidenav{left: 225px;}
+  .pfbialtopButtonsDiv svg, .pfbicctopButtonsDiv svg, .pfbicdtopButtonsDiv svg, .pfcpmaintopButtonsDiv svg{display:none;}
+  .pfbihpbreadcrumbDiv{padding: 0 15px 0 60px !important;}
+  footer{width: 100% !important;}
+  .mobile-menu{margin-top:7px !important;}  
 }
 @media (min-width: 576px) { 
-	.link-sidenav{left: 225px;}  
+  .link-sidenav{left: 225px;}  
 }
 @media (max-width: 767.98px) { 
-	#sidebarToggle{display:block !important;}
-	.pfbihpbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;} 
-	footer{width: 100% !important;}
-	.mobile-menu{margin-top:7px !important;}
-	
+  #sidebarToggle{display:block !important;}
+  .pfbihpbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;} 
+  footer{width: 100% !important;}
+  .mobile-menu{margin-top:7px !important;}
+  
 }
 @media (max-width: 991.98px) {
-	#sidebarToggle{display:block !important;}
-	.link-sidenav{z-index: 1050; }
-	.pfbihpbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;}
-	footer{width: 100% !important;}
-	.mobile-menu{margin-top:7px !important;}
+  #sidebarToggle{display:block !important;}
+  .link-sidenav{z-index: 1050; }
+  .pfbihpbreadcrumbDiv{padding: 0 15px 0 60px !important; min-height: 50px !important;}
+  footer{width: 100% !important;}
+  .mobile-menu{margin-top:7px !important;}
 }
 
 .loader  {
@@ -620,7 +620,7 @@ a.video-tutorial{color:#333;}
 
 /*tooltip styles*/
 
-#pfbialtooltipDivMap, #pfbialtooltipDivBarChart, #pfbicctooltipDiv, #pfbicdtooltipDiv, #pfbihptopTooltipDiv, #pfcpmaintooltipDiv {    
+#pfbialtooltipDivMap, #pfbialtooltipDivBarChart, #pfbicctooltipDiv, #pfbicdtooltipDiv, #pfbihptopTooltipDiv, #pfcpmaintooltipDiv, #pfcpmaintooltipDivYears {    
   position: absolute;
   text-align: left;
   color: darkslategray;
@@ -641,6 +641,15 @@ a.video-tutorial{color:#333;}
 #pfbialtooltipDivMap, #pfbialtooltipDivBarChart {
   pointer-events: all;
   cursor: default;
+}
+
+#pfcpmaintooltipDivYears {
+  border: 1px solid #999; 
+  border-radius: 4px;
+}
+
+#pfcpmaintooltipDivYears > div {
+  padding: 8px;
 }
 
 #pfbicpoverviewinnerTooltipDiv > div:nth-child(2) {
@@ -664,7 +673,7 @@ a.video-tutorial{color:#333;}
 }
 
 #pfbicctooltipDiv{
-	padding: 8px !important;
+  padding: 8px !important;
 }
 #pfbialinnerTooltipDiv {max-width: 308px !important;}
 #pfbialinnerTooltipDiv > div:nth-child(2){padding:8px !important;}
@@ -682,7 +691,7 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbialtooltipTitleDiv, .pfbicdtooltipTitleDiv, .pfbicpoverviewtooltipTitleDiv, .pfbicpbypartnertooltipTitleDiv, .pfbicpbysectortooltipTitleDiv, .pfbicppstooltipTitleDiv, .pfbicpcontrtooltipTitleDiv {
-	margin-bottom: 3px !important;
+  margin-bottom: 3px !important;
     background-color: #3189c9;
     padding: 8px 8px;
     color: #fff;
@@ -695,11 +704,11 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbialtooltipTitleDiv strong, .pfbicdtooltipTitleDiv strong{
-	font-size: 15px !important;
+  font-size: 15px !important;
 }
 
 .pfbialtooltipTotalValue{
-	display: flex;
+  display: flex;
     align-items: center;
     width: 100%;
     margin-bottom: 10px !important;
@@ -714,7 +723,7 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbialtooltipRank {
-	font-size: 12px;
+  font-size: 12px;
     color: #c1dff6;
 }
 
@@ -734,7 +743,7 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbialtooltipCerfValue .pfbialtooltipKeys {
-	font-weight: 600 !important;
+  font-weight: 600 !important;
     border-radius: 15px;
     border: 2px solid #e8c760;
     padding: 2px 10px;
@@ -742,7 +751,7 @@ a.video-tutorial{color:#333;}
 } 
 
 .pfbialtooltipCbpfValue .pfbialtooltipKeys {
-	font-weight: 600 !important;
+  font-weight: 600 !important;
     border-radius: 15px;
     border: 2px solid #e17165;
     padding: 2px 10px;
@@ -754,7 +763,7 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbialtooltipProjectsTotal, .pfbialtooltipProjectsCerf, .pfbialtooltipProjectsCbpf {
-	font-weight: 600;
+  font-weight: 600;
 }
 
 .pfbialtooltipValues, .pfbialtooltipKeys, .pfbicctooltipValues, .pfbicctooltipYears, .pfbicpbypartnertooltipKeys, .pfbicpbypartnertooltipValues, .pfbicppstooltipKeys, .pfbicppstooltipValues {
@@ -762,7 +771,7 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbialtooltipKeys{
-	font-weight: 600;
+  font-weight: 600;
 }
 
 .pfbialtooltipLeader, .pfbicctooltipLeader, .pfbicpbypartnertooltipLeader, .pfbicppstooltipLeader {
@@ -1447,6 +1456,10 @@ a.video-tutorial{color:#333;}
   height: 100%;
 }
 
+.pfcpmainouterDiv {
+  position: relative;
+}
+
 .pfcpmaindropdownAndButtonsDiv {
   width: 100%;
   height: 5vh;
@@ -1667,7 +1680,7 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbialtopButtonsDiv button, .pfbicdtopButtonsDiv button, .pfbicctopButtonsDiv button, .pfcpmaintopButtonsDiv button{
-	border: 1px solid #3289c9;
+  border: 1px solid #3289c9;
   border-radius: 3px;
   font-size: 0.7em;
   padding: 0 10px;
@@ -1676,7 +1689,7 @@ a.video-tutorial{color:#333;}
   color: #3289c9;
   background-color: #fff;
   margin-left: 7px;
-	vertical-align: top;
+  vertical-align: top;
 }
 
 .pfbialtopButtonsDiv .pfbihpSnapshotDiv, .pfbicctopButtonsDiv .pfbihpSnapshotDiv, .pfbicdtopButtonsDiv .pfbihpSnapshotDiv, .pfcpmaintopButtonsDiv .pfbihpSnapshotDiv {line-height: normal;}
@@ -1764,12 +1777,12 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbicddonorDivActive .pfbicddonorNameDiv{
-	background-color: #3189c9;    
+  background-color: #3189c9;    
     border-radius: 0 0 4px 4px;
 }
 
 .pfbicddonorDivActive .pfbicddonorNameDiv span{
-	color:#fff !important;
+  color:#fff !important;
 }
 
 .pfbicddonorExpandDiv {
@@ -1856,12 +1869,12 @@ a.video-tutorial{color:#333;}
 }
 
 #pfbiccinnerTooltipDiv > div:nth-child(1){
-	padding:8px !important;
-	background-color: #3189c9;
-	color: #fff;
-	border-radius: 4px 4px 0 0;
+  padding:8px !important;
+  background-color: #3189c9;
+  color: #fff;
+  border-radius: 4px 4px 0 0;
     line-height: normal;
-	margin-top: -8px;
+  margin-top: -8px;
     margin-left: -8px;
     margin-right: -8px;
 } 
@@ -1869,7 +1882,7 @@ a.video-tutorial{color:#333;}
 #pfbiccinnerTooltipDiv > div:nth-child(1) strong{font-size: 14px !important;}
 
 .pfbicctooltipValues{
-	font-weight: 600;
+  font-weight: 600;
 }
 
 .pfbicctooltipYears{
@@ -1878,57 +1891,57 @@ a.video-tutorial{color:#333;}
 }
 
 #pfbihpinnerTooltipDiv > div:nth-child(1) {
-	background-color: #3189c9;
+  background-color: #3189c9;
     padding: 6px 8px;
     border-radius: 4px 4px 0 0;
     color: #fff;
-	margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 #pfbihpinnerTooltipDiv > div:nth-child(1) strong{
-	font-size: 13px;
+  font-size: 13px;
     font-weight: normal;
 }
 
 #pfbihpinnerTooltipDiv > div:nth-child(2) {
-	padding: 8px;
+  padding: 8px;
     font-weight: 600;
 }
 
 #pfbicdtooltipDiv > div:nth-child(1){
-	width: 645px !important;
+  width: 645px !important;
     height: 335px !important;
 }
 
 #pfbicdtooltipDiv > div:nth-child(1) > div:nth-child(2) {
-	padding: 8px !important;
+  padding: 8px !important;
 }
 
 #pfbicdtooltipDiv .pfbicdtooltipTopDiv {
-	height: 35px !important;
+  height: 35px !important;
     background-color: #3289c9;
     padding: 8px;
     border-radius: 4px 4px 0 0;
-	margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 #pfbicdtooltipDiv .pfbicdtooltipTopDiv .pfbicdtooltipTopDivMain .pfbicdtooltipNameDiv{
-	padding-left:0 !important;
-	padding-right: 0 !important;
+  padding-left:0 !important;
+  padding-right: 0 !important;
 }
 
 #pfbicdtooltipDiv .pfbicdtooltipTopDiv .pfbicdtooltipTopDivMain .pfbicdtooltipNameDiv img{
-	width:25px !important;
-	height: 25px !important;
+  width:25px !important;
+  height: 25px !important;
 }
 
 #pfbicdtooltipDiv .pfbicdtooltipTopDiv .pfbicdtooltipTopDivMain .pfbicdtooltipNameDiv span{
-	font-size: 1rem !important;
-	color: #fff !important;
+  font-size: 1rem !important;
+  color: #fff !important;
 }
 
 #pfbicdtooltipDiv .pfbicdtooltipTopDiv .pfbicdtooltipTopDivClose svg{
-	color: #b2d3ed !important;
+  color: #b2d3ed !important;
     font-weight: normal !important;
     width: 20px !important;
 }
@@ -1985,10 +1998,10 @@ a.video-tutorial{color:#333;}
 }
 
 .pfbihptooltipTable, .pfbihptooltipTable{
-	margin: 5px;
+  margin: 5px;
   font-size: 0.8em;
   width: calc(100% - 10px);
-	margin-top: 0;
+  margin-top: 0;
   border-collapse: collapse;
 }
 
@@ -1997,7 +2010,7 @@ a.video-tutorial{color:#333;}
 }
 .pfbihptooltipTable th:nth-child(3), .pfbihptooltipTable th:nth-child(3) {
   background-color: #f37261 !important;
-	color:#fff !important;
+  color:#fff !important;
 }
 
 .pfbihptooltipTable td, .pfbihptooltipTable th {
@@ -2218,11 +2231,11 @@ a.video-tutorial{color:#333;}
 .country-pro-tabs {   
     margin: 20px;
     display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-items: stretch;
-	align-content: stretch;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
 }
 .country-pro-tabs ul li a.nav-link {
     color: #999;
