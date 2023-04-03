@@ -1,3 +1,14 @@
+//|import modules
+import { createAllocations } from "./allocations.js";
+import { createAllocationsByMonth } from "./allocationsbymonth.js";
+import { createContributionsByCerfCbpf } from "./contributionsbycerfcbpf.js";
+import { createContributionsByDonor } from "./contributionsbydonor.js";
+import { chartState } from "./chartstate.js";
+import { buttonsObject } from "./buttons.js";
+import { parameters } from "./parameters.js";
+import { createCountryProfile } from "./countryprofilemain.js";
+import { dataFilters } from "./datafilters.js";
+
 //|device features
 const isTouchScreenOnly = (window.matchMedia("(pointer: coarse)").matches && !window.matchMedia("(any-pointer: fine)").matches);
 
@@ -206,16 +217,6 @@ const yearNumberText = selections.layoutSidenav.append("div")
 	.append("span")
 	.attr("id", generalClassPrefix + "yearNumberText");
 
-//|import modules
-import { createAllocations } from "./allocations.js";
-import { createAllocationsByMonth } from "./allocationsbymonth.js";
-import { createContributionsByCerfCbpf } from "./contributionsbycerfcbpf.js";
-import { createContributionsByDonor } from "./contributionsbydonor.js";
-import { chartState } from "./chartstate.js";
-import { buttonsObject } from "./buttons.js";
-import { parameters } from "./parameters.js";
-import { createCountryProfile } from "./countryprofilemain.js";
-
 //|populate 'default' values
 for (const key in parameters) {
 	defaultValues[key] = parameters[key];
@@ -236,13 +237,13 @@ Promise.all([fetchFile("unworldmap", unworldmapUrl, "world map", "json"),
 		fetchFile("masterPartners", masterPartnersUrl, "master table for partners", "json"),
 		fetchFile((parameters.showClosedFunds ? "allocationsDataClosedFunds" : "allocationsData"),
 			(parameters.showClosedFunds ? allocationsDataUrlClosedFunds : allocationsDataUrl),
-			"allocations data" + (parameters.showClosedFunds ? " (with closed funds)" : ""), "csv"),
+			"allocations data" + (parameters.showClosedFunds ? " (with closed funds)" : ""), "csv", dataFilters.allocationsData),
 		fetchFile((parameters.showClosedFunds ? "contributionsDataClosedFunds" : "contributionsData"),
 			(parameters.showClosedFunds ? contributionsDataUrlClosedFunds : contributionsDataUrl),
-			"contributions data" + (parameters.showClosedFunds ? " (with closed funds)" : ""), "csv"),
-		fetchFile("allocationsMonthlyData", allocationsMonthlyDataUrl, "allocations data by month", "csv"),
+			"contributions data" + (parameters.showClosedFunds ? " (with closed funds)" : ""), "csv", dataFilters.contributionsData),
+		fetchFile("allocationsMonthlyData", allocationsMonthlyDataUrl, "allocations data by month", "csv", dataFilters.allocationsMonthlyData),
 		fetchFile("lastModified", lastModifiedUrl, "last modified date", "json"),
-		fetchFile("adminLevel1Data", adminLevel1DataUrl, "Admin level 1", "csv")
+		fetchFile("adminLevel1Data", adminLevel1DataUrl, "Admin level 1", "csv", dataFilters.adminLevel1Data)
 	])
 	.then(rawData => controlCharts(rawData));
 
@@ -977,7 +978,7 @@ function pushCbpfOrCerfContribution(obj, row) {
 	obj[`pledged${separator}total`] += row.PledgeAmt;
 };
 
-function fetchFile(fileName, url, warningString, method) {
+function fetchFile(fileName, url, warningString, method, dataDescription) {
 	if (localStorage.getItem(fileName) &&
 		JSON.parse(localStorage.getItem(fileName)).timestamp > (currentDate.getTime() - localStorageTime)) {
 		const fetchedData = method === "csv" ? d3.csvParse(JSON.parse(localStorage.getItem(fileName)).data, d3.autoType) :
@@ -986,7 +987,7 @@ function fetchFile(fileName, url, warningString, method) {
 		return Promise.resolve(fetchedData);
 	} else {
 		const fetchMethod = method === "csv" ? d3.csv : d3.json;
-		const rowFunction = method === "csv" ? d3.autoType : null;
+		const rowFunction = method === "csv" ? d => verifyRow(d, dataDescription, url) : null;
 		return fetchMethod(url, rowFunction).then(fetchedData => {
 			try {
 				localStorage.setItem(fileName, JSON.stringify({
@@ -1000,6 +1001,28 @@ function fetchFile(fileName, url, warningString, method) {
 			return fetchedData;
 		});
 	};
+};
+
+function verifyRow(obj, dataDescription, url) {
+	d3.autoType(obj);
+	let validRow;
+	if (dataDescription) {
+		let thisColumn;
+		validRow = dataDescription.columns.every(column => {
+			let filterResult, typeResult;
+			thisColumn = column.name;
+			filterResult = column.filterFunction ? column.filterFunction(obj[column.name]) : true;
+			typeResult = typeof column.type === "function" ? column.type(obj[column.name]) : typeof obj[column.name] === column.type;
+			return filterResult && typeResult;
+		});
+		if (validRow) {
+			return obj;
+		} else {
+			console.warn(`Problem with the dataset ${url}: a row doesn't follow the filter rules.\nColumn: ${thisColumn}\nOffending row: ${JSON.stringify(obj)}`);
+			return null;
+		};
+	};
+	return obj;
 };
 
 function updateTopValues(topValues, selections) {
