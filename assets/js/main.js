@@ -27,6 +27,7 @@ const generalClassPrefix = "pfbihp",
 	topValuesNoValue = "--",
 	formatMoney0Decimals = d3.format(",.0f"),
 	allYears = "all",
+	consoleStyle = "background-color: #0d6cb6; color: white; padding: 2px;";
 	lastModifiedUrl = "https://cbpfapi.unocha.org/vo2/odata/LastModified",
 	unworldmapUrl = "https://cbpfgms.github.io/pfbi-data/map/unworldmap.json",
 	masterFundsUrl = "https://cbpfgms.github.io/pfbi-data/mst/MstCountry.json",
@@ -961,7 +962,7 @@ function fetchFile(fileName, url, warningString, method, dataDescription) {
 		JSON.parse(localStorage.getItem(fileName)).timestamp > (currentDate.getTime() - localStorageTime)) {
 		const fetchedData = method === "csv" ? d3.csvParse(JSON.parse(localStorage.getItem(fileName)).data, d3.autoType) :
 			JSON.parse(localStorage.getItem(fileName)).data;
-		console.info("PFBI chart info: " + warningString + " from local storage");
+		console.info("%cPFBI chart info: " + warningString + " from local storage", consoleStyle);
 		return Promise.resolve(fetchedData);
 	} else {
 		const fetchMethod = method === "csv" ? d3.csv : d3.json;
@@ -973,9 +974,9 @@ function fetchFile(fileName, url, warningString, method, dataDescription) {
 					timestamp: currentDate.getTime()
 				}));
 			} catch (error) {
-				console.info("PFBI chart, " + error);
+				console.info("%cPFBI chart, " + error, consoleStyle);
 			};
-			console.info("PFBI chart info: " + warningString + " from API");
+			console.info("%cPFBI chart info: " + warningString + " from API", consoleStyle);
 			return fetchedData;
 		});
 	};
