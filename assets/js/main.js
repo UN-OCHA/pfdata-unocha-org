@@ -17,6 +17,7 @@ const generalClassPrefix = "pfbihp",
 	localStorageTime = 3600000,
 	currentDate = new Date(),
 	currentYear = currentDate.getFullYear(),
+	isPfbiSite = window.location.hostname === "pfdata.unocha.org",
 	formatLastModified = d3.utcFormat("%d/%m/%Y %H:%M:%S"),
 	localVariable = d3.local(),
 	duration = 1000,
@@ -187,12 +188,12 @@ const selections = {
 };
 
 const navLinks = [selections.navlinkAllocationsByCountry,
-	selections.navlinkAllocationsBySector,
-	selections.navlinkAllocationsByType,
-	selections.navlinkAllocationsByMonth,
-	selections.navlinkContributionsByCerfCbpf,
-	selections.navlinkContributionsByDonor,
-	selections.navlinkCountryProfile
+selections.navlinkAllocationsBySector,
+selections.navlinkAllocationsByType,
+selections.navlinkAllocationsByMonth,
+selections.navlinkContributionsByCerfCbpf,
+selections.navlinkContributionsByDonor,
+selections.navlinkCountryProfile
 ];
 
 createSpinner(selections.chartContainerDiv);
@@ -226,25 +227,26 @@ for (const key in parameters) {
 if (!defaultValues.year) defaultValues.year = currentYear;
 
 //|load master tables, world map and csv data
-Promise.all([fetchFile("unworldmap", unworldmapUrl, "world map", "json"),
-		fetchFile("masterFunds", masterFundsUrl, "master table for funds", "json"),
-		fetchFile("masterDonors", masterDonorsUrl, "master table for donors", "json"),
-		fetchFile("masterAllocationTypes", masterAllocationTypesUrl, "master table for allocation types", "json"),
-		fetchFile("masterFundTypes", masterFundTypesUrl, "master table for fund types", "json"),
-		fetchFile("masterPartnerTypes", masterPartnerTypesUrl, "master table for partner types", "json"),
-		fetchFile("masterClusterTypes", masterClusterTypesUrl, "master table for cluster types", "json"),
-		fetchFile("masterUnAgenciesTypes", masterUnAgenciesUrl, "master table for UN agencies", "json"),
-		fetchFile("masterPartners", masterPartnersUrl, "master table for partners", "json"),
-		fetchFile((parameters.showClosedFunds ? "allocationsDataClosedFunds" : "allocationsData"),
-			(parameters.showClosedFunds ? allocationsDataUrlClosedFunds : allocationsDataUrl),
-			"allocations data" + (parameters.showClosedFunds ? " (with closed funds)" : ""), "csv", dataFilters.allocationsData),
-		fetchFile((parameters.showClosedFunds ? "contributionsDataClosedFunds" : "contributionsData"),
-			(parameters.showClosedFunds ? contributionsDataUrlClosedFunds : contributionsDataUrl),
-			"contributions data" + (parameters.showClosedFunds ? " (with closed funds)" : ""), "csv", dataFilters.contributionsData),
-		fetchFile("allocationsMonthlyData", allocationsMonthlyDataUrl, "allocations data by month", "csv", dataFilters.allocationsMonthlyData),
-		fetchFile("lastModified", lastModifiedUrl, "last modified date", "json"),
-		fetchFile("adminLevel1Data", adminLevel1DataUrl, "Admin level 1", "csv", dataFilters.adminLevel1Data)
-	])
+Promise.all([
+	fetchFile("unworldmap", unworldmapUrl, "world map", "json"),
+	fetchFile("masterFunds", masterFundsUrl, "master table for funds", "json"),
+	fetchFile("masterDonors", masterDonorsUrl, "master table for donors", "json"),
+	fetchFile("masterAllocationTypes", masterAllocationTypesUrl, "master table for allocation types", "json"),
+	fetchFile("masterFundTypes", masterFundTypesUrl, "master table for fund types", "json"),
+	fetchFile("masterPartnerTypes", masterPartnerTypesUrl, "master table for partner types", "json"),
+	fetchFile("masterClusterTypes", masterClusterTypesUrl, "master table for cluster types", "json"),
+	fetchFile("masterUnAgenciesTypes", masterUnAgenciesUrl, "master table for UN agencies", "json"),
+	fetchFile("masterPartners", masterPartnersUrl, "master table for partners", "json"),
+	fetchFile((parameters.showClosedFunds ? "allocationsDataClosedFunds" : "allocationsData"),
+		(parameters.showClosedFunds ? allocationsDataUrlClosedFunds : allocationsDataUrl),
+		"allocations data" + (parameters.showClosedFunds ? " (with closed funds)" : ""), "csv", dataFilters.allocationsData),
+	fetchFile((parameters.showClosedFunds ? "contributionsDataClosedFunds" : "contributionsData"),
+		(parameters.showClosedFunds ? contributionsDataUrlClosedFunds : contributionsDataUrl),
+		"contributions data" + (parameters.showClosedFunds ? " (with closed funds)" : ""), "csv", dataFilters.contributionsData),
+	fetchFile("allocationsMonthlyData", allocationsMonthlyDataUrl, "allocations data by month", "csv", dataFilters.allocationsMonthlyData),
+	fetchFile("lastModified", lastModifiedUrl, "last modified date", "json"),
+	fetchFile("adminLevel1Data", adminLevel1DataUrl, "Admin level 1", "csv", dataFilters.adminLevel1Data)
+])
 	.then(rawData => controlCharts(rawData));
 
 function controlCharts([worldMap,
@@ -721,30 +723,6 @@ function preProcessData(rawAllocationsData, rawContributionsData) {
 	const yearsSetContributionsCbpf = new Set();
 	const yearsSetContributionsCerf = new Set();
 
-	//Temporary fix for non-numerical IDs in the allocations data
-	let allocIndex = rawAllocationsData.length - 1;
-	while (allocIndex) {
-		if (!+rawAllocationsData[allocIndex].PooledFundId) {
-			console.warn("Non-numeric PooledFundId in allocations data: " + JSON.stringify(rawAllocationsData[allocIndex]));
-			rawAllocationsData.splice(allocIndex, 1)
-		};
-		allocIndex -= 1;
-	};
-
-	//Temporary fix for non-numerical IDs in the contributions data
-	let contrIndex = rawContributionsData.length - 1;
-	while (contrIndex) {
-		if (!+rawContributionsData[contrIndex].PooledFundId) {
-			console.warn("Non-numeric PooledFundId in contributions data: " + JSON.stringify(rawContributionsData[contrIndex]));
-			rawContributionsData.splice(contrIndex, 1)
-		};
-		if (!+rawContributionsData[contrIndex].DonorId) {
-			console.warn("Non-numeric DonorId in contributions data: " + JSON.stringify(rawContributionsData[contrIndex]));
-			rawContributionsData.splice(contrIndex, 1)
-		};
-		contrIndex -= 1;
-	};
-
 	rawAllocationsData.forEach(row => {
 		row.AllocationSurceId = row.AllocationSourceId; //REMOVE THIS: TEMPORARY FIX
 		yearsSetAllocations.add(+row.AllocationYear);
@@ -1018,7 +996,7 @@ function verifyRow(obj, dataDescription, url) {
 		if (validRow) {
 			return obj;
 		} else {
-			console.warn(`Problem with the dataset ${url}: a row doesn't follow the filter rules.\nColumn: ${thisColumn}\nOffending row: ${JSON.stringify(obj)}`);
+			if (!isPfbiSite) console.warn(`Problem with the dataset ${url}: a row doesn't follow the filter rules.\nColumn: ${thisColumn}\nOffending row: ${JSON.stringify(obj)}`);
 			return null;
 		};
 	};
