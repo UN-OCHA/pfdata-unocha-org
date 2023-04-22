@@ -1622,13 +1622,16 @@ function createAllocations(selections, colors, mapData, lists) {
 			.attr("class", classPrefix + "tooltipTitleDiv")
 			.style("margin-bottom", "18px");
 
-		titleDiv.append("strong")
+		const titleDivText = titleDiv.append("div")
+			.attr("class", classPrefix + "tooltipTitleDivText");
+
+		titleDivText.append("strong")
 			.style("font-size", "16px")
 			.html((!tooltipCerf && tooltipCbpf) || chartState.selectedFund === "cbpf" ? datum.countryNameCbpf : datum.countryName);
 
-		titleDiv.append("span")
+		titleDivText.append("span")
 			.attr("class", classPrefix + "tooltipRank")
-			.html(` (rank: ${rank}<sup>${ordinal}</sup>)`);
+			.html(` (rank:&nbsp;${rank}<sup>${ordinal}</sup>)`);
 
 		const closeButton = titleDiv.append("div")
 			.attr("class", classPrefix + "closeButton")

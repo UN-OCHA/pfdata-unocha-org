@@ -698,6 +698,12 @@ a.video-tutorial{color:#333;}
     border-radius: 5px 5px 0 0;
 }
 
+.pfbialtooltipTitleDiv {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
 .pfbicpbypartnerclickText {
   font-style: italic;
   font-size: 1em;
