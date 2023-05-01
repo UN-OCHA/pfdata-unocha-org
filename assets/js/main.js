@@ -986,22 +986,28 @@ function verifyRow(obj, dataDescription, url) {
 	d3.autoType(obj);
 	let validRow;
 	if (dataDescription) {
-		let thisColumn;
+		let thisColumn,
+			thisRule;
 		validRow = dataDescription.columns.every(column => {
 			let filterResult, typeResult;
 			thisColumn = column.name;
-			filterResult = column.filterFunction ? column.filterFunction(obj[column.name]) : true;
+			thisRule = column;
 			typeResult = typeof column.type === "function" ? column.type(obj[column.name]) : typeof obj[column.name] === column.type;
+			if (typeResult) filterResult = column.filterFunction ? column.filterFunction(obj[column.name]) : true;
 			return filterResult && typeResult;
 		});
 		if (validRow) {
 			return obj;
 		} else {
-			if (!isPfbiSite) console.warn(`Problem with the dataset ${url}: a row doesn't follow the filter rules.\nColumn: ${thisColumn}\nOffending row: ${JSON.stringify(obj)}`);
+			if (!isPfbiSite) console.warn(`Problem with the dataset ${url}: a row doesn't follow the filter rules.\n----\nColumn: ${thisColumn}\n---\nRule: ${JSON.stringify(thisRule, stringifyFunction)}\n---\nOffending row: ${JSON.stringify(obj)}`);
 			return null;
 		};
 	};
 	return obj;
+};
+
+function stringifyFunction(key, value) {
+	return typeof value === "function" ? value.toString() : value;
 };
 
 function updateTopValues(topValues, selections) {
