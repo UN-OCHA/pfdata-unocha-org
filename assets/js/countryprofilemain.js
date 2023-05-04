@@ -532,7 +532,7 @@ function drawLegend(container) {
 		.attr("x", legendPaddings[3] + radiusScale.range()[1] + legendLineSize + 4)
 		.attr("y", (d, i) => i === 1 ? legendPaddings[0] + 5 + (radiusScale.range()[1] * 2) - radiusScale(d) * 2 :
 			i ? legendPaddings[0] + 3 + (radiusScale.range()[1] * 2) - radiusScale(d) * 2 :
-			legendPaddings[0] + 3 + (radiusScale.range()[1] * 2) - 2)
+				legendPaddings[0] + 3 + (radiusScale.range()[1] * 2) - 2)
 		.text(d => d ? d3.formatPrefix(".0", d)(d) : "0");
 
 	legendSizeGroup = legendSizeGroup.merge(legendSizeGroupEnter);
@@ -590,7 +590,7 @@ function createRegionsTable(container, data, colors, lists) {
 function createPies(container, colors, lists) {
 
 	const group = container.append("g")
-		.attr("transform", `translate(${piesSize/2},${piesSize/2})`);
+		.attr("transform", `translate(${piesSize / 2},${piesSize / 2})`);
 
 	const pies = group.selectAll(null)
 		.data(d => pieGenerator(d.fundTypes))
@@ -824,6 +824,9 @@ function createFundsButtons(container, colors) {
 
 function createYearsButtons(container, yearsDataSet, outerDiv, tooltipDivYears) {
 
+	d3.select("#pfbihpPlayButton")
+		.property("disabled", !yearsDataSet.size);
+
 	container.selectChildren().remove();
 
 	const yearsData = Array.from(yearsDataSet).sort((a, b) => a - b);
@@ -858,7 +861,7 @@ function createYearsButtons(container, yearsDataSet, outerDiv, tooltipDivYears) 
 	let yearButtonsSize,
 		yearButtonsContainerSize;
 
-	setTimeout(function() {
+	setTimeout(function () {
 		yearButtonsSize = ~~yearButtonsContainer.node().scrollWidth;
 		yearButtonsContainerSize = ~~yearButtonsContainerDiv.node().getBoundingClientRect().width;
 

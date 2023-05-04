@@ -4822,6 +4822,7 @@ a.video-tutorial {
 	flex-direction: row;
 	align-items: center;
 	flex-grow: 1;
+	justify-content: center;
 }
 
 .pfbicpcontryearsButtonsDiv {

@@ -156,9 +156,13 @@ function createCountryProfileContributions(container, lists, colors, tooltipDiv,
 			draw(originalData, false, false);
 		});
 
-		drawTopFigures(data.topFigures, topRowDiv, colors, syncedTransition, tooltipDiv);
-
-		drawTable(data.cbpfData, chartContentCbpf, container, lists, colors, syncedTransition, tooltipDiv, headerRowDivCbpf);
+		if (data.topFigures.total) {
+			drawTopFigures(data.topFigures, topRowDiv, colors, syncedTransition, tooltipDiv);
+			drawTable(data.cbpfData, chartContentCbpf, container, lists, colors, syncedTransition, tooltipDiv, headerRowDivCbpf);
+		} else {
+			topRowDiv.remove();
+			chartDivCbpf.remove();
+		};
 
 		//end of draw
 	};
@@ -682,16 +686,16 @@ function setDefaultYear(originalData, years) {
 };
 
 function createYearsList() {
-	const yearsList = chartState.selectedYearCountryProfile.sort(function(a, b) {
+	const yearsList = chartState.selectedYearCountryProfile.sort(function (a, b) {
 		return a - b;
-	}).reduce(function(acc, curr, index) {
+	}).reduce(function (acc, curr, index) {
 		return acc + (index >= chartState.selectedYearCountryProfile.length - 2 ? index > chartState.selectedYearCountryProfile.length - 2 ? curr : curr + " and " : curr + ", ");
 	}, "");
 	return chartState.selectedYearCountryProfile.length > 4 ? "several years selected" : yearsList;
 };
 
 function wrapTextTwoLines(text, width) {
-	text.each(function() {
+	text.each(function () {
 		let text = d3.select(this),
 			words = text.text().split(/\s+/).reverse(),
 			word,
@@ -703,10 +707,10 @@ function wrapTextTwoLines(text, width) {
 			dy = 0.32,
 			counter = 0,
 			tspan = text.text(null)
-			.append("tspan")
-			.attr("x", x)
-			.attr("y", y)
-			.attr("dy", dy + "em");
+				.append("tspan")
+				.attr("x", x)
+				.attr("y", y)
+				.attr("dy", dy + "em");
 		while ((word = words.pop()) && counter < 2) {
 			line.push(word);
 			tspan.text(line.join(" "));
