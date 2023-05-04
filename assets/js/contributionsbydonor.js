@@ -25,6 +25,7 @@ const classPrefix = "pfbicd",
 	currentDate = new Date(),
 	currentYear = currentDate.getFullYear(),
 	formatSIaxes = d3.format("~s"),
+	formatMoney = d3.format("$,.0f"),
 	currentYearOpacity = 0.6,
 	tooltipBarsColor = "#CBCBCB",
 	duration = 1000,
@@ -36,7 +37,7 @@ const classPrefix = "pfbicd",
 	svgColumnChartWidth = 195,
 	svgColumnChartHeight = 380,
 	topDonors = 10,
-	tooltipWidth = 640,
+	tooltipWidth = 630,
 	tooltipSvgHeight = 280,
 	tooltipDonorNameHeight = 30,
 	tooltipLabelCerfPadding = 10,
@@ -514,9 +515,9 @@ function createContributionsByDonor(selections, colors, lists) {
 			.style("opacity", 0)
 			.attr("points", (d, i, n) => {
 				const thisLocalScale = localyScale.get(n[i]);
-				return `${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
-				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2 + (barLabelPadding - lastYearCircleRadius - bandwidth/2)/2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
-				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2 + (barLabelPadding - lastYearCircleRadius - bandwidth/2)/2},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))} 
+				return `${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth / 2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
+				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth / 2 + (barLabelPadding - lastYearCircleRadius - bandwidth / 2) / 2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
+				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth / 2 + (barLabelPadding - lastYearCircleRadius - bandwidth / 2) / 2},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))} 
 				${xScale(currentYear - 1) + barLabelPadding},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))}`
 			})
 			.style("stroke", "#bbb")
@@ -529,9 +530,9 @@ function createContributionsByDonor(selections, colors, lists) {
 			.style("opacity", 1)
 			.attr("points", (d, i, n) => {
 				const thisLocalScale = localyScale.get(n[i]);
-				return `${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
-				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2 + (barLabelPadding - lastYearCircleRadius - bandwidth/2)/2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
-				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth/2 + (barLabelPadding - lastYearCircleRadius - bandwidth/2)/2},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))} 
+				return `${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth / 2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
+				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth / 2 + (barLabelPadding - lastYearCircleRadius - bandwidth / 2) / 2},${thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund])} 
+				${xScale(currentYear - 1) + lastYearCircleRadius + bandwidth / 2 + (barLabelPadding - lastYearCircleRadius - bandwidth / 2) / 2},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))} 
 				${xScale(currentYear - 1) + barLabelPadding},${Math.min(svgHeight - svgPadding[2] - labelMinPadding, thisLocalScale(chartState.selectedFund === "cerf/cbpf" ? d.cerf + d.cbpf : d[chartState.selectedFund]))}`
 			});
 
@@ -627,6 +628,9 @@ function createContributionsByDonor(selections, colors, lists) {
 			.style("width", "100%")
 			.style("height", "100%");
 
+		const tooltipTotalValueDiv = tooltipChartDiv.append("div")
+			.attr("class", classPrefix + "tooltipTotalValueDiv");
+
 		const tooltipSvg = tooltipChartDiv.append("svg")
 			.attr("width", tooltipWidth)
 			.attr("height", tooltipSvgHeight)
@@ -644,6 +648,14 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		const donorName = tooltipNameDiv.append("span")
 			.html(datum.donor);
+
+		tooltipTotalValueDiv.append("span")
+			.attr("class", classPrefix + "tooltipTotalValueText")
+			.html(`Total contributions from ${xScaleTooltip.domain()[0]} to ${xScaleTooltip.domain()[xScaleTooltip.domain().length - 1]}: `);
+
+		tooltipTotalValueDiv.append("span")
+			.attr("class", classPrefix + "tooltipTotalValueSpan")
+			.html(`${formatMoney(chartState.selectedFund === "cerf/cbpf" ? datum.cerf + datum.cbpf : datum[chartState.selectedFund])}`);
 
 		tooltipSvg.append("g")
 			.attr("class", classPrefix + "xAxisGroupTooltip")
@@ -815,6 +827,9 @@ function createContributionsByDonor(selections, colors, lists) {
 		if (!originalDatum.donorId) thisDonor.contributions.sort((a, b) => a.year - b.year);
 
 		const minScaleValue = 1e4;
+
+		selection.select(`.${classPrefix}tooltipTotalValueSpan`)
+			.html(`${formatMoney(chartState.selectedFund === "cerf/cbpf" ? thisDonor.cerf + thisDonor.cbpf : thisDonor[chartState.selectedFund])}`);
 
 		const updateTooltipTransition = d3.transition()
 			.duration(duration);
@@ -993,7 +1008,7 @@ function createContributionsByDonor(selections, colors, lists) {
 
 		yScaleColumn.domain(columnData.map(e => e.donor))
 			.range([svgColumnPadding[0],
-				Math.min(svgColumnChartHeight - svgColumnPadding[2], maxColumnRectHeight * 2 * (columnData.length + 1))
+			Math.min(svgColumnChartHeight - svgColumnPadding[2], maxColumnRectHeight * 2 * (columnData.length + 1))
 			]);
 
 		xScaleColumn.domain([0, d3.max(columnData, e => chartState.selectedFund === "total" ? e.total : e.cbpf + e.cerf)]);
