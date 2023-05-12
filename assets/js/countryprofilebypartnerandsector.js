@@ -144,11 +144,8 @@ function createCountryProfileByPartnerAndSector(container, lists, colors, toolti
 
 		drawTopFigures(data.topFigures, topRowDiv, colors, syncedTransition, lists, tooltipDiv);
 		recalculateDivWidth(data, barChartsDivCerf, barChartsDivCbpf);
-		if (chartState.selectedFund !== "cerf") {
-			//CHANGE SELECTION CHART!
-			drawSelectionChart(data.dataAggregated, selectionChartDiv, syncedTransition, colors, tooltipDiv, container, lists);
-			reselectCards(selectionChartDiv);
-		};
+		drawSelectionChart(data.dataAggregated, selectionChartDiv, syncedTransition, colors, tooltipDiv, container, lists);
+		reselectCards(selectionChartDiv);
 		drawTable(data.cerfData, null, partnersDivCerf, container, lists, colors, "cerf", syncedTransition, tooltipDiv);
 		drawTable(data.cbpfData, null, partnersDivCbpf, container, lists, colors, "cbpf", syncedTransition, tooltipDiv);
 
@@ -500,7 +497,7 @@ function drawSelectionChart(data, container, syncedTransition, colors, tooltip, 
 	const cardContainer = container.select(`.${classPrefix}selectionChartDivContent`);
 
 	let partnersCard = cardContainer.selectAll(`.${classPrefix}partnersCard`)
-		.data(data, d => d.partnerType);
+		.data(data, d => d.sector);
 
 	const partnersCardExit = partnersCard.exit()
 		.remove();
@@ -528,11 +525,11 @@ function drawSelectionChart(data, container, syncedTransition, colors, tooltip, 
 
 	partnersCardNameDiv.html(d => lists.clustersList[d.sector]);
 
-	partnersCardValueDiv.html(d => `${formatSIFloat(d.value)} (${formatPercent1Decimal(d.value/total)})`);
+	partnersCardValueDiv.html(d => `${formatSIFloat(d.value)} (${formatPercent1Decimal(d.value / total)})`);
 
 	const partnersCardBar = partnersCardBarDiv.append("div")
 		.attr("class", classPrefix + "partnersCardBar")
-		.style("background-color", unBlue)
+		.style("background-color", colors[chartState.selectedFund])
 		.style("width", "0%");
 
 	partnersCard = partnersCardEnter.merge(partnersCard);
@@ -540,9 +537,10 @@ function drawSelectionChart(data, container, syncedTransition, colors, tooltip, 
 	partnersCard.order();
 
 	partnersCard.select(`.${classPrefix}partnersCardValueDiv`)
-		.html(d => `${formatSIFloat(d.value)} (${formatPercent1Decimal(d.value/total)})`);
+		.html(d => `${formatSIFloat(d.value)} (${formatPercent1Decimal(d.value / total)})`);
 
 	partnersCard.select(`.${classPrefix}partnersCardBar`)
+		.style("background-color", colors[chartState.selectedFund])
 		.transition(syncedTransition)
 		.style("width", d => formatPercent1Decimal(d.value / maxValue));
 
@@ -693,7 +691,7 @@ function drawTable(data, sector, containerDiv, container, lists, colors, fundTyp
 		sortedRow = sortType;
 		filteredData.sort((a, b) => sortType === "name" ? namesList[a.partner].localeCompare(namesList[b.partner]) :
 			sortType === "type" ? lists.clustersList[a.sector].localeCompare(lists.clustersList[b.sector]) :
-			b.value - a.value);
+				b.value - a.value);
 		rowDiv.data(filteredData, d => d.partner + separator + d.sector)
 			.order()
 			.each((_, i, n) => d3.select(n[i]).style("background-color", !(i % 2) ? "#fff" : "#eee"));
@@ -958,9 +956,9 @@ function disableYears(data, yearsButtons) {
 };
 
 function createYearsList() {
-	const yearsList = chartState.selectedYearCountryProfile.sort(function(a, b) {
+	const yearsList = chartState.selectedYearCountryProfile.sort(function (a, b) {
 		return a - b;
-	}).reduce(function(acc, curr, index) {
+	}).reduce(function (acc, curr, index) {
 		return acc + (index >= chartState.selectedYearCountryProfile.length - 2 ? index > chartState.selectedYearCountryProfile.length - 2 ? curr : curr + " and " : curr + ", ");
 	}, "");
 	return chartState.selectedYearCountryProfile.length > 4 ? "several years selected" : yearsList;
@@ -1021,7 +1019,7 @@ function parseTransform(translate) {
 };
 
 function wrapTextTwoLines(text, width) {
-	text.each(function() {
+	text.each(function () {
 		let text = d3.select(this),
 			words = text.text().split(/\s+/).reverse(),
 			word,
@@ -1033,10 +1031,10 @@ function wrapTextTwoLines(text, width) {
 			dy = 0.32,
 			counter = 0,
 			tspan = text.text(null)
-			.append("tspan")
-			.attr("x", x)
-			.attr("y", y)
-			.attr("dy", dy + "em");
+				.append("tspan")
+				.attr("x", x)
+				.attr("y", y)
+				.attr("dy", dy + "em");
 		while ((word = words.pop()) && counter < 2) {
 			line.push(word);
 			tspan.text(line.join(" "));
