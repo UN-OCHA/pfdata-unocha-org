@@ -1277,7 +1277,9 @@ function setDefaultYear(originalData, yearsArrayCerf, yearsArrayCbpf) {
 	const years =
 		chartState.selectedFund === "total" ||
 		chartState.selectedFund === "cerf/cbpf"
-			? [...new Set(yearsArrayCerf.concat(yearsArrayCbpf))]
+			? [...new Set(yearsArrayCerf.concat(yearsArrayCbpf))].sort(
+					(a, b) => a - b
+			  )
 			: chartState.selectedFund === "cerf"
 			? yearsArrayCerf
 			: yearsArrayCbpf;
