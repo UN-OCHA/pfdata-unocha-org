@@ -14,7 +14,7 @@ const isTouchScreenOnly = (window.matchMedia("(pointer: coarse)").matches && !wi
 
 //|set constants
 const generalClassPrefix = "pfbihp",
-	localStorageTime = 3600000,
+	localStorageTime = 600000,
 	currentDate = new Date(),
 	currentYear = currentDate.getFullYear(),
 	isPfbiSite = window.location.hostname === "pfdata.unocha.org",
