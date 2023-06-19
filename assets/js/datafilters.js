@@ -137,12 +137,12 @@ const dataFilters = {
 			},
 			{
 				name: "AdminLocation1Latitude",
-				type: t => typeof t === "number" || t === null,
+				type: "number",
 				filterFunction: n => n >= -90 && n <= 90, //max and min latitude
 			},
 			{
 				name: "AdminLocation1Longitude",
-				type: t => typeof t === "number" || t === null,
+				type: "number",
 				filterFunction: n => n >= -180 && n <= 180, //max and min longitude
 			},
 			{
