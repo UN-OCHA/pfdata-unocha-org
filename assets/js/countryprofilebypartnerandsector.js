@@ -41,6 +41,8 @@ const padding = [4, 8, 4, 8],
 	partnerRowHeight = 3.6,
 	partnerRowMinHeight = 2.4,
 	namePadding = 1,
+	clusterIconSize = 24,
+	clusterIconPadding = 4,
 	allocationTypes = {
 		cbpf: ["1", "2"],
 		cerf: ["3", "4"],
@@ -762,6 +764,7 @@ function drawSelectionChart(
 
 	partnersCardIconDiv
 		.append("img")
+		.style("padding", clusterIconPadding + "px")
 		.style("width", "2em")
 		.style("height", "2em")
 		.attr("src", d => clustersIconsData[d.sector]);
@@ -919,8 +922,9 @@ function drawTable(
 		.append("div")
 		.style("flex", `0 ${formatPercent(typeWidth)}`)
 		.append("img")
-		.attr("height", "32px")
-		.attr("width", "32px")
+		.style("padding", clusterIconPadding + "px")
+		.attr("height", clusterIconSize + 2 * clusterIconPadding)
+		.attr("width", clusterIconSize + 2 * clusterIconPadding)
 		.attr("src", d => clustersIconsData[d.sector]);
 
 	const barDivContainer = rowDiv

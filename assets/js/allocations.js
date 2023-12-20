@@ -33,8 +33,8 @@ const classPrefix = "pfbial",
 	maxLabelLength = 16,
 	labelsColumnPadding = 2,
 	zoomBoundingMargin = 6,
-	clusterIconSize = 24,
-	clusterIconPadding = 2,
+	clusterIconSize = 20,
+	clusterIconPadding = 6,
 	localVariable = d3.local(),
 	formatPercent = d3.format("%"),
 	formatSIaxes = d3.format("~s"),
@@ -45,7 +45,7 @@ const classPrefix = "pfbial",
 	svgMapPadding = [0, 10, 0, 10],
 	svgBarChartPadding = [4, 12, 4, 12],
 	svgColumnChartPaddingByCountry = [16, 26, 4, 56],
-	svgColumnChartPaddingBySector = [16, 26, 4, 90],
+	svgColumnChartPaddingBySector = [16, 26, 4, 92],
 	svgColumnChartPaddingByType = [16, 26, 4, 66],
 	svgColumnChartTypeHeight = svgColumnChartPaddingByType[0] + svgColumnChartPaddingByType[2] + maxColumnRectHeight + 4 * maxColumnRectHeight,
 	VenezuelaRegionalRefugeeAbbr = "Venezuela Refugee...",
@@ -1865,7 +1865,7 @@ function createAllocations(selections, colors, mapData, lists) {
 				.sort((a, b) => b.value - a.value);
 
 			const padding = [16, 26, 4, 90],
-				height = padding[0] + padding[2] + maxColumnRectHeight * 1.6 * svgData.length;
+				height = padding[0] + padding[2] + maxColumnRectHeight * 1.8 * svgData.length;
 
 			const svg = thisChartDiv.append("svg")
 				.attr("width", innerTooltipDivWidth)
