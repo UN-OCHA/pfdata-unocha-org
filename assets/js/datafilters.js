@@ -58,7 +58,7 @@ const dataFilters = {
 			{
 				name: "ClusterId",
 				type: "number",
-				filterFunction: n => n > 0 && n <= 16, //currently the max ID in the clusters master table
+				filterFunction: n => n > 0 && n <= 17, //currently the max ID in the clusters master table
 			},
 			{
 				name: "FundId",
