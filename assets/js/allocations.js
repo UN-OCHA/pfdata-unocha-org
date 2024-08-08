@@ -339,8 +339,11 @@ function createAllocations(selections, colors, mapData, lists) {
 			"Early Recovery",
 			"Multi-Sector",
 			"Multi-purpose cash (not sector-specific)",
+			"Multi-Purpose cash",
 			"Emergency Telecommunications",
-			"Mine Action"
+			"Mine Action",
+			"To be determined",
+			"Food Aid"
 		])
 		.range(["Food Security",
 			"Health",
@@ -356,8 +359,11 @@ function createAllocations(selections, colors, mapData, lists) {
 			"Early Recovery",
 			"Multi-Sector",
 			"Multi-purpose",
+			"Multi-purpose",
 			"Emergency Telecom.",
-			"Mine Action"
+			"Mine Action",
+			"To\u00A0be determined",
+			"Food Aid"
 		]);
 
 	const arcGenerator = d3.arc()
