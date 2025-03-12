@@ -276,7 +276,7 @@ function createListMenu(selections, lists, pooledFundsInData, outerDiv, yearsArr
 	});
 
 	function displayCountries(d, datum){
-		const countryName = lists.fundNamesList[d.fund];
+		const countryName = lists.fundNamesList[d.fund].replace(/\(.*?\)/g,"");
 		const upperCaseLettersArray = countryName.match(/[A-Z]/g).map(e => e.toLowerCase());
 		return datum === "all" || upperCaseLettersArray.includes(datum.toLowerCase()) ? null : "none";
 	}
