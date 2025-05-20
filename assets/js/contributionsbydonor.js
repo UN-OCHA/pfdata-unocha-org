@@ -42,6 +42,7 @@ const classPrefix = "pfbicd",
 	tooltipDonorNameHeight = 30,
 	tooltipLabelCerfPadding = 10,
 	lastYearCircleRadius = 3,
+	totalValuePadding = 3,
 	yScaleTooltipRange = [
 		tooltipSvgHeight - tooltipSvgPadding[2],
 		tooltipSvgPadding[0],
@@ -56,6 +57,9 @@ const classPrefix = "pfbicd",
 		cerf: 0,
 		cbpf: 0,
 	};
+
+//the legend svg
+const legendTemplate = `<svg width="235.14" height="72.486" version="1.1" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="filter1053" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB"> <feColorMatrix result="color1" type="hueRotate" values="330"/> <feColorMatrix result="color2" type="saturate" values="2.77556e-17"/> </filter> </defs> <g class="pfbicdbarsGroups" transform="translate(-1.7339 6.2344)" fill="#fbd45c" pointer-events="none"> <rect x="12" y="54" width="3.3253" height="0"/> <rect x="17.542" y="54" width="3.3253" height="0"/> <rect x="23.084" y="54" width="3.3253" height="0"/> <rect x="28.627" y="54" width="3.3253" height="0"/> <rect x="34.169" y="54" width="3.3253" height="0"/> <rect x="39.711" y="54" width="3.3253" height="0"/> <rect x="45.253" y="54" width="3.3253" height="0"/> <rect x="50.795" y="54" width="3.3253" height="0"/> <rect x="56.337" y="54" width="3.3253" height="0"/> <rect x="61.88" y="54" width="3.3253" height="0"/> <rect x="67.422" y="54" width="3.3253" height="0"/> <rect x="72.964" y="54" width="3.3253" height="0"/> <rect x="78.506" y="54" width="3.3253" height="0"/> <rect x="84.048" y="54" width="3.3253" height="0"/> <rect x="89.59" y="54" width="3.3253" height="0"/> <rect x="95.133" y="54" width="3.3253" height="0"/> <rect x="100.67" y="54" width="3.3253" height="0"/> </g> <g class="pfbicdbarsGroups" transform="translate(-1.7339 6.2344)" fill="#f37261" pointer-events="none"> <rect x="12" y="54" width="3.3253" height="0"/> <rect x="17.542" y="54" width="3.3253" height="0"/> <rect x="23.084" y="54" width="3.3253" height="0"/> <rect x="28.627" y="54" width="3.3253" height="0"/> <rect x="34.169" y="54" width="3.3253" height="0"/> <rect x="39.711" y="54" width="3.3253" height="0"/> <rect x="45.253" y="54" width="3.3253" height="0"/> <rect x="50.795" y="54" width="3.3253" height="0"/> <rect x="56.337" y="54" width="3.3253" height="0"/> <rect x="61.88" y="54" width="3.3253" height="0"/> <rect x="67.422" y="54" width="3.3253" height="0"/> <rect x="72.964" y="54" width="3.3253" height="0"/> <rect x="78.506" y="54" width="3.3253" height="0"/> <rect x="84.048" y="54" width="3.3253" height="0"/> <rect x="89.59" y="54" width="3.3253" height="0"/> <rect x="95.133" y="54" width="3.3253" height="0"/> <rect x="100.67" y="54" width="3.3253" height="0"/> </g> <text x="156.35793" y="14.131474" fill="#1a1a1a" font-family="sans-serif" font-size="9.3333px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.6" xml:space="preserve"><tspan x="156.35793" y="14.131474"/></text> <g filter="url(#filter1053)" opacity=".7"> <path class="domain" d="m10.266 60.234h92" fill="#999" stroke="#ccc"/> <line x1="11.929" x2="11.929" y1="60.234" y2="63.234" fill="none" stroke="#ccc"/> <text x="11.928711" y="59.234375" dy="8.5199995" fill="#b3b3b3" font-family="sans-serif" font-size="5.3333px" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">2006</text> <line x1="100.6" x2="100.6" y1="60.234" y2="63.234" fill="none" stroke="#ccc"/> <text x="100.60341" y="59.234375" dy="8.5199995" fill="#b3b3b3" font-family="sans-serif" font-size="5.3333px" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">2022</text> <g class="pfbicdbarsGroups" transform="translate(-1.7339 6.2344)" fill="#65a8dc" pointer-events="none"> <rect x="12" y="38.532" width="3.3253" height="15.468"/> <rect x="17.542" y="32.303" width="3.3253" height="21.697"/> <rect x="23.084" y="30.062" width="3.3253" height="23.938"/> <rect x="28.627" y="29.425" width="3.3253" height="24.575"/> <rect x="34.169" y="29.307" width="3.3253" height="24.693"/> <rect x="39.711" y="28.342" width="3.3253" height="25.658"/> <rect x="45.253" y="31.242" width="3.3253" height="22.758"/> <rect x="50.795" y="30.51" width="3.3253" height="23.49"/> <rect x="56.337" y="30.466" width="3.3253" height="23.534"/> <rect x="61.88" y="34.261" width="3.3253" height="19.739"/> <rect x="67.422" y="29.677" width="3.3253" height="24.323"/> <rect x="72.964" y="28.917" width="3.3253" height="25.083"/> <rect x="78.506" y="19.823" width="3.3253" height="34.177"/> <rect x="84.048" y="18.686" width="3.3253" height="35.314"/> <rect x="89.59" y="17.156" width="3.3253" height="36.844"/> <rect x="95.133" y="10.022" width="3.3253" height="43.978"/> <rect x="100.67" y="10" width="3.3253" height="44"/> </g> <path class="pfbicdbarLine" d="m11.929 44.766c1.8474-2.4086 3.6948-4.8172 5.5422-6.2289 1.8474-1.4117 3.6948-1.8166 5.5422-2.2413 1.8474-0.42475 3.6948-0.55891 5.5422-0.63713 1.8474-0.07821 3.6948-0.03911 5.5422-0.11732 1.8474-0.07821 3.6948-0.96522 5.5422-0.96522s3.6948 2.9002 5.5422 2.9002c1.8474 0 3.6948-0.70306 5.5422-0.73226 1.8474-0.0292 3.6948-0.0438 5.5422-0.0438s3.6948 3.7948 5.5422 3.7948c1.8474 0 3.6948-4.0781 5.5422-4.5843 1.8474-0.50623 3.6948-0.25312 5.5422-0.75935s3.6948-8.3356 5.5422-9.094c1.8474-0.75833 3.6948-0.69288 5.5422-1.1375 1.8474-0.44462 3.6948-0.51006 5.5422-1.5302s3.6948-7.1189 5.5422-7.1336c1.8474-0.01476 3.6948-0.01845 5.5422-0.02214" fill="none" opacity="1" stroke="#888" stroke-width="1.5px"/> <circle class="pfbicdlastYearCircle" cx="100.6" cy="16.234" r="3" fill="#888" opacity="1"/> <polyline class="pfbicdlastYearLine" transform="translate(-1.7339 6.2344)" points="105.34 10 109.01 10 109.01 10 112.67 10" fill="none" opacity="1" stroke="#bbb" stroke-width="1px"/> <text class="pfbicdbarLabel" x="110.77959" y="18.296581" font-family="sans-serif" font-size="9.3333px" opacity="1" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">11M</text> <text class="pfbicdtotalValue" x="56.295277" y="7.512038" fill="#808080" font-family="sans-serif" font-size="8px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">$121M</text> </g> <g> <ellipse cx="57.691" cy="11.143" rx="22" ry="8" fill="none" stroke="#a00" stroke-width=".90312"/> <ellipse cx="121.71" cy="16.411" rx="15.256" ry="7.6834" fill="none" stroke="#a00" stroke-width=".80167"/> <g> <text x="182.11366" y="14.815255" fill="#1a1a1a" font-family="sans-serif" font-size="9.3333px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.6" xml:space="preserve"><tspan x="182.11366" y="14.815255">Total donations</tspan></text> <text x="145.6599" y="35.840569" fill="#1a1a1a" font-family="sans-serif" font-size="9.3333px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1" xml:space="preserve"><tspan x="145.6599" y="35.840569">Donations in the</tspan><tspan x="145.6599" y="45.173901">last complete year</tspan></text> <path d="m78.679 9.8009c38.292-16.411 65.415-1.5955 65.415-1.5955" fill="none" marker-end="" stroke="#a00"/> <path d="m121.26 23.565c0.45586 15.727 20.741 14.587 20.741 14.587" fill="none" marker-end="" stroke="#a00"/> </g> </g> </svg>`;
 
 //|variables
 
@@ -115,9 +119,18 @@ function createContributionsByDonor(selections, colors, lists) {
 		.append("span")
 		.html("Member States");
 
-	const nonMemberStatesContainerDiv = containerDiv
+	const bottomDiv = containerDiv
+		.append("div")
+		.attr("class", classPrefix + "bottomDiv");
+
+	const nonMemberStatesContainerDiv = bottomDiv
 		.append("div")
 		.attr("class", classPrefix + "nonMemberStatesContainerDiv")
+		.style("height", nonMemberStateHeight + "px");
+
+	const legendDiv = bottomDiv
+		.append("div")
+		.attr("class", classPrefix + "legendDiv")
 		.style("height", nonMemberStateHeight + "px");
 
 	const nonMemberStatesTopDiv = nonMemberStatesContainerDiv
@@ -131,6 +144,18 @@ function createContributionsByDonor(selections, colors, lists) {
 	const nonMemberStatesTitle = nonMemberStatesTopDiv
 		.append("span")
 		.html("others");
+
+	const legendTopDiv = legendDiv
+		.append("div")
+		.attr("class", classPrefix + "legendTopDiv")
+		.append("span")
+		.html("Legend");
+
+	legendDiv
+		.append("div")
+		.style("width", svgWidth)
+		.style("min-height", svgHeight + donorNameDivHeight + "px")
+		.html(legendTemplate);
 
 	const columnChartContainer = selections.byDonorChartContainer;
 
@@ -894,6 +919,30 @@ function createContributionsByDonor(selections, colors, lists) {
 						)(interpolator(t))
 						.replace("G", "B");
 			});
+
+		let totalValue = donorSvg
+			.selectAll("." + classPrefix + "totalValue")
+			.data(d => [d]);
+
+		totalValue = totalValue
+			.enter()
+			.append("text")
+			.attr("class", classPrefix + "totalValue")
+			.attr(
+				"x",
+				svgPadding[3] + (svgWidth - svgPadding[1] - svgPadding[3]) / 2
+			)
+			.attr("y", totalValuePadding)
+			.merge(totalValue)
+			.text(
+				d =>
+					"$" +
+					formatSIFloat(
+						chartState.selectedFund === "cerf/cbpf"
+							? d.cerf + d.cbpf
+							: d[chartState.selectedFund]
+					).replace("G", "B")
+			);
 
 		donorDiv
 			.on("mouseover", donorDivMouseOver)
