@@ -1849,19 +1849,21 @@ a.video-tutorial {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	flex: 0 80%
 }
 
 .pfbicdmemberStatesTopDiv,
-.pfbicdnonMemberStatesTopDiv {
+.pfbicdnonMemberStatesTopDiv,
+.pfbicdlegendTopDiv {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
 	height: 5vh;
 }
 
-.pfbicdnonMemberStatesTopDiv {
+.pfbicdnonMemberStatesTopDiv,
+.pfbicdlegendTopDiv {
 	align-items: center;
-	box-shadow: 0px -3px 3px 0 #ccc;
 }
 
 .pfbicdmemberStatesTitleDiv {
@@ -1872,7 +1874,8 @@ a.video-tutorial {
 }
 
 .pfbicdmemberStatesTitleDiv span,
-.pfbicdnonMemberStatesTopDiv span {
+.pfbicdnonMemberStatesTopDiv span,
+.pfbicdlegendTopDiv span {
 	font-family: "Roboto", sans-serif;
 	font-size: 0.8rem;
 	color: #666;
@@ -1909,6 +1912,19 @@ a.video-tutorial {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
 	overflow-y: scroll;
+}
+
+.pfbicdbottomDiv {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	box-shadow: 0px -3px 3px 0 #ccc;
+}
+
+.pfbicdlegendDiv {
+	flex: 0 20%;
+	display: flex;
+	flex-direction: column;
 }
 
 .pfbicdnonMemberStatesChartAreaDiv> :last-child,
@@ -1981,6 +1997,20 @@ a.video-tutorial {
 	fill: #444;
 	pointer-events: none;
 	dominant-baseline: middle;
+	letter-spacing: -0.25px;
+}
+
+.pfbicdtotalValue {
+	font-family: "Roboto", sans-serif;
+	font-size: 10px;
+	font-weight: 600;
+	fill: #aaa;
+	stroke: #fff;
+	stroke-width: 3px;
+	paint-order: stroke;
+	pointer-events: none;
+	dominant-baseline: hanging;
+	text-anchor: middle;
 	letter-spacing: -0.25px;
 }
 
