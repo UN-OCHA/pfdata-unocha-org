@@ -31,9 +31,10 @@ const buttonsObject = {
 			.append("button")
 			.attr("id", generalClassPrefix + "HelpButton");
 
-		const downloadIcon = containerSelection
-			.append("button")
-			.attr("id", generalClassPrefix + "DownloadButton");
+		//TODO: revert this
+		// const downloadIcon = containerSelection
+		// 	.append("button")
+		// 	.attr("id", generalClassPrefix + "DownloadButton");
 
 		const playIcon = containerSelection
 			.append("button")
@@ -102,10 +103,11 @@ const buttonsObject = {
 
 		helpIcon.html("HELP  ").append("span").attr("class", "fas fa-info");
 
-		downloadIcon
-			.html(".CSV  ")
-			.append("span")
-			.attr("class", "fas fa-download");
+		//TODO: revert this
+		// downloadIcon
+		// 	.html(".CSV  ")
+		// 	.append("span")
+		// 	.attr("class", "fas fa-download");
 
 		playIcon.html("PLAY  ").append("span").attr("class", "fas fa-play");
 
@@ -134,36 +136,37 @@ const buttonsObject = {
 			window.open(helpPortalUrl, "help_portal");
 		});
 
-		downloadIcon.on("click", () => {
-			if (chartState.selectedChart.includes("contributions")) {
-				window.open(contributionsDataUrl, "_blank");
-			} else if (chartState.selectedChart === "allocationsBySector") {
-				window.open(allocationsBySectorDataUrl, "_blank");
-			} else if (chartState.selectedChart === "countryProfile") {
-				const countryData = rawAllocationsData.filter(
-					e => e.PooledFundId === chartState.selectedCountryProfile
-				);
-				const csv = createCountryCsv(countryData, lists);
-				const blob = new Blob([csv], {
-					type: "text/csv;charset=utf-8;",
-				});
-				const blobUrl = URL.createObjectURL(blob);
-				const link = document.createElement("a");
-				link.setAttribute("href", blobUrl);
-				link.setAttribute(
-					"download",
-					lists.fundNamesList[chartState.selectedCountryProfile] +
-						"_CountryProfile"
-				);
-				link.style = "visibility:hidden";
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-				URL.revokeObjectURL(blob);
-			} else {
-				window.open(allocationsDataUrl, "_blank");
-			}
-		});
+		//TODO: revert this
+		// downloadIcon.on("click", () => {
+		// 	if (chartState.selectedChart.includes("contributions")) {
+		// 		window.open(contributionsDataUrl, "_blank");
+		// 	} else if (chartState.selectedChart === "allocationsBySector") {
+		// 		window.open(allocationsBySectorDataUrl, "_blank");
+		// 	} else if (chartState.selectedChart === "countryProfile") {
+		// 		const countryData = rawAllocationsData.filter(
+		// 			e => e.PooledFundId === chartState.selectedCountryProfile
+		// 		);
+		// 		const csv = createCountryCsv(countryData, lists);
+		// 		const blob = new Blob([csv], {
+		// 			type: "text/csv;charset=utf-8;",
+		// 		});
+		// 		const blobUrl = URL.createObjectURL(blob);
+		// 		const link = document.createElement("a");
+		// 		link.setAttribute("href", blobUrl);
+		// 		link.setAttribute(
+		// 			"download",
+		// 			lists.fundNamesList[chartState.selectedCountryProfile] +
+		// 				"_CountryProfile"
+		// 		);
+		// 		link.style = "visibility:hidden";
+		// 		document.body.appendChild(link);
+		// 		link.click();
+		// 		document.body.removeChild(link);
+		// 		URL.revokeObjectURL(blob);
+		// 	} else {
+		// 		window.open(allocationsDataUrl, "_blank");
+		// 	}
+		// });
 
 		playIcon.on("click", (_, d) => {
 			d.clicked = !d.clicked;
