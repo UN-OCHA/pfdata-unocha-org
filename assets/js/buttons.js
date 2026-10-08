@@ -3,11 +3,11 @@ import { chartState } from "./chartstate.js";
 
 const generalClassPrefix = "pfbihp",
 	allocationsBySectorDataUrl =
-		"https://cbpfgms.github.io/pfbi-data/download/pfmb_allocations.csv",
+		"https://pfbi-webjob-contribution-prod-g7b3h4b9ftfahnbk.eastus2-01.azurewebsites.net/download/loadAllocations/pfmb_allocations.csv",
 	allocationsDataUrl =
-		"https://cbpfgms.github.io/pfbi-data/download/full_pfmb_allocations.csv",
+		"https://pfbi-webjob-contribution-prod-g7b3h4b9ftfahnbk.eastus2-01.azurewebsites.net/download/loadAllocations/full_pfmb_allocations.csv",
 	contributionsDataUrl =
-		"https://cbpfgms.github.io/pfbi-data/download/pfmb_contributions.csv",
+		"https://pfbi-webjob-contribution-prod-g7b3h4b9ftfahnbk.eastus2-01.azurewebsites.net/download/loadContribution/pfmb_contributions.csv",
 	helpPortalUrl =
 		"https://gms.unocha.org/content/pooled-funds-business-intelligence",
 	dateFormat = d3.utcFormat("_%Y%m%d_%H%M%S_UTC"),

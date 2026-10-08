@@ -46,16 +46,17 @@ const generalClassPrefix = "pfbihp",
 	masterUnAgenciesUrl =
 		"https://cerfgms-webapi.unocha.org/v1/agency/All.json",
 	contributionsDataUrl =
-		"https://cbpfgms.github.io/pfbi-data/contributionbycerfcbpf.csv",
+		"https://pfbi-webjob-contribution-prod-g7b3h4b9ftfahnbk.eastus2-01.azurewebsites.net/download/loadContributionByCERFCBPF/contributionbycerfcbpf.csv",
 	contributionsDataUrlClosedFunds =
-		"https://cbpfgms.github.io/pfbi-data/contributionbycerfcbpfAll.csv",
+		"https://pfbi-webjob-contribution-prod-g7b3h4b9ftfahnbk.eastus2-01.azurewebsites.net/download/loadContributionByCERFCBPFAll/contributionbycerfcbpfAll.csv",
 	allocationsDataUrl =
-		"https://cbpfgms.github.io/pfbi-data/sectorSummarybyOrg.csv",
+		"https://pfbi-webjob-contribution-prod-g7b3h4b9ftfahnbk.eastus2-01.azurewebsites.net/download/loadAllocations/sectorSummarybyOrg.csv",
 	allocationsDataUrlClosedFunds =
-		"https://cbpfgms.github.io/pfbi-data/sectorSummarybyOrg.csv", //IMPORTANT: ASK FOR CLOSED FUNDS
+		"https://pfbi-webjob-contribution-prod-g7b3h4b9ftfahnbk.eastus2-01.azurewebsites.net/download/loadAllocations/sectorSummarybyOrg.csv", //IMPORTANT: ASK FOR CLOSED FUNDS
 	allocationsMonthlyDataUrl =
-		"https://cbpfgms.github.io/pfbi-data/allocationSummarybyapproveddate.csv",
-	adminLevel1DataUrl = "https://cbpfgms.github.io/pfbi-data/fund_adm1.csv",
+		"https://pfbi-webjob-contribution-prod-g7b3h4b9ftfahnbk.eastus2-01.azurewebsites.net/download/loadAllocations/allocationSummarybyapproveddate.csv",
+	adminLevel1DataUrl =
+		"https://pfbi-webjob-contribution-prod-g7b3h4b9ftfahnbk.eastus2-01.azurewebsites.net/download/loadLocations/fund_adm1.csv",
 	chartTypesAllocations = [
 		"allocationsByCountry",
 		"allocationsBySector",
